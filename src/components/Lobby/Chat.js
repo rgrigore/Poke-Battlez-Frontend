@@ -1,9 +1,55 @@
-import React from "react";
+import React, {useEffect, useState, useRef} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UsersList from "./UsersList";
 import ChatBox from "./ChatBox";
+import { sendMessage } from "../../controller/ChatController";
+// import { useSockJs } from "use-sockjs";
+// import { Client, Frame, Message, Subscription } from 'stompjs';
+
 
 function Chat() {
+
+    // let [messages, setMessages] = useState([]);
+    //
+    // const { client, connect, disconnect, subscribe, unsubscribe } = useSockJs()
+    //
+    // const subscriptionRef = useRef<Subscription | null>(null)
+    //
+    // useEffect(() => connect({url: "/chat-lobby"}), [connect]);
+    //
+    // useEffect(() => {
+    //     if (!client || !client.connected) {
+    //         return
+    //     }
+    //
+    //     subscribe({
+    //         destination: '/chat/lobby',
+    //         onMessage: message => {
+    //             setMessages([...messages, message])
+    //         },
+    //         onSubscribed: (subscription) => {
+    //             subscriptionRef.current = subscription
+    //         }
+    //     })
+    //
+    //     return ()=>{
+    //         if(subscriptionRef.current){
+    //             unsubscribe(subscriptionRef.current)
+    //         }
+    //         disconnect()
+    //     }
+    // }, [client, disconnect, messages, subscribe, unsubscribe])
+      // [client, client && client.connected]
+
+    let handleMessage = () => {
+        let field = document.getElementById("new-message")
+        let message = field.value;
+        field.value = "";
+
+        // Message(message);
+        sendMessage(message);
+    }
+
     return(
         <div className='container-fluid'>
             <div className='row'>
@@ -25,10 +71,10 @@ function Chat() {
                                 <ChatBox />
                             </div>
                             <div className="row bg-light" style={{ bottom: 0, width: '100%' }}>
-                                <form className="row m-0 p-0 w-100" onSubmit={null}>
+                                <div className="row m-0 p-0 w-100">
 
                                     <div className="col-9 m-0 p-1">
-                                        <input id="text"
+                                        <input id="new-message"
                                                className="mw-100 border rounded form-control"
                                                type="text"
                                                name="text"
@@ -37,9 +83,10 @@ function Chat() {
                                     <div className="col-3 m-0 p-1">
                                         <button className="btn btn-outline-secondary rounded border w-100"
                                                 title="Send"
-                                                style={{ paddingRight: 16 }}>Send</button>
+                                                style={{ paddingRight: 16 }}
+                                                onClick={handleMessage}>Send</button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import { connect } from "../../controller/ChatController";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function ChatBox() {
-    const messages = ["Hello user"];
+
+    let [first, setFirst] = useState(true);
+    let [messages, setMessages] = useState([]);
+
+    let updateMessages = newMessage => {
+        setMessages([...messages, newMessage])
+    }
+
+    if (first) {
+        connect(updateMessages);
+        setFirst(false);
+    }
 
     return(
         <div className='col-xl-12'>
