@@ -25,7 +25,7 @@ export function connect(updateMessages) {
 
   client[0].onConnect = () => {
     client[0].subscribe(RECEIVE_TOPIC, message => {
-      updateMessages(JSON.parse(message.body).body);
+      updateMessages(JSON.parse(message.body));
     });
   };
 
