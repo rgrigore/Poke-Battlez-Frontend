@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { connect } from "../../controller/ChatController";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function ChatBox() {
+function ChatBox(props) {
 
     let [first, setFirst] = useState(true);
     let [messages, setMessages] = useState([]);
 
     let updateMessages = newMessage => {
-        setMessages([...messages, newMessage])
+        console.log(messages);
+        setMessages(messages.concat(newMessage))
     }
 
     if (first) {
@@ -17,15 +18,15 @@ function ChatBox() {
     }
 
     return(
-        <div className='col-xl-12'>
+        <ul className='col-xl-12'>
             {messages.map((message, index) => (
-                    <div key={index+1} className="message">
-                        <div className={`p-3 m-1`}>
+                    <li key={index+1} className="message">
+                        <span className={`p-3 m-1`}>
                             {message}
-                        </div>
-                    </div>
+                        </span>
+                    </li>
             ))}
-        </div>
+        </ul>
     );
 }
 

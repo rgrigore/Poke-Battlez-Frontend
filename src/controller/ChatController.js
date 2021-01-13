@@ -1,22 +1,45 @@
-import * as SockJs from 'sockjs-client';
+// import * as SockJs from 'sockjs-client';
+import { Client } from "@stomp/stompjs/esm6";
 
-const stompJs = require("stompjs");
+const SOCKET = "ws://localhost:8080/chat-lobby";
+const RECEIVE_TOPIC = "/chat/lobby";
+const SEND_TOPIC = "/app/message/lobby";
 
-const SOCKET = "/chat-lobby";
-const RECEIVE = "/chat/lobby";
-const SEND = "/app/message/lobby";
-
-let stompClient = null;
+let client = [];
 
 export function connect(updateMessages) {
-  let socket = new SockJs("http://localhost:8080/chat-lobby");
-  stompClient = stompJs.over(socket);
-  stompClient.connect({}, frame => {
-    console.log("connected: " + frame);
-    stompClient.subscribe(RECEIVE, chatMessage => updateMessages(JSON.parse(chatMessage.body).body));
-  })
+  console.log("sup")
+
+  client.push(new Client({
+    brokerURL: SOCKET,
+    connectHeaders: {
+      user: "32"
+    },
+    debug: function (str) {
+      console.log(str);
+    },
+    reconnectDelay: 5000,
+    heartbeatIncoming: 4000,
+    heartbeatOutgoing: 4000,
+  }));
+
+  client[0].onConnect = () => {
+    client[0].subscribe(RECEIVE_TOPIC, message => {
+      updateMessages(JSON.parse(message.body).body);
+    });
+  };
+
+  client[0].onStompError = frame => {
+    console.log('Broker reported error: ' + frame.headers['message']);
+    console.log('Additional details: ' + frame.body);
+  }
+
+  client[0].activate();
 }
 
 export function sendMessage(message) {
-  stompClient.send(SEND, {}, JSON.stringify({body: message}));
+  client[0].publish({
+    destination: SEND_TOPIC,
+    body: JSON.stringify({body: message})
+  });
 }
