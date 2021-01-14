@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import ReactDom from 'react-dom'
 import { login } from "../../../controller/AccountController";
+import { UserContext } from "./UserContext";
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -23,6 +24,8 @@ const OVERLAY_STYLES = {
 }
 
 export default function LoginModal({ open, onClose }) {
+	const setUser = useContext(UserContext)[1];
+
 	if (!open) return null
 
 	let loginEvent = () => {
@@ -31,6 +34,7 @@ export default function LoginModal({ open, onClose }) {
 			password: document.getElementById("login_password").value
 		}, state => {
 			if (state) {
+				setUser(document.getElementById("login_email").value)
 				onClose();
 			}
 		});

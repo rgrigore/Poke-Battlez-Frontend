@@ -4,6 +4,7 @@ import LobbyNavbar from "./layout/LobbyNavbar";
 import Chat from "./Chat";
 import RegisterModal from "./account/RegisterModal";
 import { connect } from "../../controller/AccountController";
+import { UserContextProvider } from "./account/UserContext";
 
 function Lobby() {
     const [registered, setRegistered] = useState(false);
@@ -16,9 +17,11 @@ function Lobby() {
 
     return(
         <div className={"Lobby"}>
-            <LobbyNavbar />
-            <Chat />
-            <RegisterModal open={!registered} onClose={() => setRegistered(true)} />
+            <UserContextProvider>
+                <LobbyNavbar />
+                <Chat />
+                <RegisterModal open={!registered} onClose={() => setRegistered(true)} />
+            </UserContextProvider>
         </div>
     );
 }

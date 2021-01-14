@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import ReactDom from 'react-dom'
 import LoginModal from "./LoginModal";
 import { register } from "../../../controller/AccountController";
+import { UserContext } from "./UserContext";
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -24,6 +25,7 @@ const OVERLAY_STYLES = {
 }
 
 export default function RegisterModal({ open, onClose }) {
+	const setUser = useContext(UserContext)[1];
 	const [children, setChildren] = useState(false)
 	if (!open) return null
 	if(children) return <LoginModal open={children} onClose={onClose} />
@@ -35,6 +37,7 @@ export default function RegisterModal({ open, onClose }) {
 			password: document.getElementById("register_password").value
 		}, state => {
 			if (state) {
+				setUser(document.getElementById("register_username").value);
 				onClose();
 			}
 		});
