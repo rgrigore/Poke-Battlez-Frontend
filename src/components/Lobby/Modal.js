@@ -23,9 +23,15 @@ const OVERLAY_STYLES = {
 }
 
 export default function Modal({ open, onClose }) {
-    const [children, setChildren] = useState(false)
-    if (!open) return null
-    if(children) return <LogInModal open={children} onClose={onClose}/>
+  const [children, setChildren] = useState(false)
+  if (!open) return null
+  if(children) return <LogInModal open={children} onClose={onClose}/>
+
+  let register = () => {
+      let username = document.getElementById("register_username").value;
+      let email = document.getElementById("register_email").value;
+      let password = document.getElementById("register_password").value;
+  }
 
   return ReactDom.createPortal(
     <>
@@ -33,29 +39,22 @@ export default function Modal({ open, onClose }) {
       <div style={MODAL_STYLES}>
 
         <h2>Play Now!<span> Sign Up!</span></h2>
-
-        <form>
-            <p>
-                <input type="text" name="name" id="name" placeholder="First Name" required=""
+           <p>
+                <input type="text" name="name" id="register_username" placeholder="Username" required=""
                    autoComplete="off" aria-required="true"/>
             </p>
             <p>
-                <input type="email" name="email" placeholder="E-mail" required=""
+                <input type="email" name="email" id="register_email" placeholder="E-mail" required=""
                    autoComplete="off" aria-required="true"/>
             </p>
             <p>
-            <input type="password" name="pass" placeholder="Password" required=""
+            <input type="password" name="pass" id="register_password" placeholder="Password" required=""
                    autoComplete="off" aria-required="true"/>
             </p>
-          <button onClick={onClose}>Submit</button>
-          {/*{children}*/}
-            <button onClick={() => setChildren(true)}>Already a member? Sign In!
-
-            </button>
-
-        </form>
+          <button onClick={register}>Sign In</button>
+            <button onClick={() => setChildren(true)}>Already a member? Sign In!</button>
       </div>
     </>,
-    document.getElementById('portal')
+      document.getElementById("modals")
   )
 }

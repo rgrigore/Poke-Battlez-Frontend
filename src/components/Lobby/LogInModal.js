@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import Modal from "./Modal";
 
 const MODAL_STYLES = {
   position: 'fixed',
@@ -22,37 +21,31 @@ const OVERLAY_STYLES = {
   zIndex: 1000
 }
 
-export default function LogInModal({ open, children, onClose }) {
+export default function LogInModal({ open, onClose }) {
   if (!open) return null
+
+  let login = () => {
+    let username = document.getElementById("login_username").value;
+    let password = document.getElementById("login_password").value;
+  }
 
   return ReactDom.createPortal(
     <>
       <div style={OVERLAY_STYLES} />
       <div style={MODAL_STYLES}>
-
         <h2>Login and Get <span>Started</span></h2>
         <span>Just fill in the form below</span>
-
-        <form>
-
           <p>
-            <input type="text" name="name" id="name" placeholder="First Name" required=""
+            <input type="text" name="name" id="login_username" placeholder="Username" required=""
                    autoComplete="off" aria-required="true"/>
           </p>
-
           <p>
-            <input type="password" name="pass" placeholder="Password" required=""
+            <input type="password" name="pass" id="login_password" placeholder="Password" required=""
                    autoComplete="off" aria-required="true"/>
           </p>
-
-          <button onClick={onClose}>Close Modal</button>
-          {children}
-
-
-        </form>
-
+        <button onClick={login}>Login</button>
       </div>
     </>,
-    document.getElementById('portal')
+      document.getElementById("modals")
   )
 }
