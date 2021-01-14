@@ -3,6 +3,7 @@ import ReactDom from 'react-dom'
 import LoginModal from "./LoginModal";
 import { register } from "../../../controller/AccountController";
 import { UserContext } from "./UserContext";
+import { Button } from "react-bootstrap";
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -53,13 +54,15 @@ export default function RegisterModal({ open, onClose }) {
 				<input type="text" name="name" id="register_username" placeholder="Username" required=""
 				       autoComplete="off" aria-required="true"/> <br/>
 				<label htmlFor={"register_email"} className={"mt-1 mb-n1"}>Email</label> <br/>
-				<input type="email" name="email" id="register_email" placeholder="E-mail" required=""
-				       autoComplete="off" aria-required="true"/> <br/>
+				<input type="email" name="email" id="register_email" placeholder="john@example.com" required=""
+				       autoComplete="off" aria-required="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/> <br/>
 				<label htmlFor={"register_password"} className={"mt-1 mb-n1"}>Password</label> <br/>
 				<input type="password" name="pass" id="register_password" placeholder="Password" required=""
 				       autoComplete="off" aria-required="true"/> <br/>
-				<button onClick={registerEvent} className={"mt-3"}>Register</button>
-				<button onClick={() => setChildren(true)}>Already a member? Log In!</button>
+			    <div>
+					<Button variant={"dark"} onClick={registerEvent} className={"mt-3"}>Register</Button>{' '}
+					<Button variant={"dark"} className={"mt-3"} onClick={() => setChildren(true)}>Already a member? Log In!</Button>
+				</div>
 			</div>
 		</>,
 		document.getElementById("modals")

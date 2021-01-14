@@ -4,14 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Badge} from "react-bootstrap";
 
 function UsersList(props) {
-	// const users = ["Marius", "Razvan", "Dani"];
 
 	return (
 		<ul className="list-group list-group-flush w-100">
 			{props.users.map((user, index) => (
 				<li key={index+1} className={`list-group-item`}>
 					<div>
-						<img src="https://img.icons8.com/bubbles/35/000000/checked-2.png"/>
+						<img alt={"icon"} src="https://img.icons8.com/bubbles/35/000000/checked-2.png"/>
 						<Badge variant={"primary"}>{user.name}</Badge>
 					</div>
 				</li>
