@@ -4,6 +4,8 @@ import ChatBox from "./ChatBox";
 import {connect, sendMessage} from "../../controller/ChatController";
 import {isAuthenticated} from "../../controller/AccountController";
 
+import "../../css/HiddenScrollbar.css";
+
 function Chat() {
 
 	let [first, setFirst] = useState(true);
@@ -47,14 +49,14 @@ function Chat() {
 			<div className='d-flex align-items-stretch h-100 pt-4'>
 				<div className='h-100 d-flex flex-column mr-3' style={{minWidth: "220px"}}>
 					<div className='pt-2'><h5 className="pl-2">Online Users</h5></div>
-					<div className='flex-fill mt-2 mb-2 border rounded'
+					<div className='flex-fill mt-2 mb-2 border rounded scrollbar-hidden'
 					     style={{overflow: "auto", backgroundColor: "rgba(160, 169, 173, 0.17)"}}>
 						{/* The CustomerList component */}
 						<UsersList users={users}/>
 					</div>
 				</div>
 				<div className='pt-5 flex-grow-1 h-100 d-flex flex-column'>
-					<div className='mr-1 flex-fill border rounded'
+					<div className='mr-1 flex-fill border rounded scrollbar-hidden'
 					     style={{ overflow:'auto', backgroundColor: "rgba(160, 169, 173, 0.17)" }}>
 						<div id={"chatArea"}>
 							<ChatBox messages={messages}/>
