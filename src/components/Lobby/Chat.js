@@ -11,6 +11,8 @@ function Chat() {
     let [messages, setMessages] = useState([]);
     let [newMessage, setNewMessage] = useState(null);
 
+    let [users, setUsers] = useState([]);
+
     useEffect(() => {
         if (newMessage !== null) {
             setMessages([...messages, newMessage]);
@@ -36,7 +38,7 @@ function Chat() {
     }
 
     if (first) {
-        connect(setNewMessage);
+        connect(setNewMessage, setUsers);
         setFirst(false);
     }
 
@@ -50,7 +52,7 @@ function Chat() {
                             <div className='row ml-0 mr-0 h-75 bg-white border rounded'
                                  style={{ height: '100%', overflow:'auto' }}>
                                 {/* The CustomerList component */}
-                                <UsersList  users={[]}/>
+                                <UsersList  users={users}/>
                             </div>
                         </div>
                         <div className='col-lg-10 col-xs-12 bg-light'  style={{ height: 658 }}>
