@@ -1,4 +1,5 @@
 import { Client } from "@stomp/stompjs/esm6";
+import { getUser } from "./AccountController";
 
 const SOCKET = "ws://localhost:8080/chat-lobby";
 const RECEIVE_CHAT_TOPIC = "/chat/lobby";
@@ -8,15 +9,13 @@ const SEND_CHAT_TOPIC = "/app/message/lobby";
 let client = [];
 
 export function connect(updateMessages, updateUsers) {
-	console.log("sup")
+	console.log("Chat connect")
 
 	client.push(new Client({
 		brokerURL: SOCKET,
-		connectHeaders: {
-			user: "32"
-		},
+		connectHeaders: {},
 		debug: function (str) {
-			console.log(str);
+			console.log("Chat: " + str);
 		},
 		reconnectDelay: 5000,
 		heartbeatIncoming: 4000,
@@ -24,7 +23,7 @@ export function connect(updateMessages, updateUsers) {
 	}));
 
 	client[0].onConnect = () => {
-		client[0].subscribe(RECEIVE_CHAT_TOPIC, message => updateMessages(JSON.parse(message.body)));
+		client[0].subscribe(RECEIVE_CHAT_TOPIC, message => updateMessages(JSON.parse(message.body)), {user: getUser().id});
 		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)));
 	};
 
@@ -39,6 +38,6 @@ export function connect(updateMessages, updateUsers) {
 export function sendMessage(message) {
 	client[0].publish({
 		destination: SEND_CHAT_TOPIC,
-		body: JSON.stringify({body: message})
+		body: JSON.stringify({userId: getUser().id, body: message})
 	});
 }

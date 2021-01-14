@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import ReactDom from 'react-dom'
 import LoginModal from "./LoginModal";
+import { register } from "../../../controller/AccountController";
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -25,12 +26,18 @@ const OVERLAY_STYLES = {
 export default function RegisterModal({ open, onClose }) {
 	const [children, setChildren] = useState(false)
 	if (!open) return null
-	if(children) return <LoginModal open={children} onClose={onClose}/>
+	if(children) return <LoginModal open={children} onClose={onClose} />
 
-	let register = () => {
-		let username = document.getElementById("register_username").value;
-		let email = document.getElementById("register_email").value;
-		let password = document.getElementById("register_password").value;
+	let registerEvent = () => {
+		register({
+			email: document.getElementById("register_email").value,
+			username: document.getElementById("register_username").value,
+			password: document.getElementById("register_password").value
+		}, state => {
+			if (state) {
+				onClose();
+			}
+		});
 	}
 
 	return ReactDom.createPortal(
@@ -39,7 +46,7 @@ export default function RegisterModal({ open, onClose }) {
 			<div style={MODAL_STYLES}>
 
 				<h2>Play Now!<span> Register!</span></h2>
-				<label htmlFor={"register_username"} className={"mb-n1"}>Register</label> <br/>
+				<label htmlFor={"register_username"} className={"mb-n1"}>Username</label> <br/>
 				<input type="text" name="name" id="register_username" placeholder="Username" required=""
 				       autoComplete="off" aria-required="true"/> <br/>
 				<label htmlFor={"register_email"} className={"mt-1 mb-n1"}>Email</label> <br/>
@@ -48,7 +55,7 @@ export default function RegisterModal({ open, onClose }) {
 				<label htmlFor={"register_password"} className={"mt-1 mb-n1"}>Password</label> <br/>
 				<input type="password" name="pass" id="register_password" placeholder="Password" required=""
 				       autoComplete="off" aria-required="true"/> <br/>
-				<button onClick={register} className={"mt-3"}>Register</button>
+				<button onClick={registerEvent} className={"mt-3"}>Register</button>
 				<button onClick={() => setChildren(true)}>Already a member? Log In!</button>
 			</div>
 		</>,

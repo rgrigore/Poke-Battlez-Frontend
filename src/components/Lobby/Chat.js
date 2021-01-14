@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import UsersList from "./UsersList";
 import ChatBox from "./ChatBox";
 import {connect, sendMessage} from "../../controller/ChatController";
+import {isAuthenticated} from "../../controller/AccountController";
 
 function Chat() {
 
@@ -37,7 +38,7 @@ function Chat() {
 		}
 	}
 
-	if (first) {
+	if (first && isAuthenticated()) {
 		connect(setNewMessage, setUsers);
 		setFirst(false);
 	}

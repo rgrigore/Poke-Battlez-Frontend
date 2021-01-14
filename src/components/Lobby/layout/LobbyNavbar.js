@@ -1,7 +1,7 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav } from "react-bootstrap";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import pokeLogo from "../../img/pokeball_logo_lobby.png";
 
@@ -21,11 +21,11 @@ function LobbyNavbar() {
             <Nav className="mr-auto">
                 <Nav.Link as={Link} to="/teambuilder">TEAMBUILDER</Nav.Link>
             </Nav>
-            <Navbar.Collapse className="justify-content-end">
-                <Navbar.Text>
-                    Signed in as: <a href="#login">Poke Baller</a>
-                </Navbar.Text>
-            </Navbar.Collapse>
+            {/*<Navbar.Collapse className="justify-content-end">*/}
+            {/*    <Navbar.Text>*/}
+            {/*        Signed in as: { prop.user }*/}
+            {/*    </Navbar.Text>*/}
+            {/*</Navbar.Collapse>*/}
         </Navbar>
     );
 }
