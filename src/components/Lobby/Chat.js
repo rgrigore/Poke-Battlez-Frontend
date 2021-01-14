@@ -48,7 +48,7 @@ function Chat() {
 			<div className='row'>
 				<div className="col-md-12 h-100pr border rounded">
 					<div className='row'>
-						<div className='col-lg-2 col-xs-12 bg-light' style={{ height: 658 }}>
+						<div className='col-lg-2 col-xs-12 bg-light' style={{ height: 620 }}>
 							<div className='row p-3'><h6>Online Users</h6></div>
 							<div className='row ml-0 mr-0 h-75 bg-white border rounded'
 							     style={{ height: '100%', overflow:'auto' }}>
@@ -56,7 +56,7 @@ function Chat() {
 								<UsersList  users={users}/>
 							</div>
 						</div>
-						<div className='col-lg-10 col-xs-12 bg-light'  style={{ height: 658 }}>
+						<div className='col-lg-10 col-xs-12 bg-light'  style={{ height: 620 }}>
 							<div className='row pt-2 bg-white'
 							     style={{ height: 530, overflow:'auto' }}>
 								{/* The ChatBox component */}
