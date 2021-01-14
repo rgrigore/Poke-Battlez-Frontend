@@ -1,10 +1,22 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UsersList from "./UsersList";
 import ChatBox from "./ChatBox";
-import { sendMessage } from "../../controller/ChatController";
+import {connect, sendMessage} from "../../controller/ChatController";
 
 function Chat() {
+
+    let [first, setFirst] = useState(true);
+
+    let [messages, setMessages] = useState([]);
+    let [newMessage, setNewMessage] = useState(null);
+
+    useEffect(() => {
+        if (newMessage !== null) {
+            setMessages([...messages, newMessage]);
+        }
+        // eslint-disable-next-line
+    }, [newMessage]);
 
     let handleMessage = () => {
         let field = document.getElementById("new-message")
@@ -23,6 +35,11 @@ function Chat() {
         }
     }
 
+    if (first) {
+        connect(setNewMessage);
+        setFirst(false);
+    }
+
     return(
         <div className='container-fluid'>
             <div className='row'>
@@ -33,14 +50,16 @@ function Chat() {
                             <div className='row ml-0 mr-0 h-75 bg-white border rounded'
                                  style={{ height: '100%', overflow:'auto' }}>
                                 {/* The CustomerList component */}
-                                <UsersList />
+                                <UsersList  users={[]}/>
                             </div>
                         </div>
                         <div className='col-lg-10 col-xs-12 bg-light'  style={{ height: 658 }}>
                             <div className='row pt-2 bg-white'
                                  style={{ height: 530, overflow:'auto' }}>
                                 {/* The ChatBox component */}
-                                <ChatBox />
+                                <div id={"chatArea"} className='col-xl-12' style={{resize: "none"}}>
+                                    <ChatBox messages={messages}/>
+                                </div>
                             </div>
                             <div className="row bg-light" style={{ bottom: 0, width: '100%' }}>
                                 <div className="row m-0 p-0 w-100">

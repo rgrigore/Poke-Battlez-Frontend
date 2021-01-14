@@ -2,8 +2,8 @@
 import { Client } from "@stomp/stompjs/esm6";
 
 const SOCKET = "ws://localhost:8080/chat-lobby";
-const RECEIVE_TOPIC = "/chat/lobby";
-const SEND_TOPIC = "/app/message/lobby";
+const RECEIVE_CHAT_TOPIC = "/chat/lobby";
+const SEND_CHAT_TOPIC = "/app/message/lobby";
 
 let client = [];
 
@@ -24,7 +24,7 @@ export function connect(updateMessages) {
   }));
 
   client[0].onConnect = () => {
-    client[0].subscribe(RECEIVE_TOPIC, message => {
+    client[0].subscribe(RECEIVE_CHAT_TOPIC, message => {
       updateMessages(JSON.parse(message.body));
     });
   };
@@ -39,7 +39,7 @@ export function connect(updateMessages) {
 
 export function sendMessage(message) {
   client[0].publish({
-    destination: SEND_TOPIC,
+    destination: SEND_CHAT_TOPIC,
     body: JSON.stringify({body: message})
   });
 }
