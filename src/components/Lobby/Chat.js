@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import UsersList from "./UsersList";
 import ChatBox from "./ChatBox";
 import {connect, sendMessage} from "../../controller/ChatController";
@@ -44,44 +43,39 @@ function Chat() {
 	}
 
 	return(
-		<div className='container-fluid'>
-			<div className='row'>
-				<div className="col-md-12 h-100pr border rounded">
-					<div className='row'>
-						<div className='col-lg-2 col-xs-12 bg-light' style={{ height: 620 }}>
-							<div className='row p-3'><h6>Online Users</h6></div>
-							<div className='row ml-0 mr-0 h-75 bg-white border rounded'
-							     style={{ height: '100%', overflow:'auto' }}>
-								{/* The CustomerList component */}
-								<UsersList  users={users}/>
-							</div>
+		<div className='container-fluid h-100 pt-5' style={{backgroundColor: "slategrey"}}>
+			<div className='d-flex align-items-stretch h-100 pt-4'>
+				<div className='h-100 d-flex flex-column mr-3' style={{minWidth: "220px"}}>
+					<div className='pt-2'><h5 className="pl-2">Online Users</h5></div>
+					<div className='flex-fill mt-2 mb-2 border rounded'
+					     style={{overflow: "auto", backgroundColor: "rgba(160, 169, 173, 0.17)"}}>
+						{/* The CustomerList component */}
+						<UsersList users={users}/>
+					</div>
+				</div>
+				<div className='pt-5 flex-grow-1 h-100 d-flex flex-column'>
+					<div className='mr-1 flex-fill border rounded'
+					     style={{ overflow:'auto', backgroundColor: "rgba(160, 169, 173, 0.17)" }}>
+						<div id={"chatArea"}>
+							<ChatBox messages={messages}/>
 						</div>
-						<div className='col-lg-10 col-xs-12 bg-light'  style={{ height: 620 }}>
-							<div className='row pt-2 bg-white'
-							     style={{ height: 530, overflow:'auto' }}>
-								{/* The ChatBox component */}
-								<div id={"chatArea"} className='col-xl-12' style={{resize: "none"}}>
-									<ChatBox messages={messages}/>
-								</div>
-							</div>
-							<div className="row bg-light" style={{ bottom: 0, width: '100%' }}>
-								<div className="row m-0 p-0 w-100">
+					</div>
+					<div className="w-100 my-1 mr-1 pb-2">
+						<div className="d-flex w-100">
 
-									<div className="col-9 m-0 p-1">
-										<input id="new-message"
-										       className="mw-100 border rounded form-control"
-										       type="text"
-										       name="text"
-										       placeholder="Type a message..."
-										       onKeyUp={event => handleEnter(event)} />
-									</div>
-									<div className="col-3 m-0 p-1">
-										<button className="btn btn-outline-secondary rounded border w-100"
-										        title="Send"
-										        style={{ paddingRight: 16 }}
-										        onClick={handleMessage}>Send</button>
-									</div>
-								</div>
+							<div className="flex-grow-1 p-1">
+								<input id="new-message"
+								       className="border rounded form-control"
+								       type="text"
+								       name="text"
+								       placeholder="Type a message..."
+								       onKeyUp={event => handleEnter(event)} />
+							</div>
+							<div className="p-1">
+								<button className="btn btn-dark rounded border w-100"
+								        title="Send"
+								        style={{ paddingRight: 16 }}
+								        onClick={handleMessage}>Send</button>
 							</div>
 						</div>
 					</div>

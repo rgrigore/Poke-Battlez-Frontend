@@ -8,11 +8,9 @@ function UsersList(props) {
 	return (
 		<ul className="list-group list-group-flush w-100">
 			{props.users.map((user, index) => (
-				<li key={index+1} className={`list-group-item`}>
-					<div>
-						<img alt={"icon"} src="https://img.icons8.com/bubbles/35/000000/checked-2.png"/>
-						<Badge variant={"primary"}>{user.name}</Badge>
-					</div>
+				<li key={index+1} className={`list-group-item`} style={{backgroundColor: "rgba(0, 0, 0, 0.3)"}}>
+					<img alt={"icon"} src="https://img.icons8.com/bubbles/35/000000/checked-2.png"/>
+					<Badge variant={"primary"}>{user.name}</Badge>
 				</li>
 			))}
 		</ul>

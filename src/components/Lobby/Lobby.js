@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import LobbyNavbar from "./layout/LobbyNavbar";
 import Chat from "./Chat";
@@ -16,7 +17,7 @@ function Lobby() {
     }
 
     return(
-        <div className={"Lobby"}>
+        <div className={"Lobby vh-100"}>
             <UserContextProvider>
                 <LobbyNavbar />
                 <Chat />

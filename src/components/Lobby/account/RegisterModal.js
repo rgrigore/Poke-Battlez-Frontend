@@ -52,7 +52,7 @@ export default function RegisterModal({ open, onClose }) {
 				<h2>Play Now!<span> Register!</span></h2>
 				<label htmlFor={"register_username"} className={"mb-n1"}>Username</label> <br/>
 				<input type="text" name="name" id="register_username" placeholder="Username" required=""
-				       autoComplete="off" aria-required="true"/> <br/>
+				       autoComplete="off" aria-required="true" maxLength={"14"}/> <br/>
 				<label htmlFor={"register_email"} className={"mt-1 mb-n1"}>Email</label> <br/>
 				<input type="email" name="email" id="register_email" placeholder="john@example.com" required=""
 				       autoComplete="off" aria-required="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/> <br/>

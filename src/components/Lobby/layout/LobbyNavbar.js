@@ -11,7 +11,7 @@ function LobbyNavbar() {
     const user = useContext(UserContext)[0];
 
     return(
-        <Navbar bg="dark" variant="dark">
+        <Navbar bg="dark" variant="dark" fixed={"top"}>
             <Navbar.Brand href="/lobby">
                 <img
                     alt="pokeball"
@@ -27,7 +27,7 @@ function LobbyNavbar() {
             </Nav>
             <Navbar.Collapse className="justify-content-end">
                 <Navbar.Text>
-                    Signed in as:<Badge variant={"primary"}>{ user }</Badge>
+                    Signed in as: <Badge variant={"primary"}>{ user }</Badge>
                 </Navbar.Text>
             </Navbar.Collapse>
         </Navbar>
