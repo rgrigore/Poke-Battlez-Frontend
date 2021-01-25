@@ -1,13 +1,13 @@
 import React, {useContext} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Navbar, Nav } from "react-bootstrap";
+import {Navbar, Nav, Button} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../account/UserContext";
 import { Badge } from "react-bootstrap";
 
 import pokeLogo from "../../img/pokeball_logo_lobby.png";
 
-function LobbyNavbar() {
+function LobbyNavbar({ openTeam }) {
     const user = useContext(UserContext)[0];
 
     return(
@@ -23,7 +23,7 @@ function LobbyNavbar() {
                 Poke Battlez
             </Navbar.Brand>
             <Nav className="mr-auto">
-                <Nav.Link as={Link} to="/teambuilder">TEAMBUILDER</Nav.Link>
+                <Nav.Link onClick={openTeam}>TEAMBUILDER</Nav.Link>
             </Nav>
             <Navbar.Collapse className="justify-content-end">
                 <Navbar.Text>
