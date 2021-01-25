@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Modal, Tab, Row, Col, ListGroup } from "react-bootstrap";
+import PokemonCard from "./PokemonCard";
+import PokemonConfig from "./PokemonConfig";
 
 function TeamModal({open, onClose}) {
+
+    const [team, setTeam] = useState([{"name": 1}, {"name": 2}, {}, {}, {}, {"name": 6}]);
 
     return(
         <Modal
@@ -23,34 +27,25 @@ function TeamModal({open, onClose}) {
                                 <ListGroup.Item href={"#team"} style={navItemStyle}>
                                     <h6>Team</h6>
                                 </ListGroup.Item>
-                                <ListGroup.Item href={"#poke1"} style={navItemStyle}>
-                                    #Poke 1
-                                </ListGroup.Item>
-                                <ListGroup.Item href={"#poke2"} style={navItemStyle}>
-                                    #Poke 2
-                                </ListGroup.Item>
-                                <ListGroup.Item href={"#poke3"} style={navItemStyle}>
-                                    #Poke 3
-                                </ListGroup.Item>
-                                <ListGroup.Item href={"#poke4"} style={navItemStyle}>
-                                    #Poke 4
-                                </ListGroup.Item>
-                                <ListGroup.Item href={"#poke5"} style={navItemStyle}>
-                                    #Poke 5
-                                </ListGroup.Item>
-                                <ListGroup.Item href={"#poke6"} style={navItemStyle}>
-                                    #Poke 6
-                                </ListGroup.Item>
+                                {team.map((slot, index) => (
+                                    <ListGroup.Item href={"#poke"+(index+1).toString()} style={navItemStyle}>
+                                        #Poke {index+1}
+                                    </ListGroup.Item>
+                                ))}
                             </ListGroup>
                         </Col>
                         <Col sm={8}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="#team">
-                                    <p>Component</p>
+                                    {team.map((slot, index) => (
+                                        <PokemonCard key={index} slot={slot} />
+                                    ))}
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="#poke1">
-                                    <p>Poke1</p>
-                                </Tab.Pane>
+                                {team.map((slot, index) => (
+                                    <Tab.Pane eventKey={"#poke"+(index+1).toString()}>
+                                        <PokemonConfig slot={slot} team={team} key={index} setTeam={(newTeam) => setTeam(newTeam)} />
+                                    </Tab.Pane>
+                                ))}
                             </Tab.Content>
                         </Col>
                     </Row>
