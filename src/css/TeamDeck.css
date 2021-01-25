@@ -1,0 +1,10 @@
+@import "~bootstrap";
+
+@media (min-width:768px) {
+    .card-deck > .card
+    {
+        width: 29%;
+        flex-wrap: wrap;
+        flex: initial;
+    }
+}

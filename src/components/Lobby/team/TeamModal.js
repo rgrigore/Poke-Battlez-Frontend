@@ -3,6 +3,8 @@ import { Modal, Tab, Row, Col, ListGroup } from "react-bootstrap";
 import PokemonCard from "./PokemonCard";
 import PokemonConfig from "./PokemonConfig";
 
+import "../../../css/TeamDeck.css";
+
 function TeamModal({open, onClose}) {
 
     const [team, setTeam] = useState([{"name": 1}, {"name": 2}, {}, {}, {}, {"name": 6}]);
@@ -19,7 +21,7 @@ function TeamModal({open, onClose}) {
                     <h5>Teambuilder</h5>
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body style={{ backgroundColor: "#DCDCDC" }}>
                 <Tab.Container id="modal-menu" defaultActiveKey="#team">
                     <Row>
                         <Col sm={2}>
@@ -34,16 +36,24 @@ function TeamModal({open, onClose}) {
                                 ))}
                             </ListGroup>
                         </Col>
-                        <Col sm={8}>
+                        <Col sm={9}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="#team">
-                                    {team.map((slot, index) => (
-                                        <PokemonCard key={index} slot={slot} />
-                                    ))}
+                                    <div className="container">
+                                        <div className="card-deck ml-5">
+                                            {team.map((slot, index) => (
+                                                <PokemonCard key={index} slot={slot} index={index+1} />
+                                            ))}
+                                        </div>
+                                    </div>
                                 </Tab.Pane>
                                 {team.map((slot, index) => (
                                     <Tab.Pane eventKey={"#poke"+(index+1).toString()}>
-                                        <PokemonConfig slot={slot} team={team} key={index} setTeam={(newTeam) => setTeam(newTeam)} />
+                                        <PokemonConfig slot={slot}
+                                                       team={team}
+                                                       key={index}
+                                                       teamIndex={index+1}
+                                                       setTeam={(newTeam) => setTeam(newTeam)} />
                                     </Tab.Pane>
                                 ))}
                             </Tab.Content>
