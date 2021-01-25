@@ -1,7 +1,7 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
-import { Card } from "react-bootstrap";
+import {Card} from "react-bootstrap";
 
 import empty from "../../img/pokeball_empty_slot.png";
 

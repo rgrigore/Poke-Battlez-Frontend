@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Tab, Row, Col, ListGroup } from "react-bootstrap";
+import React, {useState} from "react";
+import {Col, ListGroup, Modal, Row, Tab} from "react-bootstrap";
 import PokemonCard from "./PokemonCard";
 import PokemonConfig from "./PokemonConfig";
 

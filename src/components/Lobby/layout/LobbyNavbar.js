@@ -1,9 +1,7 @@
 import React, {useContext} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Navbar, Nav, Button} from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { UserContext } from "../account/UserContext";
-import { Badge } from "react-bootstrap";
+import {Badge, Nav, Navbar} from "react-bootstrap";
+import {UserContext} from "../account/UserContext";
 
 import pokeLogo from "../../img/pokeball_logo_lobby.png";
 

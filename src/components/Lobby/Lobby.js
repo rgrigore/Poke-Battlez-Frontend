@@ -3,9 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import LobbyNavbar from "./layout/LobbyNavbar";
 import Chat from "./Chat";
-import RegisterModal from "./account/RegisterModal";
-import { connect } from "../../controller/AccountController";
-import { UserContextProvider } from "./account/UserContext";
+import {connect} from "../../controller/AccountController";
+import {UserContextProvider} from "./account/UserContext";
 import TeamModal from "./team/TeamModal";
 
 function Lobby() {

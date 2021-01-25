@@ -1,5 +1,5 @@
-import { Client } from "@stomp/stompjs/esm6";
-import { getUser } from "./AccountController";
+import {Client} from "@stomp/stompjs/esm6";
+import {getUser} from "./AccountController";
 
 const SOCKET = "ws://localhost:8080/chat-lobby";
 const RECEIVE_CHAT_TOPIC = "/chat/lobby";
