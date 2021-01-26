@@ -22,7 +22,7 @@ function TeamModal({open, onClose}) {
                     <h6>Teambuilder</h6>
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ backgroundColor: "#DCDCDC" }}>
+            <Modal.Body style={{ backgroundColor: "#DCDCDC" }} >
                 <Tab.Container id="modal-menu" defaultActiveKey="#team">
                     <Row>
                         <Col sm={2}>
@@ -40,7 +40,7 @@ function TeamModal({open, onClose}) {
                                 ))}
                             </ListGroup>
                         </Col>
-                        <Col sm={9}>
+                        <Col sm={10}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="#team">
                                     <div className="container">
