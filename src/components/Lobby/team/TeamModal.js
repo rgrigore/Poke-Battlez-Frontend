@@ -28,7 +28,8 @@ function TeamModal({open, onClose}) {
                         <Col sm={2}>
                             <ListGroup>
                                 <ListGroup.Item href={"#team"} style={navItemStyle}>
-                                    <h6>Team</h6>
+                                    <img style={{ marginLeft: "8px" }}
+                                        src="https://img.icons8.com/color/36/000000/insignia-1-stars--v1.png"/>
                                 </ListGroup.Item>
                                 {team.map((slot, index) => (
                                     <ListGroup.Item className={"d-flex p-1 border-2"}
@@ -70,7 +71,8 @@ function TeamModal({open, onClose}) {
 
 const navItemStyle = {
     cursor: "pointer",
-    backgroundColor: "#DCDCDC"
+    backgroundColor: "#DCDCDC",
+    marginLeft: "6px"
 };
 
 export default TeamModal;
