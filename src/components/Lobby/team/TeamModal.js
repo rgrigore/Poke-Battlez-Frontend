@@ -4,6 +4,7 @@ import PokemonCard from "./PokemonCard";
 import PokemonConfig from "./PokemonConfig";
 
 import "../../../css/TeamDeck.css";
+import PokeBadge from "./PokeBadge";
 
 function TeamModal({open, onClose}) {
 
@@ -17,8 +18,8 @@ function TeamModal({open, onClose}) {
             aria-labelledby="teambuild-modal"
         >
             <Modal.Header closeButton style={{ backgroundColor: "#696969" }}>
-                <Modal.Title id="teambuild-modal">
-                    <h5>Teambuilder</h5>
+                <Modal.Title id="teambuild-modal" >
+                    <h6>Teambuilder</h6>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body style={{ backgroundColor: "#DCDCDC" }}>
@@ -30,8 +31,10 @@ function TeamModal({open, onClose}) {
                                     <h6>Team</h6>
                                 </ListGroup.Item>
                                 {team.map((slot, index) => (
-                                    <ListGroup.Item href={"#poke"+(index+1).toString()} style={navItemStyle}>
-                                        #Poke {index+1}
+                                    <ListGroup.Item className={"d-flex p-1 border-2"}
+                                                    href={"#poke"+(index+1).toString()}
+                                                    style={navItemStyle}>
+                                        <PokeBadge slot={slot} key={index} />
                                     </ListGroup.Item>
                                 ))}
                             </ListGroup>
@@ -66,7 +69,8 @@ function TeamModal({open, onClose}) {
 }
 
 const navItemStyle = {
-    cursor: "pointer"
+    cursor: "pointer",
+    backgroundColor: "#DCDCDC"
 };
 
 export default TeamModal;
