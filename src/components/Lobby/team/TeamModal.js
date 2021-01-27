@@ -8,7 +8,47 @@ import PokeBadge from "./PokeBadge";
 
 function TeamModal({open, onClose}) {
 
-    const [team, setTeam] = useState([{"name": 1}, {"name": 2}, {}, {}, {}, {"name": 6}]);
+    const testPokemon = {
+        "id": 1,
+        "name": "bulbasaur",
+        "Types": ["normal", "green"],
+        "Stats": [
+            {"name": "HP", "val": 241, "IV": 0, "EV":31},
+            {"name": "Atk", "val": 136, "IV": 0, "EV":31},
+            {"name": "Def", "val": 136, "IV": 0, "EV":31},
+            {"name": "S. Atk", "val": 136, "IV": 0, "EV":31},
+            {"name": "S. Def", "val": 136, "IV": 0, "EV":31},
+            {"name": "Speed", "val": 136, "IV": 0, "EV":31},
+        ],
+        "gender": {
+            "all": ["male", "female"],
+            "selected": ""
+        },
+        "Level": 50,
+        "Nature": {
+            "all": ["Hardy", "Lonely", "Brave", "Adamant", "Naughty", "Bold", "Docile",
+                "Relaxed", "Impish", "Lax", "Timid", "Hasty", "Serious", "Jolly", "Naive", "Modest",
+                "Mild", "Quiet", "Bashful", "Rash", "Calm", "Gentle", "Sassy", "Careful", "Quirky"],
+            "selected": ""
+        },
+        "Item": {
+            "all": ["Item 1", "Item 2"],
+            "selected": ""
+        },
+        "Ability": {
+            "all": ["Ability 1", "Ability 2"],
+            "selected": ""
+        },
+        "Moves": {
+            "all": ["Move 1", "Move 2"],
+            "selected1": {"name": "", "Type": "normal", "Acc": 80, "Cat": "fire", "Power": 80, "Pp": 10},
+            "selected2": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+            "selected3": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+            "selected4": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
+        }
+    }
+
+    const [team, setTeam] = useState([{}, testPokemon, {}, {}, {}, {}]);
 
     return(
         <Modal

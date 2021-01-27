@@ -13,7 +13,7 @@ function PokeBadge({ slot }) {
     } else {
         return(
             <Image
-                thumbnail={true} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.name}.png`}
+                thumbnail={true} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.id}.png`}
                 roundedCircle
                 style={{ maxWidth: "80%", maxHeight: "auto", marginLeft: "6px", backgroundColor: "gray" }}
             />
