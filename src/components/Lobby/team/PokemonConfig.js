@@ -1,21 +1,23 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
 import { Image, Badge, ProgressBar, FormControl, Button } from "react-bootstrap";
+import { Typeahead } from "react-bootstrap-typeahead";
+import axios from "axios";
 
 function PokemonConfig({ slot, teamIndex, team, setTeam }) {
     // empty Pokemon Object
-    const Pokemon = {
+    let Pokemon = {
         "id": 0,
         "name": "Pokemon...",
         "Types": ["normal"],
         "Stats": [
-            {"name": "HP", "val": 241, "IV": 0, "EV":31},
-            {"name": "Atk", "val": 136, "IV": 0, "EV":31},
-            {"name": "Def", "val": 136, "IV": 0, "EV":31},
-            {"name": "S. Atk", "val": 136, "IV": 0, "EV":31},
-            {"name": "S. Def", "val": 136, "IV": 0, "EV":31},
-            {"name": "Speed", "val": 136, "IV": 0, "EV":31},
+            {"name": "HP", "base": 0, "val": 241, "EV": 0, "IV":31},
+            {"name": "Atk", "base": 0, "val": 136, "EV": 0, "IV":31},
+            {"name": "Def", "base": 0, "val": 136, "EV": 0, "IV":31},
+            {"name": "S. Atk", "base": 0, "val": 136, "EV": 0, "IV":31},
+            {"name": "S. Def", "base": 0, "val": 136, "EV": 0, "IV":31},
+            {"name": "Speed", "base": 0, "val": 136, "EV": 0, "IV":31},
         ],
         "gender": {
             "all": ["Gender..."],
@@ -29,15 +31,15 @@ function PokemonConfig({ slot, teamIndex, team, setTeam }) {
             "selected": ""
         },
         "Item": {
-            "all": ["Item..."],
-            "selected": ""
+            "all": [],
+            "selected": "Item..."
         },
         "Ability": {
             "all": ["(No Ability)"],
             "selected": ""
         },
         "Moves": {
-            "all": ["Move..."],
+            "all": ["None"],
             "selected1": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
             "selected2": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
             "selected3": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
@@ -46,6 +48,65 @@ function PokemonConfig({ slot, teamIndex, team, setTeam }) {
     }
 
     const [pokemon, setPokemon] = useState((Object.keys(slot).length === 0 && slot.constructor === Object) ? Pokemon : slot);
+
+    const changeName = (e) => {
+        let newName = e.target.value;
+        const newPokemon = {...pokemon};
+
+        let pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${newName}`;
+        let speciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${newName}/`;
+        let itemsUrl = `https://pokeapi.co/api/v2/item?offset=0&limit=20000`;
+
+        const requestPokemon = axios.get(pokemonUrl);
+        const requestSpecies = axios.get(speciesUrl);
+        const requestItems = axios.get(itemsUrl);
+
+        axios.all([requestPokemon, requestSpecies, requestItems]).then(axios.spread((...responses) => {
+            const resPokemon = responses[0];
+            const  resSpecies = responses[1];
+            const resItems = responses[2];
+
+            newPokemon["id"] = resPokemon.data.id;
+            newPokemon["name"] = resPokemon.data.name;
+            const types = resPokemon.data.types;
+            const stats = resPokemon.data.stats;
+            const abilities = resPokemon.data.abilities;
+            const moves = resPokemon.data.moves;
+            const items = resItems.data.results;
+            const genderRate = resSpecies.data.gender_rate;
+
+            newPokemon["Types"] = [];
+            types.map((type) => (newPokemon.Types.push(type.type.name)));
+
+            stats.map((stat, i) => (newPokemon.Stats[i].base = stat.base_stat));
+
+            newPokemon["Ability"]["all"] = [];
+            abilities.map(ability => (newPokemon.Ability.all.push(ability.ability.name)));
+
+            newPokemon["Moves"]["all"] = ["None"];
+            moves.map(move =>(newPokemon.Moves.all.push(move.move.name)));
+
+            newPokemon["gender"].all = getGenders(genderRate);
+
+            const itemState = [];
+            items.map(item =>(itemState.push(item.name)));
+            newPokemon["Item"]["all"] = itemState;
+
+            setPokemon(newPokemon);
+        }))
+    };
+
+    const getGenders = (genderRate) => {
+        if(genderRate===-1) {
+            return ["no gender"];
+        } else if(genderRate===0) {
+            return ["Male"];
+        } else if(genderRate===8) {
+            return ["Female"];
+        } else {
+            return ["Male", "Female"];
+        }
+    }
 
     return(
         <div className={"d-flex flex-column"}>
@@ -65,7 +126,8 @@ function PokemonConfig({ slot, teamIndex, team, setTeam }) {
                             ))}
                         </div>
                         <div style={{ marginTop: "15px" }}>
-                            <input className={"form-control"} placeholder={pokemon.name}/>
+                            <input className={"form-control"} placeholder={pokemon.name}
+                                   onBlur={changeName}/>
                         </div>
                     </div>
                     <div className={"pl-1 pr-1 pt-1"}>
@@ -83,8 +145,8 @@ function PokemonConfig({ slot, teamIndex, team, setTeam }) {
                                 </div>
                                 <div className={"align-self-center pr-1"} typeof={"number"} style={{paddingLeft: "20px"}}>
                                     <div className={"d-flex flex-row"}>
-                                        <FormControl size={"sm"} type={"number"} min={0} max={252} placeholder={"IV"} defaultValue={stat.IV}/>
-                                        <FormControl size={"sm"} type={"number"} min={0} max={31} placeholder={"EV"} defaultValue={stat.EV} />
+                                        <FormControl size={"sm"} type={"number"} min={0} max={252} placeholder={"EV"} defaultValue={stat.EV}/>
+                                        <FormControl size={"sm"} type={"number"} min={0} max={31} placeholder={"IV"} defaultValue={stat.IV} />
                                     </div>
                                 </div>
                             </div>
@@ -107,11 +169,14 @@ function PokemonConfig({ slot, teamIndex, team, setTeam }) {
                                 <option key={i}>{nature}</option>
                             ))}
                         </FormControl>
-                        <FormControl as="select" size={"sm"} className={"p-1 mr-2"} style={{minWidth:"130px"}} defaultValue={pokemon.Item.selected}>
-                            {pokemon.Item.all.map((item, i) => (
-                                <option key={i}>{item}</option>
-                            ))}
-                        </FormControl>
+                        {/*<FormControl as="select" size={"sm"} className={"p-1 mr-2"} style={{minWidth:"130px"}} defaultValue={pokemon.Item.selected}>*/}
+                        {/*    {pokemon.Item.all.map((item, i) => (*/}
+                        {/*        <option key={i}>{item}</option>*/}
+                        {/*    ))}*/}
+                        {/*</FormControl>*/}
+                        <Typeahead id={"items"} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"130px"}}
+                                   labelKey={"item"} options={pokemon.Item.all}  placeholder={pokemon.Item.selected}
+                        />
                         <FormControl as="select" size={"sm"} className={"p-1"} style={{minWidth:"130px"}} defaultValue={pokemon.Ability.selected}>
                             {pokemon.Ability.all.map((ability, i) => (
                                 <option key={i}>{ability}</option>

@@ -13,12 +13,12 @@ function TeamModal({open, onClose}) {
         "name": "bulbasaur",
         "Types": ["normal", "green"],
         "Stats": [
-            {"name": "HP", "val": 241, "IV": 0, "EV":31},
-            {"name": "Atk", "val": 136, "IV": 0, "EV":31},
-            {"name": "Def", "val": 136, "IV": 0, "EV":31},
-            {"name": "S. Atk", "val": 136, "IV": 0, "EV":31},
-            {"name": "S. Def", "val": 136, "IV": 0, "EV":31},
-            {"name": "Speed", "val": 136, "IV": 0, "EV":31},
+            {"name": "HP", "val": 241, "EV": 0, "IV":31},
+            {"name": "Atk", "val": 136, "EV": 0, "IV":31},
+            {"name": "Def", "val": 136, "EV": 0, "IV":31},
+            {"name": "S. Atk", "val": 136, "EV": 0, "IV":31},
+            {"name": "S. Def", "val": 136, "EV": 0, "IV":31},
+            {"name": "Speed", "val": 136, "EV": 0, "IV":31},
         ],
         "gender": {
             "all": ["male", "female"],
@@ -33,7 +33,7 @@ function TeamModal({open, onClose}) {
         },
         "Item": {
             "all": ["Item 1", "Item 2"],
-            "selected": ""
+            "selected": "Item 1"
         },
         "Ability": {
             "all": ["Ability 1", "Ability 2"],
@@ -72,7 +72,7 @@ function TeamModal({open, onClose}) {
                                         src="https://img.icons8.com/color/36/000000/insignia-1-stars--v1.png"/>
                                 </ListGroup.Item>
                                 {team.map((slot, index) => (
-                                    <ListGroup.Item className={"d-flex p-1 border-2"}
+                                    <ListGroup.Item key={index} className={"d-flex p-1 border-2"}
                                                     href={"#poke"+(index+1).toString()}
                                                     style={navItemStyle}>
                                         <PokeBadge slot={slot} key={index} />
@@ -92,7 +92,7 @@ function TeamModal({open, onClose}) {
                                     </div>
                                 </Tab.Pane>
                                 {team.map((slot, index) => (
-                                    <Tab.Pane eventKey={"#poke"+(index+1).toString()}>
+                                    <Tab.Pane key={index} eventKey={"#poke"+(index+1).toString()}>
                                         <PokemonConfig slot={slot}
                                                        team={team}
                                                        key={index}
