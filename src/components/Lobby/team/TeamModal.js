@@ -11,41 +11,27 @@ function TeamModal({open, onClose}) {
     const testPokemon = {
         "id": 1,
         "name": "bulbasaur",
-        "Types": ["normal", "green"],
-        "Stats": [
-            {"name": "HP", "val": 241, "EV": 0, "IV":31},
-            {"name": "Atk", "val": 136, "EV": 0, "IV":31},
-            {"name": "Def", "val": 136, "EV": 0, "IV":31},
-            {"name": "S. Atk", "val": 136, "EV": 0, "IV":31},
-            {"name": "S. Def", "val": 136, "EV": 0, "IV":31},
-            {"name": "Speed", "val": 136, "EV": 0, "IV":31},
-        ],
-        "gender": {
-            "all": ["male", "female"],
-            "selected": ""
-        },
-        "Level": 50,
-        "Nature": {
-            "all": ["Hardy", "Lonely", "Brave", "Adamant", "Naughty", "Bold", "Docile",
-                "Relaxed", "Impish", "Lax", "Timid", "Hasty", "Serious", "Jolly", "Naive", "Modest",
-                "Mild", "Quiet", "Bashful", "Rash", "Calm", "Gentle", "Sassy", "Careful", "Quirky"],
-            "selected": ""
-        },
-        "Item": {
-            "all": ["Item 1", "Item 2"],
-            "selected": "Item 1"
-        },
-        "Ability": {
-            "all": ["Ability 1", "Ability 2"],
-            "selected": ""
-        },
-        "Moves": {
-            "all": ["Move 1", "Move 2"],
-            "selected1": {"name": "", "Type": "normal", "Acc": 80, "Cat": "fire", "Power": 80, "Pp": 10},
-            "selected2": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-            "selected3": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-            "selected4": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
-        }
+        "level": 2,
+        "IvHp": 31,
+        "IvAttack": 31,
+        "IvDefence": 31,
+        "IvSpAttack": 31,
+        "IvSpDefence": 31,
+        "IvSpeed": 28,
+        "EvHp": 7,
+        "EvAttack": 30,
+        "EvDefence": 32,
+        "EvSpAttack": 0,
+        "EvSpDefence": 150,
+        "EvSpeed": 90,
+        "gender": "Female",
+        "nature": "Brave",
+        "heldItem": "master-ball",
+        "ability": "chlorophyll",
+        "move1": "razor-wind",
+        "move2": "cut",
+        "move3": "tackle",
+        "move4": "growl"
     }
 
     const [team, setTeam] = useState([{}, testPokemon, {}, {}, {}, {}]);
@@ -68,7 +54,7 @@ function TeamModal({open, onClose}) {
                         <Col sm={2}>
                             <ListGroup>
                                 <ListGroup.Item href={"#team"} style={navItemStyle}>
-                                    <img style={{ marginLeft: "8px" }}
+                                    <img alt={"pokemon"} style={{ marginLeft: "8px" }}
                                         src="https://img.icons8.com/color/36/000000/insignia-1-stars--v1.png"/>
                                 </ListGroup.Item>
                                 {team.map((slot, index) => (
@@ -97,7 +83,7 @@ function TeamModal({open, onClose}) {
                                                        team={team}
                                                        key={index}
                                                        teamIndex={index+1}
-                                                       setTeam={(newTeam) => setTeam(newTeam)} />
+                                                       setTeam={(newTeam) => setTeam(newTeam)} onClose={onClose}/>
                                     </Tab.Pane>
                                 ))}
                             </Tab.Content>
