@@ -227,6 +227,15 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
         }
     }, []);
 
+    const saveToPokemon = (e) => {
+        const newValue = e.target.value;
+        let newPokemon = {...pokemon};
+        // newPokemon[e.target.getAttribute("data-save")] = newValue;
+        // newPokemon["heldItem"] = newValue
+        // setPokemon(newPokemon);
+        console.log(e.target.getAttribute("data-save"));
+    }
+
     return(
         <div id="configForm" className={"d-flex flex-column"}>
             <div className="p-0">
@@ -245,9 +254,9 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                             ))}
                         </div>
                         <div style={{ marginTop: "15px" }}>
-                            <input className={"form-control"} placeholder={"Pokemon..."}
+                            <input data-save={"name"} className={"form-control"} placeholder={"Pokemon..."}
                                    defaultValue={formData.name !== "" ? formData.name : null}
-                                   onKeyUp={changeName}/>
+                                   onKeyUp={changeName} onBlur={saveToPokemon} />
                         </div>
                     </div>
                     <div className={"pl-1 pr-1 pt-1"}>
@@ -279,24 +288,29 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                     <div className="p-0 d-flex justify-content-center">
                         <Typeahead id={"genders"} size={"sm"} className={"p-0 mr-0"} style={{minWidth:"100px"}}
                                    labelKey={"gender"} options={formData.genders.all}  placeholder={formData.genders.selected===""?"Gender...":formData.genders.selected}
+                                    onBlur={saveToPokemon} data-save={"gender"}
                         />
                         <h6 className={"p-2"}>Level</h6>
                         <FormControl size={"sm"} value={formData.level} type={"number"} min={1} max={100}
                                      placeholder={"Level"} className={"mr-2"} style={{maxWidth:"70px"}} onChange={calcByLevel}/>
-                        <Typeahead id={"natures"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
+                        <Typeahead data-save={"nature"} id={"natures"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
                                    labelKey={"nature"} options={formData.natures.all}  placeholder={formData.natures.selected===""?"Nature...":formData.natures.selected}
+                                    onBlur={saveToPokemon}
                         />
-                        <Typeahead id={"items"} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
+                        <Typeahead data-save={"heldItem"} id={"items"} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
                                    labelKey={"item"} options={formData.items.all}  placeholder={formData.items.selected===""?"Items...":formData.items.selected}
+                                    onBlur={saveToPokemon}
                         />
-                        <Typeahead id={"abilities"} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
+                        <Typeahead data-save={"ability"} id={"abilities"} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
                                    labelKey={"ability"} options={formData.abilities.all}  placeholder={formData.abilities.selected===""?"Ability...":formData.abilities.selected}
+                                    onBlur={saveToPokemon}
                         />
                     </div>
                     <div className="p-0 d-flex justify-content-center">
                         <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead id={"move1"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
+                            <Typeahead data-save={"move1"} id={"move1"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
                                        labelKey={"move1"} options={formData.moves.all}  placeholder={formData.moves.selected1.name===""?"move...":formData.moves.selected1.name}
+                                        onBlur={saveToPokemon}
                             />
                             <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
                                 <Badge pill variant={"light"}>{formData.moves.selected1.Type}</Badge>
@@ -309,8 +323,9 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                             <span style={{fontSize:"small"}}>Pp{" "+formData.moves.selected1.Pp}</span>
                         </div>
                         <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead id={"move2"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
+                            <Typeahead data-save={"move2"} id={"move2"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
                                        labelKey={"move2"} options={formData.moves.all}  placeholder={formData.moves.selected2.name===""?"move...":formData.moves.selected2.name}
+                                        onBlur={saveToPokemon}
                             />
                             <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
                                 <Badge pill variant={"light"}>{formData.moves.selected2.Type}</Badge>
@@ -323,8 +338,9 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                             <span style={{fontSize:"small"}}>Pp{" "+formData.moves.selected2.Pp}</span>
                         </div>
                         <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead id={"move3"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
+                            <Typeahead data-save={"move3"} id={"move3"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
                                        labelKey={"move3"} options={formData.moves.all}  placeholder={formData.moves.selected3.name===""?"move...":formData.moves.selected3.name}
+                                        onBlur={saveToPokemon}
                             />
                             <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
                                 <Badge pill variant={"light"}>{formData.moves.selected3.Type}</Badge>
@@ -337,8 +353,9 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                             <span style={{fontSize:"small"}}>Pp{" "+formData.moves.selected3.Pp}</span>
                         </div>
                         <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead id={"move4"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
+                            <Typeahead data-save={"move4"} id={"move4"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
                                        labelKey={"move4"} options={formData.moves.all}  placeholder={formData.moves.selected4.name===""?"move...":formData.moves.selected4.name}
+                                        onBlur={saveToPokemon}
                             />
                             <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
                                 <Badge pill variant={"light"}>{formData.moves.selected4.Type}</Badge>
