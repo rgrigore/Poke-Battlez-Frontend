@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
 import {Badge, Button, FormControl, Image, ProgressBar} from "react-bootstrap";
@@ -120,11 +120,37 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
 
     const [formData, setFormData] = useState(PokemonFormData);
 
+    let inputRefs =  useRef([]);
+    const refElements = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+    inputRefs.current = refElements.map(
+        (ref, index) => inputRefs.current[index] = React.createRef()
+    );
+
     const changeName = (e) => {
         e.preventDefault();
         let newName = e.target.value;
         if(newName !== "" && e.keyCode === 13) {
             fetch(newName, true);
+            for(let i = 0; i < 6; i++) {
+                inputRefs.current[i].current.value = 0;
+            }
+            for(let i = 6; i < 12; i++) {
+                inputRefs.current[i].current.value = 31;
+            }
+            inputRefs.current[12].current.value = 1;
+            for(let i = 13; i < 21; i++) {
+                inputRefs.current[i].current.clear();
+            }
+
+            // const baseStats = {"type": "", "acc": 0, "cat": "", "power": 0, "pp": 0};
+            // moveConfigRef.resetState();
+            // for(let i = 0; i < 4; i++) {
+            //     document.getElementsByClassName("type"+e.target.id)[i].innerText = "Type ";
+            //     document.getElementsByClassName("acc"+e.target.id)[i].innerText = "Acc 0";
+            //     document.getElementsByClassName("cat"+e.target.id)[i].innerText = "Cat ";
+            //     document.getElementsByClassName("power"+e.target.id)[i].innerText = "Power 0";
+            //     document.getElementsByClassName("pp"+e.target.id)[i].innerText = "Pp 0";
+            // }
         }
     };
 
@@ -278,7 +304,7 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                             ))}
                         </div>
                         <div style={{ marginTop: "15px" }}>
-                            <input className={"form-control"} placeholder={"Pokemon..."}
+                            <input id={teamIndex} className={"form-control"} placeholder={"Pokemon..."}
                                    defaultValue={formData.name !== "" ? formData.name : null}
                                    onKeyUp={changeName} />
                         </div>
@@ -298,8 +324,8 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                                 </div>
                                 <div className={"align-self-center pr-1"} typeof={"number"} style={{paddingLeft: "20px"}}>
                                     <div className={"d-flex flex-row"}>
-                                        <FormControl id={i.toString()} data-name={"EV"} size={"sm"} type={"number"} min={0} max={252} placeholder={"EV"} defaultValue={stat.EV} onChange={calcByEVIV} />
-                                        <FormControl id={i.toString()} data-name={"IV"} size={"sm"} type={"number"} min={0} max={31} placeholder={"IV"} defaultValue={stat.IV} onChange={calcByEVIV} />
+                                        <FormControl ref={inputRefs.current[i]} id={i.toString()} data-name={"EV"} size={"sm"} type={"number"} min={0} max={252} placeholder={"EV"} defaultValue={stat.EV} onChange={calcByEVIV} />
+                                        <FormControl ref={inputRefs.current[i+6]} id={i.toString()} data-name={"IV"} size={"sm"} type={"number"} min={0} max={31} placeholder={"IV"} defaultValue={stat.IV} onChange={calcByEVIV} />
                                     </div>
                                 </div>
                             </div>
@@ -310,29 +336,30 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
             <div className="p-2">
                 <div className="d-flex flex-column">
                     <div className="p-0 d-flex justify-content-center">
-                        <Typeahead id={"genders"} size={"sm"} className={"p-0 mr-0"} style={{minWidth:"100px"}}
+                        <h6 className={"p-2"}>Level</h6>
+                        <FormControl ref={inputRefs.current[12]} size={"sm"} value={formData.level} type={"number"} min={1} max={100}
+                                     placeholder={"Level"} className={"mr-2"} style={{maxWidth:"70px"}} onChange={calcByLevel}/>
+                        <Typeahead ref={inputRefs.current[13]} id={"genders"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
                                    labelKey={"gender"} options={formData.genders.all}  placeholder={formData.genders.selected===""?"Gender...":formData.genders.selected}
                                     onBlur={saveToPokemon} inputProps={{"data-save": "gender"}}
                         />
-                        <h6 className={"p-2"}>Level</h6>
-                        <FormControl size={"sm"} value={formData.level} type={"number"} min={1} max={100}
-                                     placeholder={"Level"} className={"mr-2"} style={{maxWidth:"70px"}} onChange={calcByLevel}/>
                         <Typeahead inputProps={{"data-save": "nature"}} id={"natures"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
                                    labelKey={"nature"} options={formData.natures.all}  placeholder={formData.natures.selected===""?"Nature...":formData.natures.selected}
-                                    onBlur={saveToPokemon}
+                                    onBlur={saveToPokemon} ref={inputRefs.current[14]}
                         />
                         <Typeahead inputProps={{"data-save": "heldItem"}} id={"items"} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
                                    labelKey={"item"} options={formData.items.all}  placeholder={formData.items.selected===""?"Items...":formData.items.selected}
-                                    onBlur={saveToPokemon}
+                                    onBlur={saveToPokemon} ref={inputRefs.current[15]}
                         />
                         <Typeahead inputProps={{"data-save": "ability"}} id={"abilities"} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
                                    labelKey={"ability"} options={formData.abilities.all}  placeholder={formData.abilities.selected===""?"Ability...":formData.abilities.selected}
-                                    onBlur={saveToPokemon}
+                                    onBlur={saveToPokemon} ref={inputRefs.current[16]}
                         />
                     </div>
                     <div className="p-0 d-flex justify-content-center">
                         {formData.moves.selected.map((move, i) => (
-                            <MoveConfig key={i} index={i} moves={formData.moves.all} move={formData.moves.selected[i]} save={saveToPokemon} />
+                            <MoveConfig key={i} index={i} moves={formData.moves.all} move={formData.moves.selected[i]}
+                                        save={saveToPokemon} refs={inputRefs.current} teamIndex={teamIndex} />
                         ))}
                     </div>
                     <div className="p-1 d-flex justify-content-end">

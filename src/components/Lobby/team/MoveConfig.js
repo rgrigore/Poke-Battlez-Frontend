@@ -3,9 +3,13 @@ import {Typeahead} from "react-bootstrap-typeahead";
 import {Badge} from "react-bootstrap";
 import axios from "axios";
 
-function MoveConfig({ moves, move, save, index }) {
+function MoveConfig({ moves, move, save, index, refs, teamIndex }) {
+    const baseStats = {"type": "", "acc": 0, "cat": "", "power": 0, "pp": 0};
+    const [stats, setStats] = useState(baseStats);
 
-    const [stats, setStats] = useState({"type": "", "acc": 0, "cat": "", "power": 0, "pp": 0});
+    const trig = () => {
+        console.log("triggered");
+    }
 
     const updateStats = (e) => {
         e.preventDefault();
@@ -20,7 +24,7 @@ function MoveConfig({ moves, move, save, index }) {
             axios.get(`https://pokeapi.co/api/v2/move/${move}`).then(res => {
                 newStats["type"] = res.data.type.name;
                 newStats["acc"] = res.data.accuracy === null ? 0 : res.data.accuracy;
-                newStats["cat"] = "Other";
+                newStats["cat"] = res.data.damage_class.name;
                 newStats["power"] = res.data.power === null ? 0 : res.data.power;
                 newStats["pp"] = res.data.pp === null ? 0 : res.data.pp;
                 setStats(newStats);
@@ -36,17 +40,18 @@ function MoveConfig({ moves, move, save, index }) {
         <div className={"p-2"} style={moveInfoStyle}>
             <Typeahead id={"move"+(index+1)} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
                        labelKey={"name"} options={moves}  placeholder={move.name===""?"move...":move.name}
-                       inputProps={{"data-save": "move"+(index+1)}} onBlur={updateStats}
+                       inputProps={{"data-save": "move"+(index+1)}} onBlur={updateStats} ref={refs[index+17]}
+                       onChange={trig}
             />
-            <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
+            <span className={"type"+teamIndex} style={{fontSize:"small", padding: "-3px"}}>Type{" "}
                 <Badge pill variant={"light"}>{stats.type}</Badge>
                             </span><br />
-            <span style={{fontSize:"small"}}>Acc{" "+stats.acc}</span><br />
-            <span style={{fontSize:"small"}}>Cat{" "}
+            <span className={"acc"+teamIndex} style={{fontSize:"small"}}>Acc{" "+stats.acc}</span><br />
+            <span className={"cat"+teamIndex} style={{fontSize:"small"}}>Cat{" "}
                 <Badge pill variant={"light"}>{stats.cat}</Badge>
                             </span><br />
-            <span style={{fontSize:"small"}}>Power{" "+stats.power}</span><br />
-            <span style={{fontSize:"small"}}>Pp{" "+stats.pp}</span>
+            <span className={"power"+teamIndex} style={{fontSize:"small"}}>Power{" "+stats.power}</span><br />
+            <span className={"pp"+teamIndex} style={{fontSize:"small"}}>Pp{" "+stats.pp}</span>
         </div>
     );
 }
