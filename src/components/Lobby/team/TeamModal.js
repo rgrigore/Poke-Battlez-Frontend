@@ -82,7 +82,7 @@ function TeamModal({open, onClose}) {
                                         <PokemonConfig slot={slot}
                                                        team={team}
                                                        key={index}
-                                                       teamIndex={index+1}
+                                                       teamIndex={index}
                                                        setTeam={(newTeam) => setTeam(newTeam)} onClose={onClose}/>
                                     </Tab.Pane>
                                 ))}

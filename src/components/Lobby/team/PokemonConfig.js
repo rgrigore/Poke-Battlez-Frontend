@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import {Badge, Button, FormControl, Image, ProgressBar} from "react-bootstrap";
 import {Typeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
+import MoveConfig from "./MoveConfig";
 
 function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
     // empty Pokemon Object
@@ -108,12 +109,15 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
         },
         "moves": {
             "all": ["move..."],
-            "selected1": {"name": pokemon.move1, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-            "selected2": {"name": pokemon.move2, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-            "selected3": {"name": pokemon.move3, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-            "selected4": {"name": pokemon.move4, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
+            "selected": [
+                {"name": pokemon.move1, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+                {"name": pokemon.move2, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+                {"name": pokemon.move3, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+                {"name": pokemon.move4, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
+            ]
         }
     }
+
     const [formData, setFormData] = useState(PokemonFormData);
 
     const changeName = (e) => {
@@ -161,10 +165,9 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
             newPokemon["natures"]["selected"] = "";
             newPokemon["items"]["selected"] = "";
             newPokemon["abilities"]["selected"] = "";
-            newPokemon["moves"]["selected1"]["name"] = "";
-            newPokemon["moves"]["selected2"]["name"] = "";
-            newPokemon["moves"]["selected3"]["name"] = "";
-            newPokemon["moves"]["selected4"]["name"] = "";
+            newPokemon["moves"]["selected"].map(move => (
+                move["name"] = ""
+            ));
         }
 
         let pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${name}`;
@@ -230,10 +233,31 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
     const saveToPokemon = (e) => {
         const newValue = e.target.value;
         let newPokemon = {...pokemon};
-        // newPokemon[e.target.getAttribute("data-save")] = newValue;
-        // newPokemon["heldItem"] = newValue
-        // setPokemon(newPokemon);
-        console.log(e.target.getAttribute("data-save"));
+        newPokemon[e.target.getAttribute("data-save")] = newValue;
+        setPokemon(newPokemon);
+    }
+
+    const savePokemon = () => {
+        let newPokemon = {...pokemon};
+        newPokemon["id"] = formData.id;
+        newPokemon["name"] = formData.name;
+        newPokemon["level"] = formData.level;
+        newPokemon["IvHp"] = formData.stats[0].IV;
+        newPokemon["IvAttack"] = formData.stats[1].IV;
+        newPokemon["IvDefence"] = formData.stats[2].IV;
+        newPokemon["IvSpAttack"] =  formData.stats[3].IV;
+        newPokemon["IvSpDefence"] =  formData.stats[4].IV;
+        newPokemon["IvSpeed"] = formData.stats[5].IV;
+        newPokemon["EvHp"] = formData.stats[0].EV;
+        newPokemon["EvAttack"] = formData.stats[1].EV;
+        newPokemon["EvDefence"] = formData.stats[2].EV;
+        newPokemon["EvSpAttack"] = formData.stats[3].EV;
+        newPokemon["EvSpDefence"] = formData.stats[4].EV;
+        newPokemon["EvSpeed"] = formData.stats[5].EV;
+
+        let newTeam = [...team];
+        newTeam[teamIndex] = newPokemon;
+        setTeam(newTeam);
     }
 
     return(
@@ -254,9 +278,9 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                             ))}
                         </div>
                         <div style={{ marginTop: "15px" }}>
-                            <input data-save={"name"} className={"form-control"} placeholder={"Pokemon..."}
+                            <input className={"form-control"} placeholder={"Pokemon..."}
                                    defaultValue={formData.name !== "" ? formData.name : null}
-                                   onKeyUp={changeName} onBlur={saveToPokemon} />
+                                   onKeyUp={changeName} />
                         </div>
                     </div>
                     <div className={"pl-1 pr-1 pt-1"}>
@@ -288,91 +312,34 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                     <div className="p-0 d-flex justify-content-center">
                         <Typeahead id={"genders"} size={"sm"} className={"p-0 mr-0"} style={{minWidth:"100px"}}
                                    labelKey={"gender"} options={formData.genders.all}  placeholder={formData.genders.selected===""?"Gender...":formData.genders.selected}
-                                    onBlur={saveToPokemon} data-save={"gender"}
+                                    onBlur={saveToPokemon} inputProps={{"data-save": "gender"}}
                         />
                         <h6 className={"p-2"}>Level</h6>
                         <FormControl size={"sm"} value={formData.level} type={"number"} min={1} max={100}
                                      placeholder={"Level"} className={"mr-2"} style={{maxWidth:"70px"}} onChange={calcByLevel}/>
-                        <Typeahead data-save={"nature"} id={"natures"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
+                        <Typeahead inputProps={{"data-save": "nature"}} id={"natures"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
                                    labelKey={"nature"} options={formData.natures.all}  placeholder={formData.natures.selected===""?"Nature...":formData.natures.selected}
                                     onBlur={saveToPokemon}
                         />
-                        <Typeahead data-save={"heldItem"} id={"items"} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
+                        <Typeahead inputProps={{"data-save": "heldItem"}} id={"items"} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
                                    labelKey={"item"} options={formData.items.all}  placeholder={formData.items.selected===""?"Items...":formData.items.selected}
                                     onBlur={saveToPokemon}
                         />
-                        <Typeahead data-save={"ability"} id={"abilities"} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
+                        <Typeahead inputProps={{"data-save": "ability"}} id={"abilities"} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
                                    labelKey={"ability"} options={formData.abilities.all}  placeholder={formData.abilities.selected===""?"Ability...":formData.abilities.selected}
                                     onBlur={saveToPokemon}
                         />
                     </div>
                     <div className="p-0 d-flex justify-content-center">
-                        <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead data-save={"move1"} id={"move1"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
-                                       labelKey={"move1"} options={formData.moves.all}  placeholder={formData.moves.selected1.name===""?"move...":formData.moves.selected1.name}
-                                        onBlur={saveToPokemon}
-                            />
-                            <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected1.Type}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Acc{" "+formData.moves.selected1.Acc}</span><br />
-                            <span style={{fontSize:"small"}}>Cat{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected1.Cat}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Power{" "+formData.moves.selected1.Power}</span><br />
-                            <span style={{fontSize:"small"}}>Pp{" "+formData.moves.selected1.Pp}</span>
-                        </div>
-                        <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead data-save={"move2"} id={"move2"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
-                                       labelKey={"move2"} options={formData.moves.all}  placeholder={formData.moves.selected2.name===""?"move...":formData.moves.selected2.name}
-                                        onBlur={saveToPokemon}
-                            />
-                            <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected2.Type}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Acc{" "+formData.moves.selected2.Acc}</span><br />
-                            <span style={{fontSize:"small"}}>Cat{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected2.Cat}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Power{" "+formData.moves.selected2.Power}</span><br />
-                            <span style={{fontSize:"small"}}>Pp{" "+formData.moves.selected2.Pp}</span>
-                        </div>
-                        <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead data-save={"move3"} id={"move3"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
-                                       labelKey={"move3"} options={formData.moves.all}  placeholder={formData.moves.selected3.name===""?"move...":formData.moves.selected3.name}
-                                        onBlur={saveToPokemon}
-                            />
-                            <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected3.Type}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Acc{" "+formData.moves.selected3.Acc}</span><br />
-                            <span style={{fontSize:"small"}}>Cat{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected3.Cat}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Power{" "+formData.moves.selected3.Power}</span><br />
-                            <span style={{fontSize:"small"}}>Pp{" "+formData.moves.selected3.Pp}</span>
-                        </div>
-                        <div className={"p-2"} style={moveInfoStyle}>
-                            <Typeahead data-save={"move4"} id={"move4"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
-                                       labelKey={"move4"} options={formData.moves.all}  placeholder={formData.moves.selected4.name===""?"move...":formData.moves.selected4.name}
-                                        onBlur={saveToPokemon}
-                            />
-                            <span style={{fontSize:"small", padding: "-3px"}}>Type{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected4.Type}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Acc{" "+formData.moves.selected4.Acc}</span><br />
-                            <span style={{fontSize:"small"}}>Cat{" "}
-                                <Badge pill variant={"light"}>{formData.moves.selected4.Cat}</Badge>
-                            </span><br />
-                            <span style={{fontSize:"small"}}>Power{" "+formData.moves.selected4.Power}</span><br />
-                            <span style={{fontSize:"small"}}>Pp{" "+formData.moves.selected4.Pp}</span>
-                        </div>
+                        {formData.moves.selected.map((move, i) => (
+                            <MoveConfig key={i} index={i} moves={formData.moves.all} move={formData.moves.selected[i]} save={saveToPokemon} />
+                        ))}
                     </div>
                     <div className="p-1 d-flex justify-content-end">
                         <Button variant="secondary" size="sm" onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button variant="secondary" size="sm" className={"pl-2 ml-2"}>
+                        <Button variant="secondary" size="sm" className={"pl-2 ml-2"} onClick={savePokemon}>
                             Save
                         </Button>
                     </div>
@@ -380,10 +347,6 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
             </div>
         </div>
     );
-}
-
-const moveInfoStyle = {
-    borderStyle: "groove"
 }
 
 PokemonConfig.propTypes = {
