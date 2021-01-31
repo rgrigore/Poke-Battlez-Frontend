@@ -69,10 +69,12 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
     //     },
     //     "moves": {
     //         "all": ["move..."],
-    //         "selected1": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-    //         "selected2": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-    //         "selected3": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-    //         "selected4": {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
+    //         "selected": [
+    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
+    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
+    //         ]
     //     }
     // }
 
@@ -139,18 +141,13 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
             }
             inputRefs.current[12].current.value = 1;
             for(let i = 13; i < 21; i++) {
+                // let newValue = inputRefs.current[i].current.select;
+                // let newPokemon = {...pokemon};
+                // newPokemon[inputRefs.current[i].current.props.inputProps["data-save"]] = newValue;
+                // setPokemon(newPokemon);
                 inputRefs.current[i].current.clear();
+                // console.log(inputRefs.current[i].current);
             }
-
-            // const baseStats = {"type": "", "acc": 0, "cat": "", "power": 0, "pp": 0};
-            // moveConfigRef.resetState();
-            // for(let i = 0; i < 4; i++) {
-            //     document.getElementsByClassName("type"+e.target.id)[i].innerText = "Type ";
-            //     document.getElementsByClassName("acc"+e.target.id)[i].innerText = "Acc 0";
-            //     document.getElementsByClassName("cat"+e.target.id)[i].innerText = "Cat ";
-            //     document.getElementsByClassName("power"+e.target.id)[i].innerText = "Power 0";
-            //     document.getElementsByClassName("pp"+e.target.id)[i].innerText = "Pp 0";
-            // }
         }
     };
 
@@ -261,6 +258,11 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
         let newPokemon = {...pokemon};
         newPokemon[e.target.getAttribute("data-save")] = newValue;
         setPokemon(newPokemon);
+        if(["move1", "move2", "move3", "move4"].includes(e.target.getAttribute("data-save"))) {
+            let newData = {...formData};
+            newData["moves"]["selected"][e.target.getAttribute("data-save").slice(-1)-1]["name"] = newValue;
+            setFormData(newData);
+        }
     }
 
     const savePokemon = () => {
