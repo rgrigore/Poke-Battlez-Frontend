@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Col, ListGroup, Modal, Row, Tab} from "react-bootstrap";
 import PokemonCard from "./PokemonCard";
 import PokemonConfig from "./PokemonConfig";
@@ -6,35 +6,50 @@ import PokemonConfig from "./PokemonConfig";
 import "../../../css/TeamDeck.css";
 import PokeBadge from "./PokeBadge";
 
-function TeamModal({open, onClose}) {
+function TeamModal({open, onClose, theTeam}) {
 
-    const testPokemon = {
-        "id": 1,
-        "name": "bulbasaur",
-        "level": 2,
-        "IvHp": 31,
-        "IvAttack": 31,
-        "IvDefence": 31,
-        "IvSpAttack": 31,
-        "IvSpDefence": 31,
-        "IvSpeed": 28,
-        "EvHp": 7,
-        "EvAttack": 30,
-        "EvDefence": 32,
-        "EvSpAttack": 0,
-        "EvSpDefence": 150,
-        "EvSpeed": 90,
-        "gender": "Female",
-        "nature": "Brave",
-        "heldItem": "master-ball",
-        "ability": "chlorophyll",
-        "move1": "razor-wind",
-        "move2": "cut",
-        "move3": "tackle",
-        "move4": "growl"
-    }
+    // const testPokemon = {
+    //     "id": 1,
+    //     "indexId": 1,
+    //     "name": "bulbasaur",
+    //     "level": 2,
+    //     "ivHp": 31,
+    //     "ivAttack": 31,
+    //     "ivDefence": 31,
+    //     "ivSpAttack": 31,
+    //     "ivSpDefence": 31,
+    //     "ivSpeed": 28,
+    //     "evHp": 7,
+    //     "evAttack": 30,
+    //     "evDefence": 32,
+    //     "evSpAttack": 0,
+    //     "evSpDefence": 150,
+    //     "evSpeed": 90,
+    //     "gender": "Female",
+    //     "nature": "Brave",
+    //     "heldItem": "master-ball",
+    //     "ability": "chlorophyll",
+    //     "move1": "razor-wind",
+    //     "move2": "cut",
+    //     "move3": "tackle",
+    //     "move4": "growl"
+    // }
 
-    const [team, setTeam] = useState([{}, testPokemon, {}, {}, {}, {}]);
+    const [team, setTeam] = useState(theTeam===null?[{}, {}, {}, {}, {}, {}]:theTeam);
+
+    // const updateTeam = (receivedTeam) => {
+    //     const newTeam = {...team};
+    //     theTeam.map(team => {
+    //         newTeam[team.position] = team;
+    //     })
+    //     setTeam(team);
+    // };
+
+    useEffect(() => {
+        if(theTeam!==null) {
+            setTeam(theTeam)
+        }
+    }, [theTeam])
 
     return(
         <Modal
@@ -42,7 +57,7 @@ function TeamModal({open, onClose}) {
             onHide={onClose}
             size="lg"
             aria-labelledby="teambuild-modal"
-        >
+        >{console.log(theTeam)}
             <Modal.Header closeButton style={{ backgroundColor: "#696969" }}>
                 <Modal.Title id="teambuild-modal" >
                     <h6>Teambuilder</h6>

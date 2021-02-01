@@ -19,7 +19,7 @@ function PokemonCard({ slot, index }) {
     } else {
         return(
             <Card bg="secondary" border="success" style={cardStyle} className="mb-4">
-                <Card.Img variant="top" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.id}.png`} />
+                <Card.Img variant="top" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.indexId}.png`} />
                 <Card.Body>
                     <Card.Title className="text-center">{slot.name}</Card.Title>
                 </Card.Body>

@@ -6,7 +6,7 @@ import {isAuthenticated} from "../../controller/AccountController";
 
 import "../../css/HiddenScrollbar.css";
 
-function Chat() {
+function Chat(props) {
 
 	let [first, setFirst] = useState(true);
 
@@ -40,7 +40,7 @@ function Chat() {
 	}
 
 	if (first && isAuthenticated()) {
-		connect(setNewMessage, setUsers);
+		connect(setNewMessage, setUsers, props.setTeam);
 		setFirst(false);
 	}
 

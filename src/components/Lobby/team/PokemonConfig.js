@@ -5,25 +5,29 @@ import {Badge, Button, FormControl, Image, ProgressBar} from "react-bootstrap";
 import {Typeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
 import MoveConfig from "./MoveConfig";
+import {sendPokemon} from "../../../controller/ChatController";
 
 function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
     // empty Pokemon Object
     let Pokemon = {
-        "id": 0,
+        "id": null,
+        "indexId": 0,
+        "teamId": null,
+        "position": teamIndex,
         "name": "",
         "level": 1,
-        "IvHp": 31,
-        "IvAttack": 31,
-        "IvDefence": 31,
-        "IvSpAttack": 31,
-        "IvSpDefence": 31,
-        "IvSpeed": 31,
-        "EvHp": 0,
-        "EvAttack": 0,
-        "EvDefence": 0,
-        "EvSpAttack": 0,
-        "EvSpDefence": 0,
-        "EvSpeed": 0,
+        "ivHp": 31,
+        "ivAttack": 31,
+        "ivDefence": 31,
+        "ivSpAttack": 31,
+        "ivSpDefence": 31,
+        "ivSpeed": 31,
+        "evHp": 0,
+        "evAttack": 0,
+        "evDefence": 0,
+        "evSpAttack": 0,
+        "evSpDefence": 0,
+        "evSpeed": 0,
         "gender": "",
         "nature": "",
         "heldItem": "",
@@ -79,17 +83,17 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
     // }
 
     let PokemonFormData = {
-        "id": pokemon.id,
+        "id": 0,
         "name": pokemon.name,
         "level": pokemon.level,
         "Types": ["normal"],
         "stats": [
-            {"name": "HP", "base": 0, "val": 241, "EV": pokemon.EvHp, "IV": pokemon.IvHp},
-            {"name": "Atk", "base": 0, "val": 136, "EV": pokemon.EvAttack, "IV": pokemon.IvAttack},
-            {"name": "Def", "base": 0, "val": 136, "EV": pokemon.EvDefence, "IV": pokemon.IvDefence},
-            {"name": "S. Atk", "base": 0, "val": 136, "EV": pokemon.EvSpAttack, "IV": pokemon.IvSpAttack},
-            {"name": "S. Def", "base": 0, "val": 136, "EV": pokemon.EvSpDefence, "IV": pokemon.IvSpDefence},
-            {"name": "Speed", "base": 0, "val": 136, "EV": pokemon.EvSpeed, "IV": pokemon.IvSpeed}
+            {"name": "HP", "base": 0, "val": 241, "EV": pokemon.evHp, "IV": pokemon.ivHp},
+            {"name": "Atk", "base": 0, "val": 136, "EV": pokemon.evAttack, "IV": pokemon.ivAttack},
+            {"name": "Def", "base": 0, "val": 136, "EV": pokemon.evDefence, "IV": pokemon.ivDefence},
+            {"name": "S. Atk", "base": 0, "val": 136, "EV": pokemon.evSpAttack, "IV": pokemon.ivSpAttack},
+            {"name": "S. Def", "base": 0, "val": 136, "EV": pokemon.evSpDefence, "IV": pokemon.ivSpDefence},
+            {"name": "Speed", "base": 0, "val": 136, "EV": pokemon.evSpeed, "IV": pokemon.ivSpeed}
         ],
         "genders": {
             "all": ["Gender"],
@@ -140,14 +144,12 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
                 inputRefs.current[i].current.value = 31;
             }
             inputRefs.current[12].current.value = 1;
+            let newPokemon = {...pokemon};
             for(let i = 13; i < 21; i++) {
-                // let newValue = inputRefs.current[i].current.select;
-                // let newPokemon = {...pokemon};
-                // newPokemon[inputRefs.current[i].current.props.inputProps["data-save"]] = newValue;
-                // setPokemon(newPokemon);
+                newPokemon[inputRefs.current[i].current.props.inputProps["data-save"]] = "";
                 inputRefs.current[i].current.clear();
-                // console.log(inputRefs.current[i].current);
             }
+            setPokemon(newPokemon);
         }
     };
 
@@ -267,25 +269,28 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
 
     const savePokemon = () => {
         let newPokemon = {...pokemon};
-        newPokemon["id"] = formData.id;
+        newPokemon["indexId"] = formData.id;
         newPokemon["name"] = formData.name;
         newPokemon["level"] = formData.level;
-        newPokemon["IvHp"] = formData.stats[0].IV;
-        newPokemon["IvAttack"] = formData.stats[1].IV;
-        newPokemon["IvDefence"] = formData.stats[2].IV;
-        newPokemon["IvSpAttack"] =  formData.stats[3].IV;
-        newPokemon["IvSpDefence"] =  formData.stats[4].IV;
-        newPokemon["IvSpeed"] = formData.stats[5].IV;
-        newPokemon["EvHp"] = formData.stats[0].EV;
-        newPokemon["EvAttack"] = formData.stats[1].EV;
-        newPokemon["EvDefence"] = formData.stats[2].EV;
-        newPokemon["EvSpAttack"] = formData.stats[3].EV;
-        newPokemon["EvSpDefence"] = formData.stats[4].EV;
-        newPokemon["EvSpeed"] = formData.stats[5].EV;
+        newPokemon["ivHp"] = formData.stats[0].IV;
+        newPokemon["ivAttack"] = formData.stats[1].IV;
+        newPokemon["ivDefence"] = formData.stats[2].IV;
+        newPokemon["ivSpAttack"] =  formData.stats[3].IV;
+        newPokemon["ivSpDefence"] =  formData.stats[4].IV;
+        newPokemon["ivSpeed"] = formData.stats[5].IV;
+        newPokemon["evHp"] = formData.stats[0].EV;
+        newPokemon["evAttack"] = formData.stats[1].EV;
+        newPokemon["evDefence"] = formData.stats[2].EV;
+        newPokemon["evSpAttack"] = formData.stats[3].EV;
+        newPokemon["evSpDefence"] = formData.stats[4].EV;
+        newPokemon["evSpeed"] = formData.stats[5].EV;
 
         let newTeam = [...team];
         newTeam[teamIndex] = newPokemon;
         setTeam(newTeam);
+
+        // console.log(newPokemon);
+        sendPokemon(newPokemon);
     }
 
     return(

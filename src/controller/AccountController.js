@@ -1,6 +1,6 @@
 import {Client} from "@stomp/stompjs/esm6";
 
-const SOCKET = "ws://localhost:8080/account-management"
+const SOCKET = "ws://localhost:8080/account-management";
 const REGISTER_TOPIC = "/app/account/register/";
 const LOGIN_TOPIC = "/app/account/login/";
 const CONFIRM_TOPIC = "/account/confirm/";
