@@ -13,7 +13,7 @@ function Lobby() {
     const [first, setFirst] = useState(true);
 
     const [showTeam, setShowTeam] = useState(false);
-    const[team, setTeam] = useState(null);
+    const[dbTeam, setDbTeam] = useState(null);
 
     if (first) {
 	    connect();
@@ -24,9 +24,9 @@ function Lobby() {
         <div className={"Lobby vh-100"}>
             <UserContextProvider>
                 <LobbyNavbar openTeam={() => setShowTeam(true)} />
-                <Chat setTeam={(newTeam) => setTeam(newTeam)}/>
+                <Chat setTeam={(newTeam) => setDbTeam(newTeam)}/>
                 <RegisterModal open={!registered} onClose={() => setRegistered(true)} />
-                <TeamModal open={showTeam} onClose={() => setShowTeam(false)} theTeam={team}/>
+                <TeamModal open={showTeam} onClose={() => setShowTeam(false)} dbTeam={dbTeam}/>
             </UserContextProvider>
         </div>
     );

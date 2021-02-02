@@ -6,7 +6,7 @@ import PokemonConfig from "./PokemonConfig";
 import "../../../css/TeamDeck.css";
 import PokeBadge from "./PokeBadge";
 
-function TeamModal({open, onClose, theTeam}) {
+function TeamModal({open, onClose, dbTeam}) {
 
     // const testPokemon = {
     //     "id": 1,
@@ -35,7 +35,7 @@ function TeamModal({open, onClose, theTeam}) {
     //     "move4": "growl"
     // }
 
-    const [team, setTeam] = useState(theTeam===null?[{}, {}, {}, {}, {}, {}]:theTeam);
+    const [team, setTeam] = useState([{}, {}, {}, {}, {}, {}]);
 
     // const updateTeam = (receivedTeam) => {
     //     const newTeam = {...team};
@@ -45,11 +45,15 @@ function TeamModal({open, onClose, theTeam}) {
     //     setTeam(team);
     // };
 
-    useEffect(() => {
-        if(theTeam!==null) {
-            setTeam(theTeam)
-        }
-    }, [theTeam])
+    // useEffect(() => {
+    //     if(dbTeam!==null) {
+    //         const newTeam = {...team};
+    //         dbTeam.map(pokemon => (
+    //             newTeam[pokemon.position]["teamId"] = pokemon.teamId
+    //         ));
+    //         setTeam(newTeam);
+    //     }
+    // }, [dbTeam])
 
     return(
         <Modal
@@ -57,7 +61,7 @@ function TeamModal({open, onClose, theTeam}) {
             onHide={onClose}
             size="lg"
             aria-labelledby="teambuild-modal"
-        >{console.log(theTeam)}
+        >{console.log(team)}
             <Modal.Header closeButton style={{ backgroundColor: "#696969" }}>
                 <Modal.Title id="teambuild-modal" >
                     <h6>Teambuilder</h6>
@@ -98,7 +102,7 @@ function TeamModal({open, onClose, theTeam}) {
                                                        team={team}
                                                        key={index}
                                                        teamIndex={index}
-                                                       setTeam={(newTeam) => setTeam(newTeam)} onClose={onClose}/>
+                                                       setTeam={(newTeam) => setTeam(newTeam)} onClose={onClose} dbTeam={dbTeam}/>
                                     </Tab.Pane>
                                 ))}
                             </Tab.Content>

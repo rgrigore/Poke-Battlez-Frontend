@@ -7,7 +7,7 @@ import axios from "axios";
 import MoveConfig from "./MoveConfig";
 import {sendPokemon} from "../../../controller/ChatController";
 
-function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
+function PokemonConfig({ slot, teamIndex, team, setTeam, onClose, dbTeam }) {
     // empty Pokemon Object
     let Pokemon = {
         "id": null,
@@ -284,14 +284,31 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose }) {
         newPokemon["evSpAttack"] = formData.stats[3].EV;
         newPokemon["evSpDefence"] = formData.stats[4].EV;
         newPokemon["evSpeed"] = formData.stats[5].EV;
-
+        if(dbTeam!==null) {
+            newPokemon["teamId"] = dbTeam[0].teamId;
+        }
         let newTeam = [...team];
         newTeam[teamIndex] = newPokemon;
         setTeam(newTeam);
 
-        // console.log(newPokemon);
+        console.log(newPokemon);
+        console.log(dbTeam);
         sendPokemon(newPokemon);
     }
+
+    useEffect(() => {
+        if(dbTeam!==null) {
+            console.log(dbTeam);
+            let newTeam = [...team];
+            dbTeam.map(dbPoke => (
+                newTeam[dbPoke.position]["id"] = dbPoke.id
+            ));
+            dbTeam.map(dbPoke => (
+                newTeam[dbPoke.position]["teamId"] = dbPoke.teamId
+            ));
+            setTeam(newTeam);
+        }
+    }, [dbTeam])
 
     return(
         <div id="configForm" className={"d-flex flex-column"}>

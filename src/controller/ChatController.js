@@ -10,7 +10,7 @@ const TEAM_RECEIVE_TOPIC = "/chat/team/";
 
 let client = [];
 
-export function connect(updateMessages, updateUsers, setTeam) {
+export function connect(updateMessages, updateUsers, setDbTeam) {
 	console.log("Chat connect")
 
 	client.push(new Client({
@@ -29,7 +29,7 @@ export function connect(updateMessages, updateUsers, setTeam) {
 		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)));
 		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => {
 			console.log(JSON.parse(team.body));
-			setTeam(JSON.parse(team.body));
+			setDbTeam(JSON.parse(team.body));
 		});
 	};
 
