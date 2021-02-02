@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import ReactDom from 'react-dom'
-import { login } from "../../../controller/AccountController";
+import {login} from "../../../controller/AccountController";
 import { UserContext } from "./UserContext";
 import { Button } from "react-bootstrap";
 
@@ -9,7 +9,7 @@ const MODAL_STYLES = {
 	top: '50%',
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
-	backgroundColor: '#FFF',
+	backgroundColor: '#9ea8b1',
 	padding: '50px',
 	zIndex: 1000
 }
@@ -25,7 +25,7 @@ const OVERLAY_STYLES = {
 }
 
 export default function LoginModal({ open, onClose }) {
-	const setUser = useContext(UserContext)[1];
+	const userContext = useContext(UserContext);
 
 	if (!open) return null
 
@@ -33,9 +33,9 @@ export default function LoginModal({ open, onClose }) {
 		login({
 			email: document.getElementById("login_email").value,
 			password: document.getElementById("login_password").value
-		}, state => {
+		}, (state, user) => {
 			if (state) {
-				setUser(document.getElementById("login_email").value)
+				userContext.setUser(user);
 				onClose();
 			}
 		});

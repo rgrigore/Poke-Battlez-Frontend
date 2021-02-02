@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ import { Badge } from "react-bootstrap";
 import pokeLogo from "../../img/pokeball_logo_lobby.png";
 
 function LobbyNavbar() {
-    const user = useContext(UserContext)[0];
 
     return(
         <Navbar bg="dark" variant="dark" fixed={"top"}>
@@ -26,9 +25,13 @@ function LobbyNavbar() {
                 <Nav.Link as={Link} to="/teambuilder">TEAMBUILDER</Nav.Link>
             </Nav>
             <Navbar.Collapse className="justify-content-end">
-                <Navbar.Text>
-                    Signed in as: <Badge variant={"primary"}>{ user }</Badge>
-                </Navbar.Text>
+                <UserContext.Consumer>
+                    { ({ user }) => (
+                        <Navbar.Text>
+                            Signed in as: <Badge variant={"primary"}>{ user.username }</Badge>
+                        </Navbar.Text>
+                    )}
+                </UserContext.Consumer>
             </Navbar.Collapse>
         </Navbar>
     );

@@ -10,7 +10,7 @@ const MODAL_STYLES = {
 	top: '50%',
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
-	backgroundColor: '#FFF',
+	backgroundColor: '#9ea8b1',
 	padding: '50px',
 	zIndex: 1000
 }
@@ -26,7 +26,7 @@ const OVERLAY_STYLES = {
 }
 
 export default function RegisterModal({ open, onClose }) {
-	const setUser = useContext(UserContext)[1];
+	const userContext = useContext(UserContext);
 	const [children, setChildren] = useState(false)
 	if (!open) return null
 	if(children) return <LoginModal open={children} onClose={onClose} />
@@ -36,9 +36,9 @@ export default function RegisterModal({ open, onClose }) {
 			email: document.getElementById("register_email").value,
 			username: document.getElementById("register_username").value,
 			password: document.getElementById("register_password").value
-		}, state => {
+		}, (state, user) => {
 			if (state) {
-				setUser(document.getElementById("register_username").value);
+				userContext.setUser(user);
 				onClose();
 			}
 		});

@@ -14,19 +14,20 @@ let user = {
 }
 
 export function connect() {
-	console.log("Account connect");
 	client.push(new Client({
 		brokerURL: SOCKET,
 		connectHeaders: {},
 		debug: function (str) {
-			console.log("Account: " + str);
+			// console.log("Account: " + str);
 		},
 		reconnectDelay: 5000,
 		heartbeatIncoming: 4000,
 		heartbeatOutgoing: 4000,
 	}));
 
-	client[0].onConnect = () => console.log("connected to account");
+	client[0].onConnect = () => {
+		// TODO Get an UUID from Spring
+	};
 
 	client[0].onStompError = frame => {
 		console.log('Broker reported error: ' + frame.headers['message']);
@@ -49,12 +50,13 @@ function validateConfirmation(confirmation, callback) {
 		user.username = confirmation.username;
 		user.id = confirmation.id;
 		authenticated = true;
+		console.log(user);
 	}
-	callback(authenticated);
+	callback(authenticated, user);
 }
 
 export function register(form, callback) {
-	let key = Math.floor(Math.random() * 10000000);
+	let key = Math.floor(Math.random() * 10000000); // TODO Switch to using the UUID from Spring
 
 	subscribeForConfirmation(key, callback);
 	client[0].publish({
@@ -64,7 +66,7 @@ export function register(form, callback) {
 }
 
 export function login(form, callback) {
-	let key = Math.floor(Math.random() * 10000000);
+	let key = Math.floor(Math.random() * 10000000); // TODO Switch to using the UUID from Spring
 
 	subscribeForConfirmation(key, callback);
 	client[0].publish({
