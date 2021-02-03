@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
 import {Badge, Button, FormControl, Image, ProgressBar} from "react-bootstrap";
@@ -29,31 +29,29 @@ function PokemonConfig({ teamPokemon, onClose }) {
     };
     const [nature, setNature] = useState("");
 
-    const calculateHp = stat => {
-        console.log(Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + level + 10);
-        stat.setValue(Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + level + 10);
+    console.log(level);
+
+    let calculateHp = stat => {
+        console.log("called at " + level)
+        const temp = [...stats];
+        temp[stat.index].value = Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + level + 10;
+        setStats(temp);
     };
 
     const calculateStat = stat => {
-        stat.setValue(Math.floor((Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + 5) * stat.nature));
+        const temp = [...stats];
+        temp[stat.index].value = Math.floor((Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + 5) * stat.nature);
+        setStats(temp);
     };
 
-    const [hp, setHp] = useState(0);
-    const [attack, setAttack] = useState(0);
-    const [defence, setDefence] = useState(0);
-    const [spAttack, setSpAttack] = useState(0);
-    const [spDefence, setSpDefence] = useState(0);
-    const [speed, setSpeed] = useState(0);
-
     const [stats, setStats] = useState([
-        { name: "Hp", value: hp, setValue: setHp, base: 0, nature: 1, EV: teamPokemon.pokemon.evHp, IV: teamPokemon.pokemon.ivHp, calculate: calculateHp },
-        { name: "Atk", value: attack, setValue: setAttack, base: 0, nature: 1, EV: teamPokemon.pokemon.evAttack, IV: teamPokemon.pokemon.ivAttack, calculate: calculateStat },
-        { name: "Def", value: defence, setValue: setDefence, base: 0, nature: 1, EV: teamPokemon.pokemon.evDefence, IV: teamPokemon.pokemon.ivDefence, calculate: calculateStat },
-        { name: "Sp. Atk", value: spAttack, setValue: setSpAttack, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpAttack, IV: teamPokemon.pokemon.ivSpAttack, calculate: calculateStat },
-        { name: "Sp. Def", value: spDefence, setValue: setSpDefence, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpDefence, IV: teamPokemon.pokemon.ivSpDefence, calculate: calculateStat },
-        { name: "Speed", value: speed, setValue: setSpeed, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpeed, IV: teamPokemon.pokemon.ivSpeed, calculate: calculateStat }
+        { name: "Hp", index: 0, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evHp, IV: teamPokemon.pokemon.ivHp, calculate: calculateHp },
+        { name: "Atk", index: 1, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evAttack, IV: teamPokemon.pokemon.ivAttack, calculate: calculateStat },
+        { name: "Def", index: 2, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evDefence, IV: teamPokemon.pokemon.ivDefence, calculate: calculateStat },
+        { name: "Sp. Atk", index: 3, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpAttack, IV: teamPokemon.pokemon.ivSpAttack, calculate: calculateStat },
+        { name: "Sp. Def", index: 4, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpDefence, IV: teamPokemon.pokemon.ivSpDefence, calculate: calculateStat },
+        { name: "Speed", index: 5, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpeed, IV: teamPokemon.pokemon.ivSpeed, calculate: calculateStat }
     ]);
-    console.log(stats);
 
     const [genders, setGenders] = useState([]);
     const [abilities, setAbilities] = useState([]);
@@ -145,7 +143,7 @@ function PokemonConfig({ teamPokemon, onClose }) {
 
     const calculateStats = () => {
         stats.map(stat => stat.calculate(stat));
-    }
+    };
 
     const NATURE_MODIFIER = 0.1;
     useEffect(() => {
@@ -170,9 +168,9 @@ function PokemonConfig({ teamPokemon, onClose }) {
 
         calculateStats();
     }
-
+    
     const setPokemonLevel = e => {
-        setLevel(parseInt(e.target.value()));
+        setLevel(parseInt(e.target.value));
         calculateStats();
     }
 
