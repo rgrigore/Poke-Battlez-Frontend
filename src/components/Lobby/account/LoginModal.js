@@ -1,8 +1,8 @@
 import React, {useContext} from 'react'
 import ReactDom from 'react-dom'
 import {login} from "../../../controller/AccountController";
-import { UserContext } from "./UserContext";
-import { Button } from "react-bootstrap";
+import {UserContext} from "./UserContext";
+import {Button} from "react-bootstrap";
 
 const MODAL_STYLES = {
 	position: 'fixed',

@@ -1,5 +1,5 @@
-import { Client } from "@stomp/stompjs/esm6";
-import { getUser } from "./AccountController";
+import {Client} from "@stomp/stompjs/esm6";
+import {getUser} from "./AccountController";
 
 const SOCKET = "ws://localhost:8080/chat-lobby";
 const RECEIVE_CHAT_TOPIC = "/chat/lobby";
@@ -7,10 +7,14 @@ const SEND_CHAT_TOPIC = "/app/message/lobby";
 const PRIVATE_CHAT_TOPIC = "chat/private/";
 const PRIVATE_CHAT_SEND = "/app/chat/private"
 const RECEIVE_CHAT_USERS_TOPIC = "/chat/lobby/users";
+const POKEMON_SEND_TOPIC = "/app/chat/pokemon";
+const TEAM_RECEIVE_TOPIC = "/chat/team/";
 
 let client = [];
 
-export function connect(updateMessages, updateUsers) {
+export function connect(updateMessages, updateUsers, updatePokemon) {
+	// console.log("Chat connect")
+
 	client.push(new Client({
 		brokerURL: SOCKET,
 		connectHeaders: {},
@@ -32,6 +36,7 @@ export function connect(updateMessages, updateUsers) {
 				body: json.body
 			})
 		});
+		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => updatePokemon(JSON.parse(team.body)));
 	};
 
 	client[0].onStompError = frame => {
@@ -46,6 +51,13 @@ export function sendMessage(message) {
 	client[0].publish({
 		destination: SEND_CHAT_TOPIC,
 		body: JSON.stringify({body: message})
+	});
+}
+
+export function sendPokemon(pokemon) {
+	client[0].publish({
+		destination: POKEMON_SEND_TOPIC,
+		body: JSON.stringify(pokemon)
 	});
 }
 

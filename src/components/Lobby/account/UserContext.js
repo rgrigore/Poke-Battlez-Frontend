@@ -1,4 +1,4 @@
-import React, {useState, createContext} from "react";
+import React, {createContext, useState} from "react";
 
 export const UserContext = createContext({
     user: {id: -1, username: "Poke Baller"},
