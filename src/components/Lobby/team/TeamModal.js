@@ -8,36 +8,36 @@ import PokeBadge from "./PokeBadge";
 
 function TeamModal({open, onClose, updatedTeam}) {
 
-    const testPokemon = {
-        "id": 1,
-        "teamId": 1,
-        "indexId": 1,
-        "position": 1,
-        "name": "bulbasaur",
-        "level": 2,
-        "ivHp": 31,
-        "ivAttack": 31,
-        "ivDefence": 31,
-        "ivSpAttack": 31,
-        "ivSpDefence": 31,
-        "ivSpeed": 28,
-        "evHp": 7,
-        "evAttack": 30,
-        "evDefence": 32,
-        "evSpAttack": 0,
-        "evSpDefence": 150,
-        "evSpeed": 90,
-        "gender": "Female",
-        "nature": "Brave",
-        "heldItem": "master-ball",
-        "ability": "chlorophyll",
-        "move1": "razor-wind",
-        "move2": "cut",
-        "move3": "tackle",
-        "move4": "growl",
-
-        sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
-    }
+    // const testPokemon = {
+    //     "id": 1,
+    //     "teamId": 1,
+    //     "indexId": 1,
+    //     "position": 1,
+    //     "name": "bulbasaur",
+    //     "level": 2,
+    //     "ivHp": 31,
+    //     "ivAttack": 31,
+    //     "ivDefence": 31,
+    //     "ivSpAttack": 31,
+    //     "ivSpDefence": 31,
+    //     "ivSpeed": 28,
+    //     "evHp": 7,
+    //     "evAttack": 30,
+    //     "evDefence": 32,
+    //     "evSpAttack": 0,
+    //     "evSpDefence": 150,
+    //     "evSpeed": 90,
+    //     "gender": "Female",
+    //     "nature": "Brave",
+    //     "heldItem": "master-ball",
+    //     "ability": "chlorophyll",
+    //     "move1": "razor-wind",
+    //     "move2": "cut",
+    //     "move3": "tackle",
+    //     "move4": "growl",
+    //
+    //     sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+    // }
 
     let emptyPokemon = {
         id: null,
@@ -70,7 +70,7 @@ function TeamModal({open, onClose, updatedTeam}) {
     }
 
     const [pokemon1, setPokemon1] = useState(emptyPokemon);
-    const [pokemon2, setPokemon2] = useState(testPokemon);
+    const [pokemon2, setPokemon2] = useState(emptyPokemon);
     const [pokemon3, setPokemon3] = useState(emptyPokemon);
     const [pokemon4, setPokemon4] = useState(emptyPokemon);
     const [pokemon5, setPokemon5] = useState(emptyPokemon);
@@ -112,7 +112,7 @@ function TeamModal({open, onClose, updatedTeam}) {
         if(updatedTeam !== null) {
             resetTeam(updatedTeam.id);
             for (let pokemon of updatedTeam.pokemon) {
-                team[pokemon.position].set(pokemon);
+                team[pokemon.position].set({...pokemon});
             }
         }
 

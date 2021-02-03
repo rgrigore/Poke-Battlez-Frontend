@@ -274,6 +274,11 @@ function PokemonConfig({ teamPokemon, onClose }) {
         sendPokemon(pokemonData);
     }
 
+    useEffect(() => {
+        teamPokemon.set({...teamPokemon.pokemon, sprite: pokemonSprite});
+        // eslint-disable-next-line
+    }, [pokemonSprite]);
+
     return(
         <div id="configForm" className={"d-flex flex-column"}>
             <div className="p-0">
