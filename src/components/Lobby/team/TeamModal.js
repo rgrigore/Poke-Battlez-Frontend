@@ -110,9 +110,9 @@ function TeamModal({open, onClose, updatedTeam}) {
 
     useEffect(() => {
         if(updatedTeam !== null) {
-            resetTeam(updatedTeam.id);
+            resetTeam(updatedTeam.teamId);
             for (let pokemon of updatedTeam.pokemon) {
-                team[pokemon.position].set({...pokemon});
+                team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
             }
         }
 
