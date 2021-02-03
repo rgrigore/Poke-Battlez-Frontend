@@ -94,7 +94,6 @@ function PokemonConfig({ teamPokemon, onClose }) {
         (ref, index) => inputRefs.current[index] = React.createRef()
     );
 
-
     const clearPokemon = () => {
         setPokemonInfo({
             gender: "",

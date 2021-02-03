@@ -35,23 +35,23 @@ function MoveConfig({ moves, move, index, refs, teamIndex }) {
 
     return(
         <div className={"p-2"} style={moveInfoStyle}>
-            <Typeahead id={"move"+(index+1)} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
-                       labelKey={"name"} options={moves}  placeholder={move.name===""?"move...":move.name}
-                       inputProps={{"data-save": "move"+(index+1)}} onBlur={updateStats} ref={refs[index+17]}
+            <Typeahead id={"move" + teamIndex + index} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"130px"}}
+                       labelKey={"name"} options={moves}  placeholder={move.stats.name === "" ? "move..." : move.stats.name}
+                       inputProps={{"data-save": "move" + (index+1)}} onBlur={updateStats} ref={refs[index+17]}
             />
-            <span className={"type"+teamIndex} style={{fontSize:"small", padding: "-3px"}}>
+            <span style={{fontSize:"small", padding: "-3px"}}>
                 Type{" "}<Badge pill variant={"light"}>{ move.stats.name !== "" ? move.stats.type : "" }</Badge>
             </span><br/>
-            <span className={"acc"+teamIndex} style={{fontSize:"small"}}>
+            <span style={{fontSize:"small"}}>
                 Acc{ move.stats.name !== "" ? " " + move.stats.accuracy : "" }
             </span><br/>
-            <span className={"cat"+teamIndex} style={{fontSize:"small"}}>
+            <span style={{fontSize:"small"}}>
                 Cat{" "}<Badge pill variant={"light"}>{ move.stats.name !== "" ? move.stats.category : "" }</Badge>
             </span><br/>
-            <span className={"power"+teamIndex} style={{fontSize:"small"}}>
+            <span style={{fontSize:"small"}}>
                 Power{move.stats.name !== "" ? " " + move.stats.power : "" }
             </span><br />
-            <span className={"pp"+teamIndex} style={{fontSize:"small"}}>
+            <span style={{fontSize:"small"}}>
                 Pp{ move.stats.name !== "" ? " " + move.stats.pp : "" }
             </span>
         </div>
