@@ -84,6 +84,8 @@ function PokemonConfig({ teamPokemon, onClose }) {
         temp[2].stats = move3;
         temp[3].stats = move4;
         setMoves(temp);
+
+        // eslint-disable-next-line
     }, [move1, move2, move3, move4])
 
     let inputRefs =  useRef([]);
@@ -144,10 +146,6 @@ function PokemonConfig({ teamPokemon, onClose }) {
             fetch(newPokemonName);
         }
     };
-
-    // const calculateStats = level => {
-    //     stats.map(stat => stat.calculate(stat, level));
-    // };
 
     const NATURE_MODIFIER = 0.1;
     useEffect(() => {
@@ -243,8 +241,8 @@ function PokemonConfig({ teamPokemon, onClose }) {
         setPokemonInfo(temp);
     }
 
-    const savePokemon = () => { // TODO Generate a pokemon to save
-        teamPokemon.set({
+    const savePokemon = () => {
+        const pokemonData = {
             id: teamPokemon.pokemon.id,
             teamId: teamPokemon.pokemon.teamId,
             position: teamPokemon.pokemon.position,
@@ -272,36 +270,9 @@ function PokemonConfig({ teamPokemon, onClose }) {
             move4: move4.name,
 
             sprite: pokemonSprite
-        });
-        // sendPokemon(pokemon);
-
-        // let newPokemon = {...pokemon};
-        // newPokemon["indexId"] = formData.id;
-        // newPokemon["name"] = formData.name;
-        // newPokemon["level"] = formData.level;
-        // newPokemon["ivHp"] = formData.stats[0].IV;
-        // newPokemon["ivAttack"] = formData.stats[1].IV;
-        // newPokemon["ivDefence"] = formData.stats[2].IV;
-        // newPokemon["ivSpAttack"] =  formData.stats[3].IV;
-        // newPokemon["ivSpDefence"] =  formData.stats[4].IV;
-        // newPokemon["ivSpeed"] = formData.stats[5].IV;
-        // newPokemon["evHp"] = formData.stats[0].EV;
-        // newPokemon["evAttack"] = formData.stats[1].EV;
-        // newPokemon["evDefence"] = formData.stats[2].EV;
-        // newPokemon["evSpAttack"] = formData.stats[3].EV;
-        // newPokemon["evSpDefence"] = formData.stats[4].EV;
-        // newPokemon["evSpeed"] = formData.stats[5].EV;
-        // if(dbTeam!==null) {
-        //     newPokemon["teamId"] = dbTeam[0].teamId;
-        // }
-
-        // let newTeam = [...team];
-        // newTeam[teamIndex] = newPokemon;
-        // setTeam(newTeam);
-
-        // console.log(newPokemon);
-        // console.log(dbTeam);
-        // setPokemon(newPokemon);
+        }
+        teamPokemon.set(pokemonData);
+        sendPokemon(pokemonData);
     }
 
     return(

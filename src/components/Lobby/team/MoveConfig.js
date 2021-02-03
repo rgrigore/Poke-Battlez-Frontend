@@ -4,8 +4,6 @@ import {Badge} from "react-bootstrap";
 import axios from "axios";
 
 function MoveConfig({ moves, move, index, refs, teamIndex }) {
-    // const baseStats = {"type": move.Type, "acc": move.Acc, "cat": move.Cat, "power": move.Power, "pp": move.Pp};
-    // const [stats, setStats] = useState(baseStats);
 
     const updateStats = (e) => {
         e.preventDefault();
@@ -45,10 +43,10 @@ function MoveConfig({ moves, move, index, refs, teamIndex }) {
                 Type{" "}<Badge pill variant={"light"}>{ move.stats.name !== "" ? move.stats.type : "" }</Badge>
             </span><br/>
             <span className={"acc"+teamIndex} style={{fontSize:"small"}}>
-                Acc{ move.stats.name !== "" ? " " + move.stats.acc : "" }
+                Acc{ move.stats.name !== "" ? " " + move.stats.accuracy : "" }
             </span><br/>
             <span className={"cat"+teamIndex} style={{fontSize:"small"}}>
-                Cat{" "}<Badge pill variant={"light"}>{ move.stats.name !== "" ? move.stats.cat : "" }</Badge>
+                Cat{" "}<Badge pill variant={"light"}>{ move.stats.name !== "" ? move.stats.category : "" }</Badge>
             </span><br/>
             <span className={"power"+teamIndex} style={{fontSize:"small"}}>
                 Power{move.stats.name !== "" ? " " + move.stats.power : "" }

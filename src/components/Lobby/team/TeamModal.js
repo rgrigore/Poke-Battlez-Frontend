@@ -85,14 +85,6 @@ function TeamModal({open, onClose, updatedTeam}) {
         { pokemon: pokemon6, set: setPokemon6 }
     ]);
 
-    // const updateTeam = (receivedTeam) => {
-    //     const newTeam = {...team};
-    //     theTeam.map(team => {
-    //         newTeam[team.position] = team;
-    //     })
-    //     setTeam(team);
-    // };
-
     useEffect(() => {
         const teamTemp = [...team];
         teamTemp[0].pokemon = pokemon1;
@@ -103,6 +95,7 @@ function TeamModal({open, onClose, updatedTeam}) {
         teamTemp[5].pokemon = pokemon6;
         setTeam(teamTemp);
 
+        // eslint-disable-next-line
     }, [pokemon1, pokemon2, pokemon3, pokemon4, pokemon5, pokemon6])
 
     let resetTeam = teamId => {

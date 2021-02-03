@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
 import {Card} from "react-bootstrap";
@@ -9,7 +9,6 @@ function PokemonCard({ pokemon, index }) {
 
     return(
         <Card bg="secondary" border="success" style={cardStyle} className="mb-4">
-            {/*<Card.Img variant="top" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.indexId}.png`} />*/}
             <Card.Img variant="top" src={pokemon.name != null ? pokemon.sprite : empty} />
             <Card.Body>
                 <Card.Title className="text-center">{ pokemon.name != null ? pokemon.name : <h6>Empty Slot {index}</h6> }</Card.Title>
