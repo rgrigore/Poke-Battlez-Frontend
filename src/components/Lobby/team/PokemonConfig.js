@@ -58,10 +58,10 @@ function PokemonConfig({ teamPokemon, onClose }) {
     const [availableMoves, setAvailableMoves] = useState([]);
 
     const emptyMove = {name: "none", type: "", accuracy: 0, category: "", power: 0, pp: 0};
-    const [move1, setMove1] = useState({...emptyMove});
-    const [move2, setMove2] = useState({...emptyMove});
-    const [move3, setMove3] = useState({...emptyMove});
-    const [move4, setMove4] = useState({...emptyMove});
+    const [move1, setMove1] = useState(teamPokemon.pokemon.move1 === "none" ? {...emptyMove} : {name: teamPokemon.pokemon.move1, type: "", accuracy: 0, category: "", power: 0, pp: 0});
+    const [move2, setMove2] = useState(teamPokemon.pokemon.move2 === "none" ? {...emptyMove} : {name: teamPokemon.pokemon.move2, type: "", accuracy: 0, category: "", power: 0, pp: 0});
+    const [move3, setMove3] = useState(teamPokemon.pokemon.move3 === "none" ? {...emptyMove} : {name: teamPokemon.pokemon.move3, type: "", accuracy: 0, category: "", power: 0, pp: 0});
+    const [move4, setMove4] = useState(teamPokemon.pokemon.move4 === "none" ? {...emptyMove} : {name: teamPokemon.pokemon.move4, type: "", accuracy: 0, category: "", power: 0, pp: 0});
 
     const [moves, setMoves] = useState([
         { stats: move1, set: setMove1},
@@ -262,7 +262,7 @@ function PokemonConfig({ teamPokemon, onClose }) {
             gender: pokemonInfo.gender,
             nature: nature,
             heldItem: pokemonInfo.heldItem,
-            ability: pokemonInfo.heldItem,
+            ability: pokemonInfo.ability,
             move1: move1.name,
             move2: move2.name,
             move3: move3.name,

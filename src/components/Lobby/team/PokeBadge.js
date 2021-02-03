@@ -2,20 +2,21 @@ import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {Image} from "react-bootstrap";
 import pokeLogo from "../../img/pokeball_logo_lobby.png";
+import empty from "../../img/pokeball_empty_slot.png";
 
 function PokeBadge({ slot }) {
 
-    const [sprite, setSprite] = useState(pokeLogo);
-
-    useEffect(() => {
-        if (slot.name != null) {
-            setSprite(slot.sprite);
-        }
-        // eslint-disable-next-line
-    }, [slot.sprite]);
+    // const [sprite, setSprite] = useState(slot.name !== null ? slot.sprite : pokeLogo);
+    //
+    // useEffect(() => {
+    //     if (slot.name !== null) {
+    //         setSprite(slot.sprite);
+    //     }
+    //     // eslint-disable-next-line
+    // }, [slot.sprite]);
 
     return(
-        <Image src={ sprite }
+        <Image src={ slot.name !== null ? slot.sprite : pokeLogo }
             thumbnail={true} roundedCircle
             style={{ maxWidth: "80%", maxHeight: "auto", marginLeft: "6px", backgroundColor: "gray" }}
         />
