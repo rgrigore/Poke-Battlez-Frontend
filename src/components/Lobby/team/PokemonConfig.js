@@ -15,10 +15,10 @@ function PokemonConfig({ teamPokemon, onClose }) {
         heldItem: teamPokemon.pokemon.heldItem,
         ability: teamPokemon.pokemon.ability
     });
-    const [pokemonSprite, setPokemonSprite] = useState("");
+    const [pokemonSprite, setPokemonSprite] = useState(teamPokemon.pokemon.sprite);
     const [pokemonType, setPokemonType] = useState([]);
 
-    const [level, setLevel] = useState(1);
+    const [level, setLevel] = useState(teamPokemon.pokemon.level);
 
     const natures = {
         "Hardy": { up: 1, down: 1 }, "Lonely": { up: 1, down: 2 }, "Adamant": { up: 1, down: 3 }, "Naughty": { up: 1, down: 4 }, "Brave": { up: 1, down: 5 },
@@ -27,23 +27,21 @@ function PokemonConfig({ teamPokemon, onClose }) {
         "Calm": { up: 4, down: 1 }, "Gentle": { up: 4, down: 2 }, "Careful": { up: 4, down: 3 }, "Quirky": { up: 4, down: 4 }, "Sassy": { up: 4, down: 5 },
         "Timid": { up: 5, down: 1 }, "Hasty": { up: 5, down: 2 }, "Jolly": { up: 5, down: 3 }, "Naive": { up: 5, down: 4 }, "Serious": { up: 5, down: 5 }
     };
-    const [nature, setNature] = useState("");
+    const [nature, setNature] = useState(teamPokemon.pokemon.nature);
 
-    console.log(level);
-
-    let calculateHp = stat => {
-        console.log("called at " + level)
+    let calculateHp = (stat, level) => {
         const temp = [...stats];
         temp[stat.index].value = Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + level + 10;
         setStats(temp);
     };
 
-    const calculateStat = stat => {
+    const calculateStat = (stat, level) => {
         const temp = [...stats];
         temp[stat.index].value = Math.floor((Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + 5) * stat.nature);
         setStats(temp);
     };
 
+    const [statsChanged, setStatsChanged] = useState(false);
     const [stats, setStats] = useState([
         { name: "Hp", index: 0, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evHp, IV: teamPokemon.pokemon.ivHp, calculate: calculateHp },
         { name: "Atk", index: 1, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evAttack, IV: teamPokemon.pokemon.ivAttack, calculate: calculateStat },
@@ -73,14 +71,21 @@ function PokemonConfig({ teamPokemon, onClose }) {
     ]);
 
     useEffect(() => {
-        if (pokemon !== "") {
+        if (pokemon !== null) {
             fetch(pokemon);
         }
         // eslint-disable-next-line
     }, []);
 
+    useEffect(() => {
+        const temp = [...moves];
+        temp[0].stats = move1;
+        temp[1].stats = move2;
+        temp[2].stats = move3;
+        temp[3].stats = move4;
+        setMoves(temp);
+    }, [move1, move2, move3, move4])
 
-    // TODO Test if required
     let inputRefs =  useRef([]);
     const refElements = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
     inputRefs.current = refElements.map(
@@ -95,8 +100,7 @@ function PokemonConfig({ teamPokemon, onClose }) {
             ability: ""
         })
 
-        moves.map(move => move.set({...emptyMove}));
-
+        setLevel(1);
         setNature("");
         setStats([...stats].map(stat => {
             stat.EV = 0;
@@ -105,10 +109,10 @@ function PokemonConfig({ teamPokemon, onClose }) {
             stat.base = 0;
             return stat;
         }));
-        calculateStats();
+
+        moves.map(move => move.set({...emptyMove}));
     }
 
-    // TODO Might be redundant
     const clearFields = () => {
         // EVs
         for(let i = 0; i < 6; i++) {
@@ -141,9 +145,9 @@ function PokemonConfig({ teamPokemon, onClose }) {
         }
     };
 
-    const calculateStats = () => {
-        stats.map(stat => stat.calculate(stat));
-    };
+    // const calculateStats = level => {
+    //     stats.map(stat => stat.calculate(stat, level));
+    // };
 
     const NATURE_MODIFIER = 0.1;
     useEffect(() => {
@@ -152,9 +156,9 @@ function PokemonConfig({ teamPokemon, onClose }) {
             temp[natures[nature].up].nature += NATURE_MODIFIER;
             temp[natures[nature].down].nature += -NATURE_MODIFIER;
             setStats(temp);
-
-            calculateStats();
         }
+
+        setStatsChanged(true);
 
         // eslint-disable-next-line
     }, [nature]);
@@ -166,12 +170,20 @@ function PokemonConfig({ teamPokemon, onClose }) {
         temp[parseInt(e.target.id)][e.target.getAttribute("data-name")] = newValue;
         setStats(temp);
 
-        calculateStats();
+        setStatsChanged(true);
     }
-    
+
+    useEffect(() => {
+        if (statsChanged) {
+            stats.map(stat => stat.calculate(stat, level));
+            setStatsChanged(false);
+        }
+        // eslint-disable-next-line
+    }, [statsChanged]);
+
     const setPokemonLevel = e => {
         setLevel(parseInt(e.target.value));
-        calculateStats();
+        setStatsChanged(true);
     }
 
     const setPokemonNature = e => {
@@ -202,9 +214,10 @@ function PokemonConfig({ teamPokemon, onClose }) {
                 setAbilities(resPokemon.data.abilities.map(ability => ability.ability.name));
                 setAvailableMoves(resPokemon.data.moves.map(move => move.move.name));
                 setPokemonSprite(resPokemon.data.sprites.front_default);
-                calculateStats();
 
                 setItems(resItems.data.results.map(item => item.name));
+
+                setStatsChanged(true);
 
                 return axios.get(resPokemon.data.species.url);
             }))
@@ -231,7 +244,35 @@ function PokemonConfig({ teamPokemon, onClose }) {
     }
 
     const savePokemon = () => { // TODO Generate a pokemon to save
-        // teamPokemon.set(pokemon);
+        teamPokemon.set({
+            id: teamPokemon.pokemon.id,
+            teamId: teamPokemon.pokemon.teamId,
+            position: teamPokemon.pokemon.position,
+            name: pokemon,
+            level: level,
+            ivHp: stats[0].IV,
+            ivAttack: stats[1].IV,
+            ivDefence: stats[2].IV,
+            ivSpAttack: stats[3].IV,
+            ivSpDefence: stats[4].IV,
+            ivSpeed: stats[5].IV,
+            evHp: stats[0].EV,
+            evAttack: stats[1].EV,
+            evDefence: stats[2].EV,
+            evSpAttack: stats[3].EV,
+            evSpDefence: stats[4].EV,
+            evSpeed: stats[5].EV,
+            gender: pokemonInfo.gender,
+            nature: nature,
+            heldItem: pokemonInfo.heldItem,
+            ability: pokemonInfo.heldItem,
+            move1: move1.name,
+            move2: move2.name,
+            move3: move3.name,
+            move4: move4.name,
+
+            sprite: pokemonSprite
+        });
         // sendPokemon(pokemon);
 
         // let newPokemon = {...pokemon};
@@ -286,8 +327,8 @@ function PokemonConfig({ teamPokemon, onClose }) {
                     <div className={"pl-1 pr-1 pt-1"}>
                         {stats.map((stat, i) => (
                             <div className={"d-flex justify-content-center flex-row pb-2"} key={i}>
-                                <div className={"pl-2 pt-2"}><h6>{stat.name}</h6></div>
-                                <div className={"pl-3 pt-2 ml-auto"}><h6>{stat.value}</h6></div>
+                                <div className={"pl-2 pt-2"} style={{minWidth: "65px"}}><h6>{stat.name}</h6></div>
+                                <div className={"pl-3 pt-2 ml-auto"} style={{minWidth: "45px"}}><h6>{stat.value}</h6></div>
                                 <div className={"align-self-center pl-3"}>
                                     <ProgressBar style={{ width: "140px" }} variant={"info"} animated label={stat.base}
                                                  now={stat.base} min={0} max={180} />

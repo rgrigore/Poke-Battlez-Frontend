@@ -7,19 +7,12 @@ import empty from "../../img/pokeball_empty_slot.png";
 
 function PokemonCard({ pokemon, index }) {
 
-    const [sprite, setSprite] = useState("");
-
-    useEffect(() => {
-        // TODO Fetch the sprite from the API
-        setSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png");
-    }, [pokemon])
-
     return(
         <Card bg="secondary" border="success" style={cardStyle} className="mb-4">
             {/*<Card.Img variant="top" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.indexId}.png`} />*/}
-            <Card.Img variant="top" src={pokemon.id != null ? sprite : empty} />
+            <Card.Img variant="top" src={pokemon.name != null ? pokemon.sprite : empty} />
             <Card.Body>
-                <Card.Title className="text-center">{ pokemon.id != null ? pokemon.name : <h6>Empty Slot {index}</h6> }</Card.Title>
+                <Card.Title className="text-center">{ pokemon.name != null ? pokemon.name : <h6>Empty Slot {index}</h6> }</Card.Title>
             </Card.Body>
         </Card>
     );

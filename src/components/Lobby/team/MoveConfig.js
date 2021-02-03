@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Typeahead} from "react-bootstrap-typeahead";
 import {Badge} from "react-bootstrap";
 import axios from "axios";
@@ -32,6 +32,7 @@ function MoveConfig({ moves, move, index, refs, teamIndex }) {
 
     useEffect(() => {
         fetch(move.stats.name);
+        // eslint-disable-next-line
     }, []);
 
     return(

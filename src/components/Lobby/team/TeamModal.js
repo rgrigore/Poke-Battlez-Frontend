@@ -34,14 +34,16 @@ function TeamModal({open, onClose, updatedTeam}) {
         "move1": "razor-wind",
         "move2": "cut",
         "move3": "tackle",
-        "move4": "growl"
+        "move4": "growl",
+
+        sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
     }
 
     let emptyPokemon = {
         id: null,
         teamId: null,
         position: null,
-        name: "",
+        name: null,
         level: 1,
         ivHp: 31,
         ivAttack: 31,
@@ -64,7 +66,7 @@ function TeamModal({open, onClose, updatedTeam}) {
         move3: "",
         move4: "",
 
-        sprite: ""
+        sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
     }
 
     const [pokemon1, setPokemon1] = useState(emptyPokemon);
@@ -74,14 +76,14 @@ function TeamModal({open, onClose, updatedTeam}) {
     const [pokemon5, setPokemon5] = useState(emptyPokemon);
     const [pokemon6, setPokemon6] = useState(emptyPokemon);
 
-    const team = [
+    const [team, setTeam] = useState([
         { pokemon: pokemon1, set: setPokemon1 },
         { pokemon: pokemon2, set: setPokemon2 },
         { pokemon: pokemon3, set: setPokemon3 },
         { pokemon: pokemon4, set: setPokemon4 },
         { pokemon: pokemon5, set: setPokemon5 },
         { pokemon: pokemon6, set: setPokemon6 }
-    ];
+    ]);
 
     // const updateTeam = (receivedTeam) => {
     //     const newTeam = {...team};
@@ -90,6 +92,18 @@ function TeamModal({open, onClose, updatedTeam}) {
     //     })
     //     setTeam(team);
     // };
+
+    useEffect(() => {
+        const teamTemp = [...team];
+        teamTemp[0].pokemon = pokemon1;
+        teamTemp[1].pokemon = pokemon2;
+        teamTemp[2].pokemon = pokemon3;
+        teamTemp[3].pokemon = pokemon4;
+        teamTemp[4].pokemon = pokemon5;
+        teamTemp[5].pokemon = pokemon6;
+        setTeam(teamTemp);
+
+    }, [pokemon1, pokemon2, pokemon3, pokemon4, pokemon5, pokemon6])
 
     let resetTeam = teamId => {
         for (let index in team) {
@@ -132,7 +146,7 @@ function TeamModal({open, onClose, updatedTeam}) {
                                     <ListGroup.Item key={index} className={"d-flex p-1 border-2"}
                                                     href={"#poke"+(index+1).toString()}
                                                     style={navItemStyle}>
-                                        <PokeBadge slot={pokemon} key={index} />
+                                        <PokeBadge slot={pokemon.pokemon} key={index} />
                                     </ListGroup.Item>
                                 ))}
                             </ListGroup>
