@@ -36,10 +36,7 @@ export function connect(updateMessages, updateUsers, updatePokemon) {
 				body: json.body
 			})
 		});
-		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => {
-			updatePokemon(JSON.parse(team.body));
-			console.log(JSON.parse(team.body));
-		})
+		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => updatePokemon(JSON.parse(team.body)));
 	};
 
 	client[0].onStompError = frame => {
