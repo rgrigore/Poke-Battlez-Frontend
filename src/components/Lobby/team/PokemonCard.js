@@ -1,32 +1,28 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
 import {Card} from "react-bootstrap";
 
 import empty from "../../img/pokeball_empty_slot.png";
 
-function PokemonCard({ slot, index }) {
+function PokemonCard({ pokemon, index }) {
 
-    if(Object.keys(slot).length === 0 && slot.constructor === Object) {
-        return(
-            <Card bg="secondary" border="warning" style={cardStyle} className="card mb-4">
-                <Card.Img variant="top" src={empty} />
-                <Card.Body>
-                    <Card.Title className="text-center"><h6>Empty Slot {index}</h6></Card.Title>
-                </Card.Body>
-            </Card>
-        );
-    } else {
-        return(
-            <Card bg="secondary" border="success" style={cardStyle} className="mb-4">
-                <Card.Img variant="top" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.indexId}.png`} />
-                <Card.Body>
-                    <Card.Title className="text-center">{slot.name}</Card.Title>
-                </Card.Body>
-            </Card>
-        );
-    }
+    const [sprite, setSprite] = useState("");
 
+    useEffect(() => {
+        // TODO Fetch the sprite from the API
+        setSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png");
+    }, [pokemon])
+
+    return(
+        <Card bg="secondary" border="success" style={cardStyle} className="mb-4">
+            {/*<Card.Img variant="top" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${slot.indexId}.png`} />*/}
+            <Card.Img variant="top" src={pokemon.id != null ? sprite : empty} />
+            <Card.Body>
+                <Card.Title className="text-center">{ pokemon.id != null ? pokemon.name : <h6>Empty Slot {index}</h6> }</Card.Title>
+            </Card.Body>
+        </Card>
+    );
 }
 
 const cardStyle = {
@@ -38,7 +34,7 @@ const cardStyle = {
 }
 
 PokemonCard.propTypes = {
-    slot: PropTypes.object.isRequired
+    pokemon: PropTypes.object.isRequired
 }
 
 export default PokemonCard;

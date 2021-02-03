@@ -10,14 +10,14 @@ const TEAM_RECEIVE_TOPIC = "/chat/team/";
 
 let client = [];
 
-export function connect(updateMessages, updateUsers, setDbTeam) {
-	console.log("Chat connect")
+export function connect(updateMessages, updateUsers, updatePokemon) {
+	// console.log("Chat connect")
 
 	client.push(new Client({
 		brokerURL: SOCKET,
 		connectHeaders: {},
 		debug: function (str) {
-			console.log("Chat: " + str);
+			// console.log("Chat: " + str);
 		},
 		reconnectDelay: 5000,
 		heartbeatIncoming: 4000,
@@ -29,7 +29,7 @@ export function connect(updateMessages, updateUsers, setDbTeam) {
 		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)));
 		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => {
 			console.log(JSON.parse(team.body));
-			setDbTeam(JSON.parse(team.body));
+			updatePokemon(JSON.parse(team.body));
 		});
 	};
 

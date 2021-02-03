@@ -14,19 +14,20 @@ let user = {
 }
 
 export function connect() {
-	console.log("Account connect");
+	// console.log("Account connect");
 	client.push(new Client({
 		brokerURL: SOCKET,
 		connectHeaders: {},
 		debug: function (str) {
-			console.log("Account: " + str);
+			// console.log("Account: " + str);
 		},
 		reconnectDelay: 5000,
 		heartbeatIncoming: 4000,
 		heartbeatOutgoing: 4000,
 	}));
 
-	client[0].onConnect = () => console.log("connected to account");
+	// client[0].onConnect = () => console.log("connected to account");
+	client[0].onConnect = () => {};
 
 	client[0].onStompError = frame => {
 		console.log('Broker reported error: ' + frame.headers['message']);

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
 import {Badge, Button, FormControl, Image, ProgressBar} from "react-bootstrap";
@@ -7,308 +7,263 @@ import axios from "axios";
 import MoveConfig from "./MoveConfig";
 import {sendPokemon} from "../../../controller/ChatController";
 
-function PokemonConfig({ slot, teamIndex, team, setTeam, onClose, dbTeam }) {
-    // empty Pokemon Object
-    let Pokemon = {
-        "id": null,
-        "indexId": 0,
-        "teamId": null,
-        "position": teamIndex,
-        "name": "",
-        "level": 1,
-        "ivHp": 31,
-        "ivAttack": 31,
-        "ivDefence": 31,
-        "ivSpAttack": 31,
-        "ivSpDefence": 31,
-        "ivSpeed": 31,
-        "evHp": 0,
-        "evAttack": 0,
-        "evDefence": 0,
-        "evSpAttack": 0,
-        "evSpDefence": 0,
-        "evSpeed": 0,
-        "gender": "",
-        "nature": "",
-        "heldItem": "",
-        "ability": "",
-        "move1": "",
-        "move2": "",
-        "move3": "",
-        "move4": ""
-    }
+function PokemonConfig({ teamPokemon, onClose }) {
 
-    const [pokemon, setPokemon] = useState((Object.keys(slot).length === 0 && slot.constructor === Object) ? Pokemon : slot);
+    const [pokemon, setPokemon] = useState(teamPokemon.pokemon.name);
+    const [pokemonInfo, setPokemonInfo] = useState({
+        gender: teamPokemon.pokemon.gender,
+        heldItem: teamPokemon.pokemon.heldItem,
+        ability: teamPokemon.pokemon.ability
+    });
+    const [pokemonSprite, setPokemonSprite] = useState("");
+    const [pokemonType, setPokemonType] = useState([]);
 
-    // let PokemonFormDataBase = {
-    //     "id": 0,
-    //     "name": "",
-    //     "level": 0,
-    //     "Types": ["normal"],
-    //     "stats": [
-    //         {"name": "HP", "base": 0, "val": 241, "EV": 0, "IV": 31},
-    //         {"name": "Atk", "base": 0, "val": 136, "EV": 0, "IV": 31},
-    //         {"name": "Def", "base": 0, "val": 136, "EV": 0, "IV": 31},
-    //         {"name": "S. Atk", "base": 0, "val": 136, "EV": 0, "IV": 31},
-    //         {"name": "S. Def", "base": 0, "val": 136, "EV": 0, "IV": 31},
-    //         {"name": "Speed", "base": 0, "val": 136, "EV": 0, "IV": 31}
-    //     ],
-    //     "genders": {
-    //         "all": ["Gender"],
-    //         "selected": ""
-    //     },
-    //     "natures": {
-    //         "all": ["Hardy", "Lonely", "Brave", "Adamant", "Naughty", "Bold", "Docile",
-    //             "Relaxed", "Impish", "Lax", "Timid", "Hasty", "Serious", "Jolly", "Naive", "Modest",
-    //             "Mild", "Quiet", "Bashful", "Rash", "Calm", "Gentle", "Sassy", "Careful", "Quirky"],
-    //         "selected": ""
-    //     },
-    //     "items": {
-    //         "all": ["Items..."],
-    //         "selected": ""
-    //     },
-    //     "abilities": {
-    //         "all": ["Ability..."],
-    //         "selected": ""
-    //     },
-    //     "moves": {
-    //         "all": ["move..."],
-    //         "selected": [
-    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-    //             {"name": "", "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
-    //         ]
-    //     }
-    // }
+    const [level, setLevel] = useState(1);
 
-    let PokemonFormData = {
-        "id": 0,
-        "name": pokemon.name,
-        "level": pokemon.level,
-        "Types": ["normal"],
-        "stats": [
-            {"name": "HP", "base": 0, "val": 241, "EV": pokemon.evHp, "IV": pokemon.ivHp},
-            {"name": "Atk", "base": 0, "val": 136, "EV": pokemon.evAttack, "IV": pokemon.ivAttack},
-            {"name": "Def", "base": 0, "val": 136, "EV": pokemon.evDefence, "IV": pokemon.ivDefence},
-            {"name": "S. Atk", "base": 0, "val": 136, "EV": pokemon.evSpAttack, "IV": pokemon.ivSpAttack},
-            {"name": "S. Def", "base": 0, "val": 136, "EV": pokemon.evSpDefence, "IV": pokemon.ivSpDefence},
-            {"name": "Speed", "base": 0, "val": 136, "EV": pokemon.evSpeed, "IV": pokemon.ivSpeed}
-        ],
-        "genders": {
-            "all": ["Gender"],
-            "selected": pokemon.gender
-        },
-        "natures": {
-            "all": ["Hardy", "Lonely", "Brave", "Adamant", "Naughty", "Bold", "Docile",
-            "Relaxed", "Impish", "Lax", "Timid", "Hasty", "Serious", "Jolly", "Naive", "Modest",
-            "Mild", "Quiet", "Bashful", "Rash", "Calm", "Gentle", "Sassy", "Careful", "Quirky"],
-            "selected": pokemon.nature
-        },
-        "items": {
-            "all": ["Items..."],
-            "selected": pokemon.heldItem
-        },
-        "abilities": {
-            "all": ["Ability..."],
-            "selected": pokemon.ability
-        },
-        "moves": {
-            "all": ["move..."],
-            "selected": [
-                {"name": pokemon.move1, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-                {"name": pokemon.move2, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-                {"name": pokemon.move3, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0},
-                {"name": pokemon.move4, "Type": "", "Acc": 0, "Cat": "", "Power": 0, "Pp": 0}
-            ]
+    const natures = {
+        "Hardy": { up: 1, down: 1 }, "Lonely": { up: 1, down: 2 }, "Adamant": { up: 1, down: 3 }, "Naughty": { up: 1, down: 4 }, "Brave": { up: 1, down: 5 },
+        "Bold": { up: 2, down: 1 }, "Docile": { up: 2, down: 2 }, "Impish": { up: 2, down: 3 }, "Lax": { up: 2, down: 4 }, "Relaxed": { up: 2, down: 5 },
+        "Modest": { up: 3, down: 1 }, "Mild": { up: 3, down: 2 }, "Bashful": { up: 3, down: 3 }, "Rash": { up: 3, down: 4 }, "Quiet": { up: 3, down: 5 },
+        "Calm": { up: 4, down: 1 }, "Gentle": { up: 4, down: 2 }, "Careful": { up: 4, down: 3 }, "Quirky": { up: 4, down: 4 }, "Sassy": { up: 4, down: 5 },
+        "Timid": { up: 5, down: 1 }, "Hasty": { up: 5, down: 2 }, "Jolly": { up: 5, down: 3 }, "Naive": { up: 5, down: 4 }, "Serious": { up: 5, down: 5 }
+    };
+    const [nature, setNature] = useState("");
+
+    const calculateHp = stat => {
+        console.log(Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + level + 10);
+        stat.setValue(Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + level + 10);
+    };
+
+    const calculateStat = stat => {
+        stat.setValue(Math.floor((Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + 5) * stat.nature));
+    };
+
+    const [hp, setHp] = useState(0);
+    const [attack, setAttack] = useState(0);
+    const [defence, setDefence] = useState(0);
+    const [spAttack, setSpAttack] = useState(0);
+    const [spDefence, setSpDefence] = useState(0);
+    const [speed, setSpeed] = useState(0);
+
+    const [stats, setStats] = useState([
+        { name: "Hp", value: hp, setValue: setHp, base: 0, nature: 1, EV: teamPokemon.pokemon.evHp, IV: teamPokemon.pokemon.ivHp, calculate: calculateHp },
+        { name: "Atk", value: attack, setValue: setAttack, base: 0, nature: 1, EV: teamPokemon.pokemon.evAttack, IV: teamPokemon.pokemon.ivAttack, calculate: calculateStat },
+        { name: "Def", value: defence, setValue: setDefence, base: 0, nature: 1, EV: teamPokemon.pokemon.evDefence, IV: teamPokemon.pokemon.ivDefence, calculate: calculateStat },
+        { name: "Sp. Atk", value: spAttack, setValue: setSpAttack, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpAttack, IV: teamPokemon.pokemon.ivSpAttack, calculate: calculateStat },
+        { name: "Sp. Def", value: spDefence, setValue: setSpDefence, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpDefence, IV: teamPokemon.pokemon.ivSpDefence, calculate: calculateStat },
+        { name: "Speed", value: speed, setValue: setSpeed, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpeed, IV: teamPokemon.pokemon.ivSpeed, calculate: calculateStat }
+    ]);
+    console.log(stats);
+
+    const [genders, setGenders] = useState([]);
+    const [abilities, setAbilities] = useState([]);
+    const [items, setItems] = useState([]);
+
+    const [availableMoves, setAvailableMoves] = useState([]);
+
+    const emptyMove = {name: "none", type: "", accuracy: 0, category: "", power: 0, pp: 0};
+    const [move1, setMove1] = useState({...emptyMove});
+    const [move2, setMove2] = useState({...emptyMove});
+    const [move3, setMove3] = useState({...emptyMove});
+    const [move4, setMove4] = useState({...emptyMove});
+
+    const [moves, setMoves] = useState([
+        { stats: move1, set: setMove1},
+        { stats: move2, set: setMove2},
+        { stats: move3, set: setMove3},
+        { stats: move4, set: setMove4}
+    ]);
+
+    useEffect(() => {
+        if (pokemon !== "") {
+            fetch(pokemon);
         }
-    }
+        // eslint-disable-next-line
+    }, []);
 
-    const [formData, setFormData] = useState(PokemonFormData);
 
+    // TODO Test if required
     let inputRefs =  useRef([]);
     const refElements = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
     inputRefs.current = refElements.map(
         (ref, index) => inputRefs.current[index] = React.createRef()
     );
 
-    const changeName = (e) => {
+
+    const clearPokemon = () => {
+        setPokemonInfo({
+            gender: "",
+            heldItem: "",
+            ability: ""
+        })
+
+        moves.map(move => move.set({...emptyMove}));
+
+        setNature("");
+        setStats([...stats].map(stat => {
+            stat.EV = 0;
+            stat.IV = 31;
+            stat.nature = 1;
+            stat.base = 0;
+            return stat;
+        }));
+        calculateStats();
+    }
+
+    // TODO Might be redundant
+    const clearFields = () => {
+        // EVs
+        for(let i = 0; i < 6; i++) {
+            inputRefs.current[i].current.value = 0;
+        }
+
+        // IVs
+        for(let i = 6; i < 12; i++) {
+            inputRefs.current[i].current.value = 31;
+        }
+
+        // level
+        inputRefs.current[12].current.value = 1;
+
+        // gender, nature, item, ability, moves
+        for (let i = 13; i < 21; i++) {
+            inputRefs.current[i].current.clear();
+        }
+    }
+
+    const changePokemon = (e) => {
         e.preventDefault();
-        let newName = e.target.value;
-        if(newName !== "" && e.keyCode === 13) {
-            fetch(newName, true);
-            for(let i = 0; i < 6; i++) {
-                inputRefs.current[i].current.value = 0;
-            }
-            for(let i = 6; i < 12; i++) {
-                inputRefs.current[i].current.value = 31;
-            }
-            inputRefs.current[12].current.value = 1;
-            let newPokemon = {...pokemon};
-            for(let i = 13; i < 21; i++) {
-                newPokemon[inputRefs.current[i].current.props.inputProps["data-save"]] = "";
-                inputRefs.current[i].current.clear();
-            }
-            setPokemon(newPokemon);
+        let newPokemonName = e.target.value;
+
+        if(newPokemonName !== "" && e.keyCode === 13) {
+            clearFields();
+            clearPokemon();
+
+            fetch(newPokemonName);
         }
     };
 
-    const calcStats = (pokemon) => {
-        pokemon.stats[0].val = Math.floor((pokemon.stats[0].base * 2 + pokemon.stats[0].IV + Math.floor(pokemon.stats[0].EV / 4)) * pokemon.level / 100) + pokemon.level + 10;
-
-        for(let i = 1; i < pokemon.stats.length; i++) {
-            pokemon.stats[i].val = calcStatus(pokemon.stats[i], pokemon.level, 1); // TODO replace 1 with nature modifier
-        }
-        return pokemon;
+    const calculateStats = () => {
+        stats.map(stat => stat.calculate(stat));
     }
 
-    const calcStatus = (stat, level, modifier) => {
-        return Math.floor((Math.floor((stat.base * 2 + stat.IV + Math.floor(stat.EV / 4)) * level / 100) + 5)*modifier);
-    }
+    const NATURE_MODIFIER = 0.1;
+    useEffect(() => {
+        if (nature !== "") {
+            const temp = [...stats];
+            temp[natures[nature].up].nature += NATURE_MODIFIER;
+            temp[natures[nature].down].nature += -NATURE_MODIFIER;
+            setStats(temp);
 
-    const calcByLevel = (e) => {
-        const newLevel = e.target.value;
-        const newPokemon = {...formData};
-        newPokemon["level"] = parseInt(newLevel);
-        setFormData(calcStats(newPokemon));
-    }
-
-    const calcByEVIV = (e) => {
-        const newValue = e.target.value;
-        const newPokemon = {...formData};
-        newPokemon.stats[parseInt(e.target.id)][e.target.getAttribute("data-name")] = parseInt(newValue);
-        setFormData(calcStats(newPokemon));
-    }
-
-    const fetch = (name, clear) => {
-        const newPokemon = {...formData};
-        if(clear) {
-            newPokemon["level"] = 1;
-            newPokemon["genders"]["selected"] = "";
-            newPokemon.stats.map((stat, i) => (newPokemon.stats[i].EV = 0));
-            newPokemon.stats.map((stat, i) => (newPokemon.stats[i].IV = 31));
-            newPokemon["natures"]["selected"] = "";
-            newPokemon["items"]["selected"] = "";
-            newPokemon["abilities"]["selected"] = "";
-            newPokemon["moves"]["selected"].map(move => (
-                move["name"] = ""
-            ));
+            calculateStats();
         }
 
+        // eslint-disable-next-line
+    }, [nature]);
+
+    const setEvIv = e => {
+        const newValue = parseInt(e.target.value);
+
+        const temp = [...stats];
+        temp[parseInt(e.target.id)][e.target.getAttribute("data-name")] = newValue;
+        setStats(temp);
+
+        calculateStats();
+    }
+
+    const setPokemonLevel = e => {
+        setLevel(parseInt(e.target.value()));
+        calculateStats();
+    }
+
+    const setPokemonNature = e => {
+        const newNature = e.target.value;
+        if (natures.hasOwnProperty(newNature)) {
+            setNature(newNature);
+        }
+    }
+
+    const fetch = (name) => {
         let pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${name}`;
         let itemsUrl = `https://pokeapi.co/api/v2/item?offset=0&limit=20000`;
 
         const requestPokemon = axios.get(pokemonUrl);
         const requestItems = axios.get(itemsUrl);
 
-        axios.all([requestPokemon, requestItems]).then(axios.spread((...responses) => {
-            const resPokemon = responses[0];
-            const resItems = responses[1];
+        axios.all([requestPokemon, requestItems])
+            .then(axios.spread((...responses) => {
+                const resPokemon = responses[0];
+                const resItems = responses[1];
 
-            newPokemon["id"] = resPokemon.data.id;
-            newPokemon["name"] = resPokemon.data.name;
-            const types = resPokemon.data.types;
-            const stats = resPokemon.data.stats;
-            const abilities = resPokemon.data.abilities;
-            const moves = resPokemon.data.moves;
-            const items = resItems.data.results;
+                setPokemon(resPokemon.data.name);
+                setPokemonType(resPokemon.data.types.map(type => type.type.name));
+                setStats([...stats].map((stat, index) => {
+                    stat.base = resPokemon.data.stats[index].base_stat;
+                    return stat;
+                }));
+                setAbilities(resPokemon.data.abilities.map(ability => ability.ability.name));
+                setAvailableMoves(resPokemon.data.moves.map(move => move.move.name));
+                setPokemonSprite(resPokemon.data.sprites.front_default);
+                calculateStats();
 
-            newPokemon["Types"] = [];
-            types.map((type) => (newPokemon.Types.push(type.type.name)));
+                setItems(resItems.data.results.map(item => item.name));
 
-            stats.map((stat, i) => (newPokemon.stats[i].base = stat.base_stat));
-
-            newPokemon["abilities"]["all"] = [];
-            abilities.map(ability => (newPokemon.abilities.all.push(ability.ability.name)));
-
-            newPokemon["moves"]["all"] = ["None"];
-            moves.map(move =>(newPokemon.moves.all.push(move.move.name)));
-
-
-            const itemState = [];
-            items.map(item =>(itemState.push(item.name)));
-            newPokemon["items"]["all"] = itemState;
-
-            return axios.get(resPokemon.data.species.url);
-        })).then(res => {
-            const genderRate = res.data.gender_rate;
-            newPokemon["genders"]["all"] = getGenders(genderRate);
-            setFormData(calcStats(newPokemon));
-        })
+                return axios.get(resPokemon.data.species.url);
+            }))
+            .then(res => {
+                setAvailableGenders(res.data.gender_rate);
+            })
     }
 
-    const getGenders = (genderRate) => {
-        if(genderRate===-1) {
-            return ["no gender"];
-        } else if(genderRate===0) {
-            return ["Male"];
-        } else if(genderRate===8) {
-            return ["Female"];
-        } else {
-            return ["Male", "Female"];
+    const setAvailableGenders = genderRate => {
+        switch (genderRate) {
+            case -1: setGenders(["genderless"]); break;
+            case 0: setGenders(["Male"]); break;
+            case 8: setGenders(["Female"]); break;
+            default: setGenders(["Male", "Female"]);
         }
     }
 
-    useEffect(() => {
-        if(formData.name !== "") {
-            fetch(formData.name, false);
-        }
-    }, []);
+    const updatePokemonInfo = e => {
+        const target = e.target;
 
-    const saveToPokemon = (e) => {
-        const newValue = e.target.value;
-        let newPokemon = {...pokemon};
-        newPokemon[e.target.getAttribute("data-save")] = newValue;
-        setPokemon(newPokemon);
-        if(["move1", "move2", "move3", "move4"].includes(e.target.getAttribute("data-save"))) {
-            let newData = {...formData};
-            newData["moves"]["selected"][e.target.getAttribute("data-save").slice(-1)-1]["name"] = newValue;
-            setFormData(newData);
-        }
+        const temp = {...pokemonInfo};
+        temp[target.dataset.field] = target.value;
+        setPokemonInfo(temp);
     }
 
-    const savePokemon = () => {
-        let newPokemon = {...pokemon};
-        newPokemon["indexId"] = formData.id;
-        newPokemon["name"] = formData.name;
-        newPokemon["level"] = formData.level;
-        newPokemon["ivHp"] = formData.stats[0].IV;
-        newPokemon["ivAttack"] = formData.stats[1].IV;
-        newPokemon["ivDefence"] = formData.stats[2].IV;
-        newPokemon["ivSpAttack"] =  formData.stats[3].IV;
-        newPokemon["ivSpDefence"] =  formData.stats[4].IV;
-        newPokemon["ivSpeed"] = formData.stats[5].IV;
-        newPokemon["evHp"] = formData.stats[0].EV;
-        newPokemon["evAttack"] = formData.stats[1].EV;
-        newPokemon["evDefence"] = formData.stats[2].EV;
-        newPokemon["evSpAttack"] = formData.stats[3].EV;
-        newPokemon["evSpDefence"] = formData.stats[4].EV;
-        newPokemon["evSpeed"] = formData.stats[5].EV;
-        if(dbTeam!==null) {
-            newPokemon["teamId"] = dbTeam[0].teamId;
-        }
-        let newTeam = [...team];
-        newTeam[teamIndex] = newPokemon;
-        setTeam(newTeam);
+    const savePokemon = () => { // TODO Generate a pokemon to save
+        // teamPokemon.set(pokemon);
+        // sendPokemon(pokemon);
 
-        console.log(newPokemon);
-        console.log(dbTeam);
-        sendPokemon(newPokemon);
+        // let newPokemon = {...pokemon};
+        // newPokemon["indexId"] = formData.id;
+        // newPokemon["name"] = formData.name;
+        // newPokemon["level"] = formData.level;
+        // newPokemon["ivHp"] = formData.stats[0].IV;
+        // newPokemon["ivAttack"] = formData.stats[1].IV;
+        // newPokemon["ivDefence"] = formData.stats[2].IV;
+        // newPokemon["ivSpAttack"] =  formData.stats[3].IV;
+        // newPokemon["ivSpDefence"] =  formData.stats[4].IV;
+        // newPokemon["ivSpeed"] = formData.stats[5].IV;
+        // newPokemon["evHp"] = formData.stats[0].EV;
+        // newPokemon["evAttack"] = formData.stats[1].EV;
+        // newPokemon["evDefence"] = formData.stats[2].EV;
+        // newPokemon["evSpAttack"] = formData.stats[3].EV;
+        // newPokemon["evSpDefence"] = formData.stats[4].EV;
+        // newPokemon["evSpeed"] = formData.stats[5].EV;
+        // if(dbTeam!==null) {
+        //     newPokemon["teamId"] = dbTeam[0].teamId;
+        // }
+
+        // let newTeam = [...team];
+        // newTeam[teamIndex] = newPokemon;
+        // setTeam(newTeam);
+
+        // console.log(newPokemon);
+        // console.log(dbTeam);
+        // setPokemon(newPokemon);
     }
-
-    useEffect(() => {
-        if(dbTeam!==null) {
-            console.log(dbTeam);
-            let newTeam = [...team];
-            dbTeam.map(dbPoke => (
-                newTeam[dbPoke.position]["id"] = dbPoke.id
-            ));
-            dbTeam.map(dbPoke => (
-                newTeam[dbPoke.position]["teamId"] = dbPoke.teamId
-            ));
-            setTeam(newTeam);
-        }
-    }, [dbTeam])
 
     return(
         <div id="configForm" className={"d-flex flex-column"}>
@@ -316,40 +271,33 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose, dbTeam }) {
                 <div className="d-flex flex-row">
                     <div className="p-1">
                         <div style={{ textAlign: "center" }}>
-                            <Image
-                                thumbnail={true}
-                                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${formData.id}.png`}
-                                style={{ width: "90%" ,maxHeight: "auto", backgroundColor: "gray" }}
-                            />
+                            <Image thumbnail={true} src={ pokemonSprite }
+                                   style={{ width: "90%" ,maxHeight: "auto", backgroundColor: "gray" }} />
                         </div>
                         <div style={{ textAlign: "center" }}>
-                            {formData.Types.map((type, i) => (
+                            { pokemonType.map((type, i) => (
                                 <Badge pill variant={"light"} className={"mr-1"} key={i}>{type}</Badge>
-                            ))}
+                            )) }
                         </div>
                         <div style={{ marginTop: "15px" }}>
-                            <input id={teamIndex} className={"form-control"} placeholder={"Pokemon..."}
-                                   defaultValue={formData.name !== "" ? formData.name : null}
-                                   onKeyUp={changeName} />
+                            <input id={ teamPokemon.pokemon.position } className={"form-control"} placeholder={"Pokemon..."}
+                                   defaultValue={pokemon !== "" ? pokemon : null}
+                                   onKeyUp={changePokemon} />
                         </div>
                     </div>
                     <div className={"pl-1 pr-1 pt-1"}>
-                        {formData.stats.map((stat, i) => (
+                        {stats.map((stat, i) => (
                             <div className={"d-flex justify-content-center flex-row pb-2"} key={i}>
                                 <div className={"pl-2 pt-2"}><h6>{stat.name}</h6></div>
-                                <div className={"pl-3 pt-2 ml-auto"}><h6>{stat.val}</h6></div>
+                                <div className={"pl-3 pt-2 ml-auto"}><h6>{stat.value}</h6></div>
                                 <div className={"align-self-center pl-3"}>
-                                    <ProgressBar style={{ width: "140px" }}
-                                                 variant={"info"}
-                                                 animated now={stat.base}
-                                                 label={stat.base}
-                                                 min={0}
-                                                 max={180} />
+                                    <ProgressBar style={{ width: "140px" }} variant={"info"} animated label={stat.base}
+                                                 now={stat.base} min={0} max={180} />
                                 </div>
                                 <div className={"align-self-center pr-1"} typeof={"number"} style={{paddingLeft: "20px"}}>
                                     <div className={"d-flex flex-row"}>
-                                        <FormControl ref={inputRefs.current[i]} id={i.toString()} data-name={"EV"} size={"sm"} type={"number"} min={0} max={252} placeholder={"EV"} defaultValue={stat.EV} onChange={calcByEVIV} />
-                                        <FormControl ref={inputRefs.current[i+6]} id={i.toString()} data-name={"IV"} size={"sm"} type={"number"} min={0} max={31} placeholder={"IV"} defaultValue={stat.IV} onChange={calcByEVIV} />
+                                        <FormControl ref={inputRefs.current[i]} id={i.toString()} data-name={"EV"} size={"sm"} type={"number"} min={0} max={252} placeholder={"EV"} defaultValue={stat.EV} onChange={setEvIv} />
+                                        <FormControl ref={inputRefs.current[i+6]} id={i.toString()} data-name={"IV"} size={"sm"} type={"number"} min={0} max={31} placeholder={"IV"} defaultValue={stat.IV} onChange={setEvIv} />
                                     </div>
                                 </div>
                             </div>
@@ -361,30 +309,26 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose, dbTeam }) {
                 <div className="d-flex flex-column">
                     <div className="p-0 d-flex justify-content-center">
                         <h6 className={"p-2"}>Level</h6>
-                        <FormControl ref={inputRefs.current[12]} size={"sm"} value={formData.level} type={"number"} min={1} max={100}
-                                     placeholder={"Level"} className={"mr-2"} style={{maxWidth:"70px"}} onChange={calcByLevel}/>
-                        <Typeahead ref={inputRefs.current[13]} id={"genders"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
-                                   labelKey={"gender"} options={formData.genders.all}  placeholder={formData.genders.selected===""?"Gender...":formData.genders.selected}
-                                    onBlur={saveToPokemon} inputProps={{"data-save": "gender"}}
-                        />
-                        <Typeahead inputProps={{"data-save": "nature"}} id={"natures"} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
-                                   labelKey={"nature"} options={formData.natures.all}  placeholder={formData.natures.selected===""?"Nature...":formData.natures.selected}
-                                    onBlur={saveToPokemon} ref={inputRefs.current[14]}
-                        />
-                        <Typeahead inputProps={{"data-save": "heldItem"}} id={"items"} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
-                                   labelKey={"item"} options={formData.items.all}  placeholder={formData.items.selected===""?"Items...":formData.items.selected}
-                                    onBlur={saveToPokemon} ref={inputRefs.current[15]}
-                        />
-                        <Typeahead inputProps={{"data-save": "ability"}} id={"abilities"} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
-                                   labelKey={"ability"} options={formData.abilities.all}  placeholder={formData.abilities.selected===""?"Ability...":formData.abilities.selected}
-                                    onBlur={saveToPokemon} ref={inputRefs.current[16]}
-                        />
+                        <FormControl ref={inputRefs.current[12]} size={"sm"} value={ level } type={"number"} min={1} max={100}
+                                     placeholder={"Level"} className={"mr-2"} style={{maxWidth:"70px"}} onChange={setPokemonLevel}/>
+                        <Typeahead id={"genders"} inputProps={{"data-field": "gender"}} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
+                                   labelKey={"gender"} options={genders}  placeholder={ pokemonInfo.gender === "" ? "Gender..." : pokemonInfo.gender }
+                                   onBlur={updatePokemonInfo} ref={inputRefs.current[13]} />
+                        <Typeahead id={"natures"} inputProps={{"data-field": "nature"}} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
+                                   labelKey={"nature"} options={Object.keys(natures)}  placeholder={nature === "" ? "Nature..." : nature}
+                                   onBlur={setPokemonNature} ref={inputRefs.current[14]} />
+                        <Typeahead id={"items"} inputProps={{"data-field": "heldItem"}} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
+                                   labelKey={"item"} options={items}  placeholder={pokemonInfo.heldItem === "" ? "Item..." : pokemonInfo.heldItem}
+                                   onBlur={updatePokemonInfo} ref={inputRefs.current[15]} />
+                        <Typeahead id={"abilities"} inputProps={{"data-field": "ability"}} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
+                                   labelKey={"ability"} options={abilities}  placeholder={pokemonInfo.ability === "" ? "Ability..." : pokemonInfo.ability}
+                                   onBlur={updatePokemonInfo} ref={inputRefs.current[16]} />
                     </div>
                     <div className="p-0 d-flex justify-content-center">
-                        {formData.moves.selected.map((move, i) => (
-                            <MoveConfig key={i} index={i} moves={formData.moves.all} move={formData.moves.selected[i]}
-                                        save={saveToPokemon} refs={inputRefs.current} teamIndex={teamIndex} />
-                        ))}
+                        { moves.map((move, i) => (
+                            <MoveConfig key={i} moves={availableMoves} move={move} index={i}
+                                        refs={inputRefs.current} teamIndex={ teamPokemon.pokemon.position } />
+                        )) }
                     </div>
                     <div className="p-1 d-flex justify-content-end">
                         <Button variant="secondary" size="sm" onClick={onClose}>
@@ -401,8 +345,7 @@ function PokemonConfig({ slot, teamIndex, team, setTeam, onClose, dbTeam }) {
 }
 
 PokemonConfig.propTypes = {
-    slot: PropTypes.object.isRequired,
-    team: PropTypes.array.isRequired,
+    teamPokemon: PropTypes.object.isRequired
 }
 
 export default PokemonConfig;
