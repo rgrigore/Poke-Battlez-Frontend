@@ -18,6 +18,7 @@ function UserModal({ open, close, listUser }) {
     const sendMessage = () => {
         if(message !== "") {
             sendPrivate(user.id, message);
+            setMessage("");
         }
     };
 
@@ -28,9 +29,15 @@ function UserModal({ open, close, listUser }) {
             </Modal.Header>
             <Modal.Body  style={{backgroundColor: '#9ea8b1'}}>
                 <input id="pm-message" type="text" name="text" className="border rounded form-control"
-                       placeholder="Type a message..." onChange={setNewMessage} />
-                <button onClick={sendMessage}>Send</button>
-                <button onClick={() => sendChallenge(user)}>Challenge</button>
+                       placeholder="Type a message..." onChange={setNewMessage} value={message} />
+                <button className="btn btn-dark rounded border w-100 mt-2"
+                        title="Send"
+                        style={{ paddingRight: 16 }}
+                        onClick={sendMessage}>Send</button>
+                <button className="btn btn-dark rounded border w-100 mt-2"
+                        title="Send"
+                        style={{ paddingRight: 16 }}
+                        onClick={() => sendChallenge(user)}>Challenge</button>
             </Modal.Body>
         </Modal>
     );
