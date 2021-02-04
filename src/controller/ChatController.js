@@ -40,7 +40,12 @@ export function connect(updateUsers, updatePokemon, updateMessages) {
 				body: json.body
 			})
 		});
-		client[0].subscribe(CHALLENGE_TOPIC + frame.headers["user-name"], challenge => updateMessages("Challenged by " + JSON.parse(challenge.body).from.name));
+		client[0].subscribe(CHALLENGE_TOPIC + frame.headers["user-name"], challenge =>
+			updateMessages({
+				name: "Challenged by",
+				body: JSON.parse(challenge.body).from.name
+			})
+		);
 		_connected = true;
 	};
 

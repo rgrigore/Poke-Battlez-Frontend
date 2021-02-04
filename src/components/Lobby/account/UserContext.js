@@ -6,13 +6,11 @@ export const UserContext = createContext({
 });
 
 export const UserContextProvider = (props) => {
-    // const [user, setUser] = useState("Poke Baller");
 
     const [id, setId] = useState(-1);
     const [username, setUsername] = useState("Poke Baller");
 
     const setUser = user => {
-        console.log(user);
         setId(user.id);
         setUsername(user.username);
     }

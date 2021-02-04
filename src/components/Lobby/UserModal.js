@@ -24,7 +24,7 @@ function UserModal({ open, close, listUser }) {
     return(
         <Modal show={open} onHide={close} size="sm" aria-labelledby="pm-modal" style={{paddingTop: "12rem"}} >
             <Modal.Header style={{backgroundColor: '#828991'}}>
-                <h4>{user.name}</h4>
+                <h4>{ user !== null ? user.name : ""}</h4>
             </Modal.Header>
             <Modal.Body  style={{backgroundColor: '#9ea8b1'}}>
                 <input id="pm-message" type="text" name="text" className="border rounded form-control"
