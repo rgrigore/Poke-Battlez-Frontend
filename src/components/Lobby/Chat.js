@@ -52,7 +52,7 @@ function Chat(props) {
 					<div className='flex-fill mt-2 mb-2 border rounded scrollbar-hidden'
 					     style={{overflow: "auto", backgroundColor: "rgba(160, 169, 173, 0.17)"}}>
 						{/* The CustomerList component */}
-						<UsersList users={users}/>
+						<UsersList users={users} openPm={props.openPm} toPm={props.toPm} />
 					</div>
 				</div>
 				<div className='pt-5 flex-grow-1 h-100 d-flex flex-column'>

@@ -61,10 +61,10 @@ function TeamModal({open, onClose, updatedTeam}) {
         nature: "",
         heldItem: "",
         ability: "",
-        move1: "",
-        move2: "",
-        move3: "",
-        move4: "",
+        move1: "none",
+        move2: "none",
+        move3: "none",
+        move4: "none",
 
         sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
     }

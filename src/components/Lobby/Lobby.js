@@ -17,7 +17,11 @@ function Lobby() {
     const[updatedTeam, setUpdatedTeam] = useState(null);
 
     const[showPmModal, setShowPmModal] = useState(false);
-    const[to, setTo] = useState(null);
+    const[pmTo, setPmTo] = useState(null);
+
+    // const setPmDestination = (user) => {
+    //     setPmTo(user);
+    // }
 
     if (first) {
 	    connect();
@@ -28,10 +32,10 @@ function Lobby() {
         <div className={"Lobby vh-100"}>
             <UserContextProvider>
                 <LobbyNavbar openTeam={() => setShowTeam(true)} />
-                <Chat setTeam={(newTeam) => setUpdatedTeam(newTeam)} />
+                <Chat setTeam={(newTeam) => setUpdatedTeam(newTeam)} openPm={() => setShowPmModal(true)} toPm={setPmTo} />
                 <RegisterModal open={!registered} onClose={() => setRegistered(true)} />
                 <TeamModal open={showTeam} onClose={() => setShowTeam(false)} updatedTeam={updatedTeam} />
-                {/*<PmModal open={showPmModal} onClose={() => setShowPmModal(false)} to={to}/>*/}
+                <PmModal open={showPmModal} close={() => setShowPmModal(false)} to={pmTo}/>
             </UserContextProvider>
         </div>
     );

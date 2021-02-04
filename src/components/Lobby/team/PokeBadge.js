@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {Image} from "react-bootstrap";
 import pokeLogo from "../../img/pokeball_logo_lobby.png";

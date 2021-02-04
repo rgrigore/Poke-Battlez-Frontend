@@ -4,7 +4,7 @@ import {getUser} from "./AccountController";
 const SOCKET = "ws://localhost:8080/chat-lobby";
 const RECEIVE_CHAT_TOPIC = "/chat/lobby";
 const SEND_CHAT_TOPIC = "/app/message/lobby";
-const PRIVATE_CHAT_TOPIC = "chat/private/";
+const PRIVATE_CHAT_TOPIC = "/chat/private/";
 const PRIVATE_CHAT_SEND = "/app/chat/private";
 const RECEIVE_CHAT_USERS_TOPIC = "/chat/lobby/users";
 const POKEMON_SEND_TOPIC = "/app/chat/pokemon";
@@ -35,6 +35,7 @@ export function connect(updateMessages, updateUsers, updatePokemon) {
 				name: json.sender ? "To " + json.to.name : "From " + json.from.name,
 				body: json.body
 			})
+			console.log(json);
 		});
 		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => updatePokemon(JSON.parse(team.body)));
 	};
