@@ -109,6 +109,11 @@ function TeamModal({open, onClose, updatedTeam}) {
     }
 
     useEffect(() => {
+        resetTeam(0)
+        // eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {
         if(updatedTeam !== null) {
             resetTeam(updatedTeam.teamId);
             for (let pokemon of updatedTeam.pokemon) {
