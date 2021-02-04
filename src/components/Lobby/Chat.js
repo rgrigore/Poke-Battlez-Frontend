@@ -1,26 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import UsersList from "./UsersList";
 import ChatBox from "./ChatBox";
-import {connect, sendMessage} from "../../controller/ChatController";
-import {isAuthenticated} from "../../controller/AccountController";
+import {sendMessage} from "../../controller/ChatController";
+import PropTypes from "prop-types";
 
 import "../../css/HiddenScrollbar.css";
 
 function Chat(props) {
-
-	let [first, setFirst] = useState(true);
-
-	let [messages, setMessages] = useState([]);
-	let [newMessage, setNewMessage] = useState(null);
-
-	let [users, setUsers] = useState([]);
-
-	useEffect(() => {
-		if (newMessage !== null) {
-			setMessages([...messages, newMessage]);
-		}
-		// eslint-disable-next-line
-	}, [newMessage]);
 
 	let handleMessage = () => {
 		let field = document.getElementById("new-message")
@@ -39,11 +25,6 @@ function Chat(props) {
 		}
 	}
 
-	if (first && isAuthenticated()) {
-		connect(setNewMessage, setUsers, props.setTeam);
-		setFirst(false);
-	}
-
 	return(
 		<div className='container-fluid h-100 pt-5' style={{backgroundColor: "slategrey"}}>
 			<div className='d-flex align-items-stretch h-100 pt-4'>
@@ -52,14 +33,14 @@ function Chat(props) {
 					<div className='flex-fill mt-2 mb-2 border rounded scrollbar-hidden'
 					     style={{overflow: "auto", backgroundColor: "rgba(160, 169, 173, 0.17)"}}>
 						{/* The CustomerList component */}
-						<UsersList users={users} openPm={props.openPm} toPm={props.toPm} />
+						<UsersList users={props.users} openUser={props.openUser} selectUser={props.selectUser} />
 					</div>
 				</div>
 				<div className='pt-5 flex-grow-1 h-100 d-flex flex-column'>
 					<div className='mr-1 flex-fill border rounded scrollbar-hidden'
 					     style={{ overflow:'auto', backgroundColor: "rgba(160, 169, 173, 0.17)" }}>
 						<div id={"chatArea"}>
-							<ChatBox messages={messages}/>
+							<ChatBox messages={props.messages}/>
 						</div>
 					</div>
 					<div className="w-100 my-1 mr-1 pb-2">
@@ -85,6 +66,12 @@ function Chat(props) {
 			</div>
 		</div>
 	);
+}
+
+Chat.propTypes = {
+	users: PropTypes.array.isRequired,
+	openUser: PropTypes.func.isRequired,
+	selectUser: PropTypes.func.isRequired
 }
 
 export default Chat;

@@ -15,7 +15,7 @@ function PokemonConfig({ teamPokemon, onClose }) {
         heldItem: teamPokemon.pokemon.heldItem,
         ability: teamPokemon.pokemon.ability
     });
-    const [pokemonSprite, setPokemonSprite] = useState(teamPokemon.pokemon.sprite);
+    const [pokemonSprite, setPokemonSprite] = useState("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png");
     const [pokemonType, setPokemonType] = useState([]);
 
     const [level, setLevel] = useState(teamPokemon.pokemon.level);

@@ -9,10 +9,13 @@ const PRIVATE_CHAT_SEND = "/app/chat/private";
 const RECEIVE_CHAT_USERS_TOPIC = "/chat/lobby/users";
 const POKEMON_SEND_TOPIC = "/app/chat/pokemon";
 const TEAM_RECEIVE_TOPIC = "/chat/team/";
+const CHALLENGE_SEND = "/app/chat/challenge";
+const CHALLENGE_TOPIC = "/chat/challenge/";
 
 let client = [];
+let _connected = false;
 
-export function connect(updateMessages, updateUsers, updatePokemon) {
+export function connect(updateUsers, updatePokemon, updateMessages) {
 	// console.log("Chat connect")
 
 	client.push(new Client({
@@ -27,17 +30,18 @@ export function connect(updateMessages, updateUsers, updatePokemon) {
 	}));
 
 	client[0].onConnect = frame => {
-		client[0].subscribe(RECEIVE_CHAT_TOPIC, message => updateMessages(JSON.parse(message.body)), {user: getUser().id});
-		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)));
+		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)), {user: getUser().id});
+		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => updatePokemon(JSON.parse(team.body)));
+		client[0].subscribe(RECEIVE_CHAT_TOPIC, message => updateMessages(JSON.parse(message.body)));
 		client[0].subscribe(PRIVATE_CHAT_TOPIC + frame.headers["user-name"], message => {
 			let json = JSON.parse(message.body)
 			updateMessages({
 				name: json.sender ? "To " + json.to.name : "From " + json.from.name,
 				body: json.body
 			})
-			console.log(json);
 		});
-		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => updatePokemon(JSON.parse(team.body)));
+		client[0].subscribe(CHALLENGE_TOPIC + frame.headers["user-name"], challenge => updateMessages("Challenged by " + JSON.parse(challenge.body).from.name));
+		_connected = true;
 	};
 
 	client[0].onStompError = frame => {
@@ -46,6 +50,10 @@ export function connect(updateMessages, updateUsers, updatePokemon) {
 	}
 
 	client[0].activate();
+}
+
+export function isConnected() {
+	return _connected;
 }
 
 export function sendMessage(message) {
@@ -67,4 +75,11 @@ export function sendPrivate(to, message) {
 		destination: PRIVATE_CHAT_SEND,
 		body: JSON.stringify({to: to, body: message})
 	})
+}
+
+export function sendChallenge(to) {
+	client[0].publish({
+		destination: CHALLENGE_SEND,
+		body: JSON.stringify({to: to.id})
+	});
 }
