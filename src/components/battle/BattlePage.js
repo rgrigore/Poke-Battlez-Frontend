@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import ChatBox from "../lobby/ChatBox";
 import OpponentCard from "./OpponentCard";
+import GraphicBattle from "./GraphicBattle";
 
 function BattlePage(props) {
 
@@ -10,6 +11,9 @@ function BattlePage(props) {
     let [opponentRank, setOpponentrank] = useState("15");
     let [chatMessages, setChatMessages] = useState([]);
     let [opponentTeam, setOpponentTeam] = useState([true, true, true, true, true, true]);
+    let [currentPokemon, setCurrentPokemon] = useState(6);
+    let [currentOpponentPokemon, setCurrentOpponentPokemon] = useState(8);
+    let [turn, setTurn] = useState(true);
     // let [newMessage, setNewMessage] = useState(null);
 
     let handleMessage = () => {
@@ -22,6 +26,7 @@ function BattlePage(props) {
             setChatMessages([...chatMessages, messageTest]);
             const newOpponentTeam = [true, false, true, true, true, true];
             setOpponentTeam(newOpponentTeam);
+            setTurn(false);
             // sendMessage(message);
         }
     }
@@ -40,7 +45,9 @@ function BattlePage(props) {
                 </div>
                 <div className={"d-flex mr-3 mb-2 mt-3"}
                     style={{minHeight: "400px", minWidth:"500px", overflow:"auto", borderStyle:"dotted"}}>
-                    Graphic Battle
+                    <GraphicBattle currentPokemon={currentPokemon}
+                                   currentOpponentPokemon={currentOpponentPokemon}
+                                   turn={turn}  />
                 </div>
                 <div className={"d-flex mr-3"}
                      style={{minHeight: "200px", minWidth:"300px", overflow:"auto", borderStyle:"dotted"}}>
