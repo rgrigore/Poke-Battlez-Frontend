@@ -12,7 +12,7 @@ function OpponentCard({ opponent, opponentRank, opponentTeam }) {
                 <div><Badge variant={"danger"}>{ opponent }</Badge></div>
                 <div className={"pb-1"}>
                     <img src="https://img.icons8.com/officel/16/000000/command-sergeant-major-csm.png"/>{" "}
-                    <Badge variant={"info"}>{ opponentRank }</Badge>
+                    <Badge variant={"warning"}>{ opponentRank }</Badge>
                 </div>
             </div>
             <div className={"flex-fill align-self-center pr-2"}>

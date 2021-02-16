@@ -29,7 +29,7 @@ function GraphicBattle({ currentPokemon, currentOpponentPokemon, turn }) {
                      animation: turn ? '' : 'float 4s ease-in-out infinite'
                  }} />
             <br />
-            <img alt="" className={"pokemon"} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${currentPokemon}.png`}
+            <img alt="" className={"pokemon"} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${currentPokemon.id}.png`}
                  style={{
                      position: 'relative',
                      top: '150px',

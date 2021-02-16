@@ -2,18 +2,28 @@ import React, {useState} from "react";
 import ChatBox from "../lobby/ChatBox";
 import OpponentCard from "./OpponentCard";
 import GraphicBattle from "./GraphicBattle";
+import BattleController from "./BattleController";
 
 function BattlePage(props) {
 
+    const testTeam = [
+        {name: "pokemon 1", id: 5, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
+        {name: "pokemon 1", id: 1, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
+        {name: "pokemon 1", id: 8, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
+        {name: "pokemon 1", id: 10, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
+        {name: "pokemon 1", id: 3, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
+        {name: "pokemon 1", id: 2, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]}
+    ];
     const messageTest = {name: "user", body: "message"}; //TODO delete after implementing
 
-    let [opponent, setOpponent] = useState("Username");
-    let [opponentRank, setOpponentrank] = useState("15");
+    let [opponent, setOpponent] = useState("Opponent");
+    let [opponentRank, setOpponentRank] = useState("15");
     let [chatMessages, setChatMessages] = useState([]);
     let [opponentTeam, setOpponentTeam] = useState([true, true, true, true, true, true]);
-    let [currentPokemon, setCurrentPokemon] = useState(6);
+    let [currentPokemon, setCurrentPokemon] = useState(testTeam[3]);
     let [currentOpponentPokemon, setCurrentOpponentPokemon] = useState(8);
     let [turn, setTurn] = useState(true);
+    let [team, setTeam] = useState(testTeam);
     // let [newMessage, setNewMessage] = useState(null);
 
     let handleMessage = () => {
@@ -44,17 +54,19 @@ function BattlePage(props) {
                     <OpponentCard opponent={opponent} opponentRank={opponentRank} opponentTeam={opponentTeam} />
                 </div>
                 <div className={"d-flex mr-3 mb-2 mt-3"}
-                    style={{minHeight: "400px", minWidth:"500px", overflow:"auto", borderStyle:"dotted"}}>
+                    style={{minHeight: "400px", minWidth:"500px", overflow:"auto",
+                        // borderStyle:"dotted"
+                    }}>
                     <GraphicBattle currentPokemon={currentPokemon}
                                    currentOpponentPokemon={currentOpponentPokemon}
                                    turn={turn}  />
                 </div>
                 <div className={"d-flex mr-3"}
-                     style={{minHeight: "200px", minWidth:"300px", overflow:"auto", borderStyle:"dotted"}}>
-                    BattleController
+                     style={{minHeight: "200px", minWidth:"300px", overflow:"auto"}}>
+                    <BattleController team={team} currentPokemon={currentPokemon} />
                 </div>
             </div>
-            <div className='pt-1 h-100 d-flex flex-column'>
+            <div className='pt-1 pl-2 h-100 d-flex flex-column' style={{minWidth: '400px'}}>
                 <div className='mr-1 flex-fill border rounded scrollbar-hidden'
                      style={{ overflow:'auto', backgroundColor: "rgba(160, 169, 173, 0.17)" }}>
                     <div id={"battleChatArea"}>
