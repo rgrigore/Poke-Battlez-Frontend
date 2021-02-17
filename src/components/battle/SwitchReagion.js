@@ -1,7 +1,7 @@
 import React from "react";
-import {Badge} from "react-bootstrap";
+import {Badge, ProgressBar} from "react-bootstrap";
 
-function SwitchRegion({ team, moves, switching, setSwitching }) {
+function SwitchRegion({ team, moves, switching, setSwitching, setCurrentPokemon }) {
 
     return(
         <div className="flex-grow-1 h-30 pt-1 flex-column">
@@ -9,12 +9,19 @@ function SwitchRegion({ team, moves, switching, setSwitching }) {
                     <div className={"h-30 pt-1 d-flex flex-row"}>
                         <div className={"d-flex mr-0 mb-2 mt-3 justify-content-around h-50"}>
                             {team.map((pokemon, index) => (
-                                <div key={index} className="flex-fill">
-                                    <img alt={""} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}/>
-                                    <Badge variant={"light"}>{ pokemon.hp }</Badge>
-                                    {pokemon.types.map((type, index) => (
-                                        <Badge key={index} variant={"light"}>{ type }</Badge>
-                                    ))}
+                                <div key={index} className="flex-fill ml-3 mr-2 justify-content-around"
+                                    style={{ marginTop: '-10px' }}
+                                >
+                                    <div className={"align-self-stretch"}>
+                                        <img alt={""} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+                                             style={{margin: '-5px'}} onClick={() => setCurrentPokemon(pokemon)}
+                                        />
+                                        <ProgressBar style={{ width: "auto" }} variant={"info"} animated label={pokemon.hp}
+                                                 now={pokemon.hp} min={0} max={100} />
+                                        {pokemon.types.map((type, index) => (
+                                            <Badge className={"mr-1"} key={index} variant={"light"}>{ type }</Badge>
+                                        ))}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -33,7 +40,7 @@ function SwitchRegion({ team, moves, switching, setSwitching }) {
                                 title="mega_evo"
                                 style={{ marginRight: 16, minWidth: '100px' }}
                             // onClick={handleMessage}
-                        >mega evo</button>
+                        >mega</button>
                         <button className="btn btn-warning rounded border"
                                 title="switch"
                                 style={{ minWidth: '100px' }}

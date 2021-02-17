@@ -4,16 +4,16 @@ import OpponentCard from "./OpponentCard";
 import GraphicBattle from "./GraphicBattle";
 import BattleController from "./BattleController";
 
-function BattlePage(props) {
+function BattlePage() {
 
     const testTeam = [
         {name: "pokemon 1", id: 5, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
         {name: "pokemon 1", id: 1, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
-        {name: "pokemon 1", id: 8, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
+        {name: "pokemon 1", id: 8, hp: 50, types: ["normal", "electricity"], moves: ["move 1", "move 2", "move 3", "move 4"]},
         {name: "pokemon 1", id: 10, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
         {name: "pokemon 1", id: 3, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
         {name: "pokemon 1", id: 2, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]}
-    ];
+    ]; //TODO delete after implementing
     const messageTest = {name: "user", body: "message"}; //TODO delete after implementing
 
     let [opponent, setOpponent] = useState("Opponent");
@@ -22,7 +22,7 @@ function BattlePage(props) {
     let [opponentTeam, setOpponentTeam] = useState([true, true, true, true, true, true]);
     let [currentPokemon, setCurrentPokemon] = useState(testTeam[3]);
     let [currentOpponentPokemon, setCurrentOpponentPokemon] = useState(8);
-    let [turn, setTurn] = useState(true);
+    // let [turn, setTurn] = useState(true);
     let [team, setTeam] = useState(testTeam);
     // let [newMessage, setNewMessage] = useState(null);
 
@@ -36,7 +36,6 @@ function BattlePage(props) {
             setChatMessages([...chatMessages, messageTest]);
             const newOpponentTeam = [true, false, true, true, true, true];
             setOpponentTeam(newOpponentTeam);
-            setTurn(false);
             // sendMessage(message);
         }
     }
@@ -59,11 +58,13 @@ function BattlePage(props) {
                     }}>
                     <GraphicBattle currentPokemon={currentPokemon}
                                    currentOpponentPokemon={currentOpponentPokemon}
-                                   turn={turn}  />
+                    />
                 </div>
                 <div className={"d-flex mr-3"}
                      style={{minHeight: "200px", minWidth:"300px", overflow:"auto"}}>
-                    <BattleController team={team} currentPokemon={currentPokemon} />
+                    <BattleController team={team} currentPokemon={currentPokemon}
+                                        setCurrentPokemon={(pokemon) => setCurrentPokemon(pokemon)}
+                    />
                 </div>
             </div>
             <div className='pt-1 pl-2 h-100 d-flex flex-column' style={{minWidth: '400px'}}>

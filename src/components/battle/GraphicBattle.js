@@ -7,7 +7,7 @@ import background5 from '../img/battle_background_5.jpg';
 
 import "../../css/PokemonAnimation.css";
 
-function GraphicBattle({ currentPokemon, currentOpponentPokemon, turn }) {
+function GraphicBattle({ currentPokemon, currentOpponentPokemon }) {
 
     const backgrounds = [background1, background2, background3, background4, background5 ]
     const [background, setBackground] = useState(backgrounds[Math.floor(Math.random() * Math.floor(backgrounds.length))]);
@@ -26,7 +26,7 @@ function GraphicBattle({ currentPokemon, currentOpponentPokemon, turn }) {
                      overflow: 'hidden',
                      borderRadius: '70%',
                      transform: 'translatey(0px)',
-                     animation: turn ? '' : 'float 4s ease-in-out infinite'
+                     animation: 'float 4s ease-in-out infinite'
                  }} />
             <br />
             <img alt="" className={"pokemon"} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${currentPokemon.id}.png`}
@@ -39,7 +39,7 @@ function GraphicBattle({ currentPokemon, currentOpponentPokemon, turn }) {
                      overflow: 'hidden',
                      borderRadius: '70%',
                      transform: 'translatey(0px)',
-                     animation: turn ? 'float 4s ease-in-out infinite' : ''
+                     animation: 'float 4s ease-in-out infinite'
                  }} />
         </div>
     );
