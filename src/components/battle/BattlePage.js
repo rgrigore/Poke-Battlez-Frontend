@@ -4,18 +4,18 @@ import OpponentCard from "./OpponentCard";
 import GraphicBattle from "./GraphicBattle";
 import BattleController from "./BattleController";
 import {UserContext} from "../lobby/account/UserContext";
-import {connect} from "../../controller/BattleController";
+import {connect, sendMove, sendSwitch} from "../../controller/BattleController";
 
 
 function BattlePage() {
 
     const testTeam = [
-        {name: "pokemon 1", id: 5, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
-        {name: "pokemon 1", id: 1, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
-        {name: "pokemon 1", id: 8, hp: 50, types: ["normal", "electricity"], moves: ["move 1", "move 2", "move 3", "move 4"]},
-        {name: "pokemon 1", id: 10, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
-        {name: "pokemon 1", id: 3, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]},
-        {name: "pokemon 1", id: 2, hp: 50, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"]}
+        {name: "pokemon 1", id: 5, currentHp: 45, hp: 50, position: 0, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"], frontSprite: "", backSprite: ""},
+        {name: "pokemon 2", id: 1, currentHp: 50, hp: 50, position: 1, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"], frontSprite: "", backSprite: ""},
+        {name: "pokemon 3", id: 8, currentHp: 50, hp: 50, position: 2, types: ["normal", "electric"], moves: ["move 1", "move 2", "move 3", "move 4"], frontSprite: "", backSprite: ""},
+        {name: "pokemon 4", id: 10, currentHp: 50, hp: 50, position: 3, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"], frontSprite: "", backSprite: ""},
+        {name: "pokemon 5", id: 3, currentHp: 50, hp: 50, position: 4, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"], frontSprite: "", backSprite: ""},
+        {name: "pokemon 6", id: 2, currentHp: 50, hp: 50, position: 5, types: ["normal", "water"], moves: ["move 1", "move 2", "move 3", "move 4"], frontSprite: "", backSprite: ""}
     ]; //TODO delete after implementing
     const messageTest = {name: "user", body: "message"}; //TODO delete after implementing
 
@@ -25,22 +25,26 @@ function BattlePage() {
 
     let [first, setFirst] = useState(true);
 
+    let [acted, setActed] = useState(false);
+
+    let [chatMessages, setChatMessages] = useState([]);
+    let [newMessage, setNewMessage] = useState(null);
+
+    let [team, setTeam] = useState(testTeam);
+    let [teamHp, setTeamHp] = useState(null);
+    let [currentPokemon, setCurrentPokemon] = useState(null);
+    let [currentPokemonIndex, setCurrentPokemonIndex] = useState(null);
+
     let [opponent, setOpponent] = useState("Opponent");
     let [opponentRank, setOpponentRank] = useState("15");
-    let [chatMessages, setChatMessages] = useState([]);
     let [opponentTeam, setOpponentTeam] = useState([true, true, true, true, true, true]);
-    let [teamHp, setTeamHp] = useState(null);
-    let [opponentTeamHp, setOpponentTeamHp] = useState(null);
-    let [currentPokemonIndex, setCurrentPokemonIndex] = useState(null);
-    let [currentPokemon, setCurrentPokemon] = useState(null);
     let [currentOpponentPokemon, setCurrentOpponentPokemon] = useState(null);
-    let [currentOpponentPokemonIndex, setCurrentOpponentPokemonIndex] = useState(null);
-    let [team, setTeam] = useState(testTeam);
-    let [newMessage, setNewMessage] = useState(null);
+
+
 
     if(first) {
         setFirst(false);
-        connect(userContext.user.id, setNewMessage, setTeamHp, setOpponentTeamHp, setCurrentPokemonIndex, setCurrentOpponentPokemonIndex)
+        connect(userContext.user.id, setTeam, setNewMessage, setTeamHp, setCurrentPokemonIndex, setOpponentTeam, setCurrentOpponentPokemon, setActed)
     }
 
     useEffect(() => {
@@ -52,19 +56,18 @@ function BattlePage() {
 
     useEffect(() => {
         //TODO
+        console.log(teamHp)
     }, [teamHp])
 
     useEffect(() => {
-        //TODO
-    }, [opponentTeamHp])
-
-    useEffect(() => {
-        //TODO
+        for (const pokemon of team) {
+            if (pokemon.position === currentPokemonIndex) {
+                setCurrentPokemon(pokemon);
+                break;
+            }
+        }
+        // eslint-disable-next-line
     }, [currentPokemonIndex])
-
-    useEffect(() => {
-        //TODO
-    }, [currentOpponentPokemonIndex])
 
     let handleMessage = () => {
         let field = document.getElementById("battle-new-message")
@@ -86,6 +89,16 @@ function BattlePage() {
         }
     }
 
+    const sendPokemonMove = move => {
+        sendMove(userContext.user.id, move, currentOpponentPokemon.id);
+        setActed(true);
+    }
+
+    const sendSwitchPokemon = pokemon => {
+        sendSwitch(userContext.user.id, pokemon);
+        setActed(true);
+    }
+
     return (
         <div className={"d-flex container-fluid vh-100 pt-2"} style={{backgroundColor: "slategrey"}}>
             <div className="flex-grow-1 h-100 pt-1 flex-column">
@@ -103,7 +116,8 @@ function BattlePage() {
                 <div className={"d-flex mr-3"}
                      style={{minHeight: "200px", minWidth:"300px", overflow:"auto"}}>
                     <BattleController team={team} currentPokemon={currentPokemon}
-                                        setCurrentPokemon={(pokemon) => setCurrentPokemon(pokemon)}
+                                      setCurrentPokemon={(pokemon) => setCurrentPokemon(pokemon)}
+                                      acted={acted} sendMove={sendPokemonMove} sendSwitch={sendSwitchPokemon}
                     />
                 </div>
             </div>

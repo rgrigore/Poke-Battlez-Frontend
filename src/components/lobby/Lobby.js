@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import { useHistory } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import LobbyNavbar from "./layout/LobbyNavbar";
@@ -28,12 +29,18 @@ function Lobby() {
     const [showChallengeModal, setShowChallengeModal] = useState(false);
     const [challenger, setChallenger] = useState(null);
 
+    const history = useHistory();
+
+    const changeRoute = newRoute => {
+        history.push(newRoute);
+    }
+
     if (!registered) {
         connectAccount();
     }
 
     if (first && registered) {
-        connectLobby(setUsers, setUpdatedTeam, setNewMessage, setChallenger, setShowChallengeModal);
+        connectLobby(setUsers, setUpdatedTeam, setNewMessage, setChallenger, setShowChallengeModal, changeRoute);
         setFirst(false);
     }
 

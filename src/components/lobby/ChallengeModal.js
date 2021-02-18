@@ -25,8 +25,6 @@ function ChallengeModal({open, close, challenger, setChallenger}) {
         <Modal show={open} onHide={close} size="sm" aria-labelledby="pm-modal" style={{paddingTop: "12rem"}} >
             <Modal.Header style={{backgroundColor: '#828991'}}>
                 <h4>{ by !== null ? by.name : "" }</h4>
-                {console.log(by !== null ? by.name : "")}
-                {console.log(by !== null ? by.id : "")}
             </Modal.Header>
             <Modal.Body  style={{backgroundColor: '#9ea8b1'}}>
                 <button className="btn btn-dark rounded border w-100 mt-2"

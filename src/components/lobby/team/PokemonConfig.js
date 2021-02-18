@@ -45,9 +45,9 @@ function PokemonConfig({ teamPokemon, onClose }) {
     const [stats, setStats] = useState([
         { name: "Hp", index: 0, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evHp, IV: teamPokemon.pokemon.ivHp, calculate: calculateHp },
         { name: "Atk", index: 1, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evAttack, IV: teamPokemon.pokemon.ivAttack, calculate: calculateStat },
-        { name: "Def", index: 2, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evDefence, IV: teamPokemon.pokemon.ivDefence, calculate: calculateStat },
+        { name: "Def", index: 2, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evDefense, IV: teamPokemon.pokemon.ivDefense, calculate: calculateStat },
         { name: "Sp. Atk", index: 3, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpAttack, IV: teamPokemon.pokemon.ivSpAttack, calculate: calculateStat },
-        { name: "Sp. Def", index: 4, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpDefence, IV: teamPokemon.pokemon.ivSpDefence, calculate: calculateStat },
+        { name: "Sp. Def", index: 4, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpDefense, IV: teamPokemon.pokemon.ivSpDefense, calculate: calculateStat },
         { name: "Speed", index: 5, value: 0, base: 0, nature: 1, EV: teamPokemon.pokemon.evSpeed, IV: teamPokemon.pokemon.ivSpeed, calculate: calculateStat }
     ]);
 
@@ -249,15 +249,15 @@ function PokemonConfig({ teamPokemon, onClose }) {
             level: level,
             ivHp: stats[0].IV,
             ivAttack: stats[1].IV,
-            ivDefence: stats[2].IV,
+            ivDefense: stats[2].IV,
             ivSpAttack: stats[3].IV,
-            ivSpDefence: stats[4].IV,
+            ivSpDefense: stats[4].IV,
             ivSpeed: stats[5].IV,
             evHp: stats[0].EV,
             evAttack: stats[1].EV,
-            evDefence: stats[2].EV,
+            evDefense: stats[2].EV,
             evSpAttack: stats[3].EV,
-            evSpDefence: stats[4].EV,
+            evSpDefense: stats[4].EV,
             evSpeed: stats[5].EV,
             gender: pokemonInfo.gender,
             nature: nature,

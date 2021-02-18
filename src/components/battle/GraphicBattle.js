@@ -17,31 +17,39 @@ function GraphicBattle({ currentPokemon, currentOpponentPokemon }) {
     return(
         <div className={"ml-3 mr-2 border rounded scrollbar-hidden"} style={{backgroundImage: `url(${background})`,
             minWidth: '800px'}}>
-            <img alt="" className={"pokemon"} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${currentOpponentPokemon}.png`}
-                 style={{
-                     position: 'absolute',
-                     top: '150px',
-                     right: '500px',
-                     width: '250px',
-                     height: '250px',
-                     overflow: 'hidden',
-                     borderRadius: '70%',
-                     transform: 'translatey(0px)',
-                     animation: 'float 4s ease-in-out infinite'
-                 }} />
+            { currentOpponentPokemon !== null ?
+                <img alt="" className={"pokemon"}
+                     src={currentOpponentPokemon.frontSprite}
+                     style={{
+                         position: 'absolute',
+                         top: '150px',
+                         right: '500px',
+                         width: '250px',
+                         height: '250px',
+                         overflow: 'hidden',
+                         borderRadius: '70%',
+                         transform: 'translatey(0px)',
+                         animation: 'float 4s ease-in-out infinite'
+                     }}/>
+                : <></>
+            }
             <br />
-            <img alt="" className={"pokemon"} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${currentPokemon.id}.png`}
-                 style={{
-                     position: 'relative',
-                     top: '150px',
-                     right: '0px',
-                     width: '250px',
-                     height: '250px',
-                     overflow: 'hidden',
-                     borderRadius: '70%',
-                     transform: 'translatey(0px)',
-                     animation: 'float 4s ease-in-out infinite'
-                 }} />
+            { currentPokemon !== null ?
+                <img alt="" className={"pokemon"}
+                     src={currentPokemon.backSprite}
+                     style={{
+                         position: 'relative',
+                         top: '150px',
+                         right: '0px',
+                         width: '250px',
+                         height: '250px',
+                         overflow: 'hidden',
+                         borderRadius: '70%',
+                         transform: 'translatey(0px)',
+                         animation: 'float 4s ease-in-out infinite'
+                     }}/>
+                : <></>
+            }
         </div>
     );
 }
