@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-// import { connect } from "../../controller/ChatController";
+import { connect } from "../../controller/ChatController";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function ChatBox(props) {

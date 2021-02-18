@@ -291,7 +291,7 @@ function PokemonConfig({ teamPokemon, onClose }) {
                         <div style={{ textAlign: "center" }}>
                             { pokemonType.map((type, i) => (
                                 <Badge pill variant={"light"} className={"mr-1"} key={i}>{type}</Badge>
-                            )) }
+                            ))}
                         </div>
                         <div style={{ marginTop: "15px" }}>
                             <input id={ teamPokemon.pokemon.position } className={"form-control"} placeholder={"Pokemon..."}
