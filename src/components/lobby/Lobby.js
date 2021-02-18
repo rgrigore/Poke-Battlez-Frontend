@@ -5,7 +5,6 @@ import LobbyNavbar from "./layout/LobbyNavbar";
 import Chat from "./Chat";
 import {connect as connectAccount} from "../../controller/AccountController";
 import {connect as connectLobby, isConnected} from "../../controller/ChatController";
-import {UserContextProvider} from "./account/UserContext";
 import TeamModal from "./team/TeamModal";
 import RegisterModal from "./account/RegisterModal";
 import UserModal from "./UserModal";
@@ -47,20 +46,18 @@ function Lobby() {
 
     return(
         <div className={"Lobby vh-100"}>
-            <UserContextProvider>
-                <LobbyNavbar openTeam={() => setShowTeam(true)} />
-                <Chat users={users} openUser={() => setShowUserModal(true)} selectUser={setSelectedUser} messages={chatMessages} />
-                <RegisterModal open={!registered} onClose={() => setRegistered(true)} />
-                { registered && isConnected() &&
-                    <>
-                        <TeamModal open={showTeam} onClose={() => setShowTeam(false)} updatedTeam={updatedTeam} />
-                        <UserModal open={showUserModal} close={() => setShowUserModal(false)} listUser={selectedUser} />
-                        <ChallengeModal open={showChallengeModal} close={() => setShowChallengeModal(false)}
-                                        challenger={challenger} setChallenger={(value) => setChallenger(value)}
-                        />
-                    </>
-                }
-            </UserContextProvider>
+            <LobbyNavbar openTeam={() => setShowTeam(true)} />
+            <Chat users={users} openUser={() => setShowUserModal(true)} selectUser={setSelectedUser} messages={chatMessages} />
+            <RegisterModal open={!registered} onClose={() => setRegistered(true)} />
+            { registered && isConnected() &&
+                <>
+                    <TeamModal open={showTeam} onClose={() => setShowTeam(false)} updatedTeam={updatedTeam} />
+                    <UserModal open={showUserModal} close={() => setShowUserModal(false)} listUser={selectedUser} />
+                    <ChallengeModal open={showChallengeModal} close={() => setShowChallengeModal(false)}
+                                    challenger={challenger} setChallenger={(value) => setChallenger(value)}
+                    />
+                </>
+            }
         </div>
     );
 }

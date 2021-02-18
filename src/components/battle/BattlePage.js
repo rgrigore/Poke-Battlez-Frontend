@@ -1,8 +1,11 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import ChatBox from "../lobby/ChatBox";
 import OpponentCard from "./OpponentCard";
 import GraphicBattle from "./GraphicBattle";
 import BattleController from "./BattleController";
+import {UserContext} from "../lobby/account/UserContext";
+import {connect} from "../../controller/BattleController";
+
 
 function BattlePage() {
 
@@ -16,15 +19,52 @@ function BattlePage() {
     ]; //TODO delete after implementing
     const messageTest = {name: "user", body: "message"}; //TODO delete after implementing
 
+
+
+    const userContext = useContext(UserContext);
+
+    let [first, setFirst] = useState(true);
+
     let [opponent, setOpponent] = useState("Opponent");
     let [opponentRank, setOpponentRank] = useState("15");
     let [chatMessages, setChatMessages] = useState([]);
     let [opponentTeam, setOpponentTeam] = useState([true, true, true, true, true, true]);
-    let [currentPokemon, setCurrentPokemon] = useState(testTeam[3]);
-    let [currentOpponentPokemon, setCurrentOpponentPokemon] = useState(8);
-    // let [turn, setTurn] = useState(true);
+    let [teamHp, setTeamHp] = useState(null);
+    let [opponentTeamHp, setOpponentTeamHp] = useState(null);
+    let [currentPokemonIndex, setCurrentPokemonIndex] = useState(null);
+    let [currentPokemon, setCurrentPokemon] = useState(null);
+    let [currentOpponentPokemon, setCurrentOpponentPokemon] = useState(null);
+    let [currentOpponentPokemonIndex, setCurrentOpponentPokemonIndex] = useState(null);
     let [team, setTeam] = useState(testTeam);
-    // let [newMessage, setNewMessage] = useState(null);
+    let [newMessage, setNewMessage] = useState(null);
+
+    if(first) {
+        setFirst(false);
+        connect(userContext.user.id, setNewMessage, setTeamHp, setOpponentTeamHp, setCurrentPokemonIndex, setCurrentOpponentPokemonIndex)
+    }
+
+    useEffect(() => {
+        if(newMessage !== null) {
+            setChatMessages([...chatMessages, newMessage]);
+        }
+    // eslint-disable-next-line
+    }, [newMessage]);
+
+    useEffect(() => {
+        //TODO
+    }, [teamHp])
+
+    useEffect(() => {
+        //TODO
+    }, [opponentTeamHp])
+
+    useEffect(() => {
+        //TODO
+    }, [currentPokemonIndex])
+
+    useEffect(() => {
+        //TODO
+    }, [currentOpponentPokemonIndex])
 
     let handleMessage = () => {
         let field = document.getElementById("battle-new-message")
@@ -33,9 +73,9 @@ function BattlePage() {
             field.value = "";
             field.focus();
 
-            setChatMessages([...chatMessages, messageTest]);
-            const newOpponentTeam = [true, false, true, true, true, true];
-            setOpponentTeam(newOpponentTeam);
+            setNewMessage({user: userContext.user.username, message: message});
+            // const newOpponentTeam = [true, false, true, true, true, true];
+            // setOpponentTeam(newOpponentTeam);
             // sendMessage(message);
         }
     }
