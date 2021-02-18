@@ -6,6 +6,8 @@ import background4 from '../img/battle_background_4.jpg';
 import background5 from '../img/battle_background_5.jpg';
 
 import "../../css/PokemonAnimation.css";
+import "../../css/HiddenScrollbar.css";
+
 
 function GraphicBattle({ currentPokemon, currentOpponentPokemon }) {
 
@@ -13,9 +15,8 @@ function GraphicBattle({ currentPokemon, currentOpponentPokemon }) {
     const [background, setBackground] = useState(backgrounds[Math.floor(Math.random() * Math.floor(backgrounds.length))]);
 
     return(
-        <div className={"ml-5 border rounded scrollbar-hidden"} style={{backgroundImage: `url(${background})`,
-            minWidth: '800px',
-            marginBottom: '-10px'}}>
+        <div className={"ml-3 mr-2 border rounded scrollbar-hidden"} style={{backgroundImage: `url(${background})`,
+            minWidth: '800px'}}>
             <img alt="" className={"pokemon"} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${currentOpponentPokemon}.png`}
                  style={{
                      position: 'absolute',

@@ -9,7 +9,7 @@ function SwitchRegion({ team, moves, switching, setSwitching, setCurrentPokemon 
                     <div className={"h-30 pt-1 d-flex flex-row"}>
                         <div className={"d-flex mr-0 mb-2 mt-3 justify-content-around h-50"}>
                             {team.map((pokemon, index) => (
-                                <div key={index} className="flex-fill ml-3 mr-2 justify-content-around"
+                                <div key={index} className="flex-fill ml-2 mr-2 justify-content-around"
                                     style={{ marginTop: '-10px' }}
                                 >
                                     <div className={"align-self-stretch"}>

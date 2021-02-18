@@ -52,7 +52,7 @@ function BattlePage() {
                 <div className={"d-flex mr-3 justify-content-end"}>
                     <OpponentCard opponent={opponent} opponentRank={opponentRank} opponentTeam={opponentTeam} />
                 </div>
-                <div className={"d-flex mr-3 mb-2 mt-3"}
+                <div className={"d-flex mr-2 mb-2 mt-3 justify-content-end"}
                     style={{minHeight: "400px", minWidth:"500px", overflow:"auto",
                         // borderStyle:"dotted"
                     }}>
