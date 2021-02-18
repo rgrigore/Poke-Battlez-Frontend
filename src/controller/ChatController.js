@@ -1,5 +1,6 @@
 import {Client} from "@stomp/stompjs/esm6";
 import {getUser} from "./AccountController";
+import {startBattle} from "./BattleController";
 
 const SOCKET = "ws://localhost:8080/chat-lobby";
 const RECEIVE_CHAT_TOPIC = "/chat/lobby";
@@ -11,6 +12,7 @@ const POKEMON_SEND_TOPIC = "/app/chat/pokemon";
 const TEAM_RECEIVE_TOPIC = "/chat/team/";
 const CHALLENGE_SEND = "/app/chat/challenge";
 const CHALLENGE_TOPIC = "/chat/challenge/";
+const BATTLE_START = "/battle/start/";
 
 let client = [];
 let _connected = false;
@@ -51,6 +53,7 @@ export function connect(updateUsers, updatePokemon, updateMessages, setChallenge
 				});
 				showChallenge(true);
 		});
+		client[0].subscribe(BATTLE_START + frame.headers["user-name"], confirmation => startBattle(JSON.parse(confirmation.body)));
 		_connected = true;
 	};
 
