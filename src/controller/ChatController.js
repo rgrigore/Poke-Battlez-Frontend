@@ -1,6 +1,6 @@
 import {Client} from "@stomp/stompjs/esm6";
 import {getUser} from "./AccountController";
-import {startBattle} from "./BattleController";
+import {setBattleData} from "./BattleController";
 
 const SOCKET = "ws://localhost:8080/chat-lobby";
 const RECEIVE_CHAT_TOPIC = "/chat/lobby";
@@ -13,11 +13,12 @@ const TEAM_RECEIVE_TOPIC = "/chat/team/";
 const CHALLENGE_SEND = "/app/chat/challenge";
 const CHALLENGE_TOPIC = "/chat/challenge/";
 const BATTLE_START = "/battle/start/";
+const SEND_CHALLENGE_RESPONSE = "/app/chat/challenge/accept";
 
 let client = [];
 let _connected = false;
 
-export function connect(updateUsers, updatePokemon, updateMessages, setChallenger, showChallenge) {
+export function connect(updateUsers, updatePokemon, updateMessages, setChallenger, showChallenge, changeRoute) {
 	// console.log("Chat connect")
 
 	client.push(new Client({
@@ -53,7 +54,12 @@ export function connect(updateUsers, updatePokemon, updateMessages, setChallenge
 				});
 				showChallenge(true);
 		});
-		client[0].subscribe(BATTLE_START + frame.headers["user-name"], confirmation => startBattle(JSON.parse(confirmation.body)));
+
+		client[0].subscribe(BATTLE_START + frame.headers["user-name"], confirmation => {
+			setBattleData(JSON.parse(confirmation.body));
+			changeRoute("/battle");
+			// window.location.href = "/battle";
+		});
 		_connected = true;
 	};
 
@@ -94,5 +100,12 @@ export function sendChallenge(to) {
 	client[0].publish({
 		destination: CHALLENGE_SEND,
 		body: JSON.stringify({to: to.id})
+	});
+}
+
+export function sendChallengeResponse(response, from) {
+	client[0].publish({
+		destination: SEND_CHALLENGE_RESPONSE,
+		body: JSON.stringify({accept: response, from: from})
 	});
 }

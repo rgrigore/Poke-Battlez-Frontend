@@ -16,12 +16,17 @@ function ChatBox(props) {
 
     return(
         <>
-            {props.messages.map((message, index) => (
-              <div key={index+1} className="message ml-2 mt-1">
-                  <span className={"font-weight-bold"}>{message.name} :</span>
-                  <span className={"ml-2"}>{message.body}</span>
-              </div>
-            ))}
+            {props.messages.map((message, index) =>
+                message.name != null ?
+                    <div key={index + 1} className="message ml-2 mt-1">
+                        <span className={"font-weight-bold"}>{message.name} :</span>
+                        <span className={"ml-2"}>{message.body}</span>
+                    </div>
+                :
+                    <div key={index + 1} className="message ml-2 mt-1">
+                        <span className={"font-weight-bold"}>{message.body}</span>
+                    </div>
+            )}
             <div style={{ float:"left", clear: "both" }}
                  ref={(el) => { setMessagesEnd(el) }} />
         </>

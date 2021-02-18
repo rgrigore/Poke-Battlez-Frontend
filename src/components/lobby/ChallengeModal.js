@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Modal} from "react-bootstrap";
-// import {sendChallenge} from "../../controller/ChatController"; //TODO import acceptChallenge method after implementation
+import {sendChallengeResponse} from "../../controller/ChatController";
 
 function ChallengeModal({open, close, challenger, setChallenger}) {
     const[by, setBy] = useState(null);
@@ -9,7 +9,14 @@ function ChallengeModal({open, close, challenger, setChallenger}) {
         setBy(challenger);
     }, [challenger]);
 
+    const accept = () => {
+        sendChallengeResponse(true, challenger.id)
+        setChallenger(null);
+        close();
+    }
+
     const decline = () => {
+        sendChallengeResponse(false, challenger.id)
         setChallenger(null);
         close();
     }
@@ -18,14 +25,12 @@ function ChallengeModal({open, close, challenger, setChallenger}) {
         <Modal show={open} onHide={close} size="sm" aria-labelledby="pm-modal" style={{paddingTop: "12rem"}} >
             <Modal.Header style={{backgroundColor: '#828991'}}>
                 <h4>{ by !== null ? by.name : "" }</h4>
-                {console.log(by !== null ? by.name : "")}
-                {console.log(by !== null ? by.id : "")}
             </Modal.Header>
             <Modal.Body  style={{backgroundColor: '#9ea8b1'}}>
                 <button className="btn btn-dark rounded border w-100 mt-2"
                         title="Accept"
                         style={{ paddingRight: 16 }}
-                        // onClick={sendMessage} // TODO switch with acceptChallenge method after implementation
+                        onClick={accept}
                 >Accept
                 </button>
                 <button className="btn btn-danger rounded border w-100 mt-2"

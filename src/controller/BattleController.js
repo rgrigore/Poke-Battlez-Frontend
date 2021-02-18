@@ -5,10 +5,9 @@ const GENERAL_SEND = "/app/battle/";
 const BATTLE_RECEIVE_TOPIC = "/battle/";
 
 let client = [];
-let _connected = false;
 let _battleData = {battleId: "", trainers: [], trainerNames: {}, trainerTeams: {}, availablePokemon: {}};
 
-export function connect() {
+export function connect(userId, setTeam, setNewMessage, setTeamHp, setCurrentPokemonIndex, setOpponentTeam, setCurrentOpponentPokemon, setActed) {
     // console.log("Chat connect")
 
     client.push(new Client({
@@ -23,9 +22,58 @@ export function connect() {
     }));
 
     client[0].onConnect = frame => {
-        client[0].subscribe(BATTLE_RECEIVE_TOPIC, battle => console.log(JSON.parse(battle.body)));
+        client[0].subscribe(BATTLE_RECEIVE_TOPIC + _battleData.battleId + "/team/" + userId, teamPacket => {
+            const team = [];
+            for (const pokemon of JSON.parse(teamPacket.body)) {
+                team.push({
+                    name: pokemon.name,
+                    id: pokemon.id,
+                    currentHp: pokemon.hp,
+                    hp: pokemon.hp,
+                    position: pokemon.position,
+                    types: pokemon.types,
+                    moves: pokemon.moves,
+                    frontSprite: pokemon.frontSprite,
+                    backSprite: pokemon.backSprite
+                })
+            }
+            console.log(team);
+            setTeam(team);
+        });
 
-        _connected = true;
+        client[0].subscribe(BATTLE_RECEIVE_TOPIC + _battleData.battleId, battle => {
+            let json = JSON.parse(battle.body)
+
+            console.log(json)
+
+            for (const message of json.log) {
+                setNewMessage({name: null, body: message});
+            }
+
+            let teamHp = {};
+            Object.entries(json.currentHealths[userId]).forEach((id, hp) => teamHp[id] = hp);
+            setTeamHp(teamHp);
+
+            let opponentTeamHp = [false, false, false, false, false, false];
+            json.opponents[userId].forEach(pokemon => opponentTeamHp[pokemon.position] = pokemon.currentHp > 0);
+            setOpponentTeam(opponentTeamHp);
+
+            for (const pokemon of json.opponents[userId]) {
+                if (pokemon.active) {
+                    setCurrentOpponentPokemon(pokemon);
+                    break;
+                }
+            }
+
+            setCurrentPokemonIndex(json.active[userId])
+
+            setActed(false);
+        });
+
+        client[0].publish({
+            destination: GENERAL_SEND + _battleData.battleId + "/connect",
+            body: JSON.stringify({playerId: userId})
+        });
     };
 
     client[0].onStompError = frame => {
@@ -36,32 +84,28 @@ export function connect() {
     client[0].activate();
 }
 
-export function isConnected() {
-    return _connected;
-}
-
-export function sendMove(playerId, moveIndex, targetId) {
+export function sendMove(playerId, moveName, targetId) {
     client[0].publish({
         destination: GENERAL_SEND + _battleData.battleId + "/move",
-        body: JSON.stringify({id: playerId, index: moveIndex, target: targetId})
+        body: JSON.stringify({playerId: playerId, move: moveName, targetId: targetId})
     });
 }
 
 export function sendSwitch(playerId, pokemonIndex) {
     client[0].publish({
         destination: GENERAL_SEND + _battleData.battleId + "/switch",
-        body: JSON.stringify({id: playerId, index: pokemonIndex})
+        body: JSON.stringify({playerId: playerId, index: pokemonIndex})
     });
 }
 
 export function sendCancel(playerId) {
     client[0].publish({
         destination: GENERAL_SEND + _battleData.battleId + "/cancel",
-        body: JSON.stringify({id: playerId})
+        body: JSON.stringify({playerId: playerId})
     });
 }
 
-export function startBattle(battleData) {
+export function setBattleData(battleData) {
+    console.log(battleData);
     _battleData = battleData;
-
 }
