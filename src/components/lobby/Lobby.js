@@ -9,6 +9,7 @@ import {UserContextProvider} from "./account/UserContext";
 import TeamModal from "./team/TeamModal";
 import RegisterModal from "./account/RegisterModal";
 import UserModal from "./UserModal";
+import ChallengeModal from "./ChallengeModal";
 
 function Lobby() {
     const [registered, setRegistered] = useState(false);
@@ -25,12 +26,15 @@ function Lobby() {
     let [chatMessages, setChatMessages] = useState([]);
     let [newMessage, setNewMessage] = useState(null);
 
+    const [showChallengeModal, setShowChallengeModal] = useState(false);
+    const [challenger, setChallenger] = useState(null);
+
     if (!registered) {
         connectAccount();
     }
 
     if (first && registered) {
-        connectLobby(setUsers, setUpdatedTeam, setNewMessage);
+        connectLobby(setUsers, setUpdatedTeam, setNewMessage, setChallenger, setShowChallengeModal);
         setFirst(false);
     }
 
@@ -51,6 +55,9 @@ function Lobby() {
                     <>
                         <TeamModal open={showTeam} onClose={() => setShowTeam(false)} updatedTeam={updatedTeam} />
                         <UserModal open={showUserModal} close={() => setShowUserModal(false)} listUser={selectedUser} />
+                        <ChallengeModal open={showChallengeModal} close={() => setShowChallengeModal(false)}
+                                        challenger={challenger} setChallenger={(value) => setChallenger(value)}
+                        />
                     </>
                 }
             </UserContextProvider>

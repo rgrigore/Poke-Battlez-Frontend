@@ -15,7 +15,7 @@ const CHALLENGE_TOPIC = "/chat/challenge/";
 let client = [];
 let _connected = false;
 
-export function connect(updateUsers, updatePokemon, updateMessages) {
+export function connect(updateUsers, updatePokemon, updateMessages, setChallenger, showChallenge) {
 	// console.log("Chat connect")
 
 	client.push(new Client({
@@ -40,12 +40,17 @@ export function connect(updateUsers, updatePokemon, updateMessages) {
 				body: json.body
 			})
 		});
-		client[0].subscribe(CHALLENGE_TOPIC + frame.headers["user-name"], challenge =>
-			updateMessages({
-				name: "Challenged by",
-				body: JSON.parse(challenge.body).from.name
-			})
-		);
+		client[0].subscribe(CHALLENGE_TOPIC + frame.headers["user-name"], challenge => {
+				updateMessages({
+					name: "Challenged by",
+					body: JSON.parse(challenge.body).from.name
+				});
+				setChallenger({
+					id: JSON.parse(challenge.body).from.id,
+					name: JSON.parse(challenge.body).from.name
+				});
+				showChallenge(true);
+		});
 		_connected = true;
 	};
 
