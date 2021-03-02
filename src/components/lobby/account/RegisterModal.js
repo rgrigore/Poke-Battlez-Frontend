@@ -1,9 +1,9 @@
 import React, {useContext, useState} from 'react'
 import ReactDom from 'react-dom'
 import LoginModal from "./LoginModal";
-import {register} from "../../../controller/AccountController";
 import {UserContext} from "./UserContext";
 import {Button} from "react-bootstrap";
+import axios from "axios";
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -32,16 +32,22 @@ export default function RegisterModal({ open, onClose }) {
 	if(children) return <LoginModal open={children} onClose={onClose} />
 
 	let registerEvent = () => {
-		register({
-			email: document.getElementById("register_email").value,
-			username: document.getElementById("register_username").value,
-			password: document.getElementById("register_password").value
-		}, (state, user) => {
-			if (state) {
-				userContext.setUser(user);
+		axios.post(
+			"http://localhost:8080/account/register",
+			{
+				email: document.getElementById("register_email").value,
+				username: document.getElementById("register_username").value,
+				password: document.getElementById("register_password").value
+			}
+		).then(response => {
+			if (response.data.state) {
+				userContext.setUser({
+					userName: response.data.username,
+					id: response.data.id
+				});
 				onClose();
 			}
-		});
+		})
 	}
 
 	return ReactDom.createPortal(

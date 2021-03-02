@@ -1,5 +1,4 @@
 import {Client} from "@stomp/stompjs/esm6";
-import {getUser} from "./AccountController";
 import {setBattleData} from "./BattleController";
 
 const SOCKET = "ws://localhost:8080/chat-lobby";
@@ -18,7 +17,7 @@ const SEND_CHALLENGE_RESPONSE = "/app/chat/challenge/accept";
 let client = [];
 let _connected = false;
 
-export function connect(updateUsers, updatePokemon, updateMessages, setChallenger, showChallenge, changeRoute) {
+export function connect(updateUsers, updatePokemon, updateMessages, setChallenger, showChallenge, changeRoute, userId) {
 	// console.log("Chat connect")
 
 	client.push(new Client({
@@ -33,7 +32,7 @@ export function connect(updateUsers, updatePokemon, updateMessages, setChallenge
 	}));
 
 	client[0].onConnect = frame => {
-		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)), {user: getUser().id});
+		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)), {user: userId});
 		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => updatePokemon(JSON.parse(team.body)));
 		client[0].subscribe(RECEIVE_CHAT_TOPIC, message => updateMessages(JSON.parse(message.body)));
 		client[0].subscribe(PRIVATE_CHAT_TOPIC + frame.headers["user-name"], message => {
