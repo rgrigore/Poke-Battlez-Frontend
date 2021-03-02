@@ -1,12 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Col, ListGroup, Modal, Row, Tab} from "react-bootstrap";
 import PokemonCard from "./PokemonCard";
 import PokemonConfig from "./PokemonConfig";
 
 import "../../../css/TeamDeck.css";
 import PokeBadge from "./PokeBadge";
+import axios from "axios";
+import {UserContext} from "../account/UserContext";
 
-function TeamModal({open, onClose, updatedTeam}) {
+function TeamModal({open, onClose}) {
 
     // const testPokemon = {
     //     "id": 1,
@@ -69,6 +71,8 @@ function TeamModal({open, onClose, updatedTeam}) {
         sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
     }
 
+    const userContext = useContext(UserContext);
+
     const [pokemon1, setPokemon1] = useState(emptyPokemon);
     const [pokemon2, setPokemon2] = useState(emptyPokemon);
     const [pokemon3, setPokemon3] = useState(emptyPokemon);
@@ -108,21 +112,31 @@ function TeamModal({open, onClose, updatedTeam}) {
         }
     }
 
+    let loadTeam = teamData => {
+        resetTeam(teamData.teamId);
+        for (let pokemon of teamData.pokemon) {
+            team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
+        }
+    }
+
+    let sendPokemon = pokemonData => {
+        axios.post(
+            "http://localhost:8080/team/" + userContext.user.id + "/update",
+            pokemonData
+        ).then(response => loadTeam(response.data));
+    }
+
     useEffect(() => {
         resetTeam(0)
         // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
-        if(updatedTeam !== null) {
-            resetTeam(updatedTeam.teamId);
-            for (let pokemon of updatedTeam.pokemon) {
-                team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
-            }
-        }
-
+        axios.get(
+            "http://localhost:8080/team/" + userContext.user.id
+        ).then(response => loadTeam(response.data));
         // eslint-disable-next-line
-    }, [updatedTeam])
+    }, [])
 
     return(
         <Modal show={open} onHide={onClose} size="lg" aria-labelledby="teambuild-modal" >
@@ -162,7 +176,7 @@ function TeamModal({open, onClose, updatedTeam}) {
                                 </Tab.Pane>
                                 {team.map((pokemon, index) => (
                                     <Tab.Pane key={index} eventKey={"#poke"+(index+1).toString()}>
-                                        <PokemonConfig key={index} teamPokemon={pokemon} onClose={onClose} />
+                                        <PokemonConfig key={index} sendPokemon={sendPokemon} teamPokemon={pokemon} onClose={onClose} />
                                     </Tab.Pane>
                                 ))}
                             </Tab.Content>

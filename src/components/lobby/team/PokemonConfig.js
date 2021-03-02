@@ -5,9 +5,8 @@ import {Badge, Button, FormControl, Image, ProgressBar} from "react-bootstrap";
 import {Typeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
 import MoveConfig from "./MoveConfig";
-import {sendPokemon} from "../../../controller/ChatController";
 
-function PokemonConfig({ teamPokemon, onClose }) {
+function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
 
     const [pokemon, setPokemon] = useState(teamPokemon.pokemon.name);
     const [pokemonInfo, setPokemonInfo] = useState({
@@ -271,6 +270,7 @@ function PokemonConfig({ teamPokemon, onClose }) {
             sprite: pokemonSprite
         }
         teamPokemon.set(pokemonData);
+
         sendPokemon(pokemonData);
     }
 
