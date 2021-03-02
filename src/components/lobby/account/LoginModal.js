@@ -1,8 +1,8 @@
 import React, {useContext} from 'react'
 import ReactDom from 'react-dom'
-import {login} from "../../../controller/AccountController";
 import {UserContext} from "./UserContext";
 import {Button} from "react-bootstrap";
+import axios from "axios";
 
 const MODAL_STYLES = {
 	position: 'fixed',
@@ -30,15 +30,29 @@ export default function LoginModal({ open, onClose }) {
 	if (!open) return null
 
 	let loginEvent = () => {
-		login({
+
+		const data = {
 			email: document.getElementById("login_email").value,
 			password: document.getElementById("login_password").value
-		}, (state, user) => {
-			if (state) {
-				userContext.setUser(user);
+		};
+
+		console.log(data);
+
+		axios.post(
+			"http://localhost:8080/account/login",
+			{
+				email: document.getElementById("login_email").value,
+				password: document.getElementById("login_password").value
+			}
+		).then(response => {
+			if (response.data.state) {
+				userContext.setUser({
+					userName: response.data.username,
+					id: response.data.id
+				});
 				onClose();
 			}
-		});
+		})
 	}
 
 	return ReactDom.createPortal(

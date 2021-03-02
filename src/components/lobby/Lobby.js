@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { useHistory } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import LobbyNavbar from "./layout/LobbyNavbar";
 import Chat from "./Chat";
-import {connect as connectAccount} from "../../controller/AccountController";
 import {connect as connectLobby, isConnected} from "../../controller/ChatController";
 import TeamModal from "./team/TeamModal";
 import RegisterModal from "./account/RegisterModal";
 import UserModal from "./UserModal";
 import ChallengeModal from "./ChallengeModal";
+import {UserContext} from "./account/UserContext";
 
 function Lobby() {
     const [registered, setRegistered] = useState(false);
@@ -29,18 +29,16 @@ function Lobby() {
     const [showChallengeModal, setShowChallengeModal] = useState(false);
     const [challenger, setChallenger] = useState(null);
 
+    const userContext = useContext(UserContext);
+
     const history = useHistory();
 
     const changeRoute = newRoute => {
         history.push(newRoute);
     }
 
-    if (!registered) {
-        connectAccount();
-    }
-
     if (first && registered) {
-        connectLobby(setUsers, setUpdatedTeam, setNewMessage, setChallenger, setShowChallengeModal, changeRoute);
+        connectLobby(setUsers, setUpdatedTeam, setNewMessage, setChallenger, setShowChallengeModal, changeRoute, userContext.user.id);
         setFirst(false);
     }
 
