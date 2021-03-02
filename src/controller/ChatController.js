@@ -7,8 +7,6 @@ const SEND_CHAT_TOPIC = "/app/message/lobby";
 const PRIVATE_CHAT_TOPIC = "/chat/private/";
 const PRIVATE_CHAT_SEND = "/app/chat/private";
 const RECEIVE_CHAT_USERS_TOPIC = "/chat/lobby/users";
-const POKEMON_SEND_TOPIC = "/app/chat/pokemon";
-const TEAM_RECEIVE_TOPIC = "/chat/team/";
 const CHALLENGE_SEND = "/app/chat/challenge";
 const CHALLENGE_TOPIC = "/chat/challenge/";
 const BATTLE_START = "/battle/start/";
@@ -17,9 +15,7 @@ const SEND_CHALLENGE_RESPONSE = "/app/chat/challenge/accept";
 let client = [];
 let _connected = false;
 
-export function connect(updateUsers, updatePokemon, updateMessages, setChallenger, showChallenge, changeRoute, userId) {
-	// console.log("Chat connect")
-
+export function connect(updateUsers, updateMessages, setChallenger, showChallenge, changeRoute, userId) {
 	client.push(new Client({
 		brokerURL: SOCKET,
 		connectHeaders: {},
@@ -33,7 +29,6 @@ export function connect(updateUsers, updatePokemon, updateMessages, setChallenge
 
 	client[0].onConnect = frame => {
 		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)), {user: userId});
-		client[0].subscribe(TEAM_RECEIVE_TOPIC + frame.headers["user-name"], team => updatePokemon(JSON.parse(team.body)));
 		client[0].subscribe(RECEIVE_CHAT_TOPIC, message => updateMessages(JSON.parse(message.body)));
 		client[0].subscribe(PRIVATE_CHAT_TOPIC + frame.headers["user-name"], message => {
 			let json = JSON.parse(message.body)
@@ -57,7 +52,6 @@ export function connect(updateUsers, updatePokemon, updateMessages, setChallenge
 		client[0].subscribe(BATTLE_START + frame.headers["user-name"], confirmation => {
 			setBattleData(JSON.parse(confirmation.body));
 			changeRoute("/battle");
-			// window.location.href = "/battle";
 		});
 		_connected = true;
 	};
@@ -78,13 +72,6 @@ export function sendMessage(message) {
 	client[0].publish({
 		destination: SEND_CHAT_TOPIC,
 		body: JSON.stringify({body: message})
-	});
-}
-
-export function sendPokemon(pokemon) {
-	client[0].publish({
-		destination: POKEMON_SEND_TOPIC,
-		body: JSON.stringify(pokemon)
 	});
 }
 

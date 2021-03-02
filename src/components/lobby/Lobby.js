@@ -16,7 +16,6 @@ function Lobby() {
     const [first, setFirst] = useState(true);
 
     const [showTeam, setShowTeam] = useState(false);
-    const [updatedTeam, setUpdatedTeam] = useState(null);
 
     const [showUserModal, setShowUserModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -38,7 +37,7 @@ function Lobby() {
     }
 
     if (first && registered) {
-        connectLobby(setUsers, setUpdatedTeam, setNewMessage, setChallenger, setShowChallengeModal, changeRoute, userContext.user.id);
+        connectLobby(setUsers, setNewMessage, setChallenger, setShowChallengeModal, changeRoute, userContext.user.id);
         setFirst(false);
     }
 
@@ -56,7 +55,7 @@ function Lobby() {
             <RegisterModal open={!registered} onClose={() => setRegistered(true)} />
             { registered && isConnected() &&
                 <>
-                    <TeamModal open={showTeam} onClose={() => setShowTeam(false)} updatedTeam={updatedTeam} />
+                    <TeamModal open={showTeam} onClose={() => setShowTeam(false)} />
                     <UserModal open={showUserModal} close={() => setShowUserModal(false)} listUser={selectedUser} />
                     <ChallengeModal open={showChallengeModal} close={() => setShowChallengeModal(false)}
                                     challenger={challenger} setChallenger={(value) => setChallenger(value)}
