@@ -113,24 +113,13 @@ function TeamModal({open, onClose}) {
     }
 
     let loadTeam = teamData => {
-        resetTeam(teamData.teamId);
-        for (let pokemon of teamData.pokemon) {
-            team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
+        if(teamData !== '') {
+            resetTeam(teamData.teamId);
+            for (let pokemon of teamData.pokemon) {
+                team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
+            }
         }
     }
-
-    // axios.interceptors.request.use(
-    //     config => {
-    //         const token = localStorage.getItem('token');
-    //         config.headers.authorization = `Bearer ${token}`;
-    //         return config;
-    //     },
-    //     error => {
-    //         return Promise.reject(error);
-    //     }
-    // );
-
-    // axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem('token')}` }
 
     let sendPokemon = pokemonData => {
         axios.post(
