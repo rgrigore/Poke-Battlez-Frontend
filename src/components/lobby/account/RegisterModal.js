@@ -42,8 +42,9 @@ export default function RegisterModal({ open, onClose }) {
 		).then(response => {
 			if (response.data.state) {
 				userContext.setUser({
-					userName: response.data.username,
-					id: response.data.id
+					username: response.data.username,
+					id: response.data.id,
+					token: response.data.token
 				});
 				onClose();
 			}

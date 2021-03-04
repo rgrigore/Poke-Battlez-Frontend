@@ -113,16 +113,19 @@ function TeamModal({open, onClose}) {
     }
 
     let loadTeam = teamData => {
-        resetTeam(teamData.teamId);
-        for (let pokemon of teamData.pokemon) {
-            team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
+        if(teamData !== '') {
+            resetTeam(teamData.teamId);
+            for (let pokemon of teamData.pokemon) {
+                team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
+            }
         }
     }
 
     let sendPokemon = pokemonData => {
         axios.post(
             "http://localhost:8080/team/" + userContext.user.id + "/update",
-            pokemonData
+            pokemonData,
+            {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
         ).then(response => loadTeam(response.data));
     }
 
@@ -133,7 +136,8 @@ function TeamModal({open, onClose}) {
 
     useEffect(() => {
         axios.get(
-            "http://localhost:8080/team/" + userContext.user.id
+            "http://localhost:8080/team/" + userContext.user.id,
+            {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
         ).then(response => loadTeam(response.data));
         // eslint-disable-next-line
     }, [])
