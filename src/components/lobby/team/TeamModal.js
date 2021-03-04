@@ -119,10 +119,24 @@ function TeamModal({open, onClose}) {
         }
     }
 
+    // axios.interceptors.request.use(
+    //     config => {
+    //         const token = localStorage.getItem('token');
+    //         config.headers.authorization = `Bearer ${token}`;
+    //         return config;
+    //     },
+    //     error => {
+    //         return Promise.reject(error);
+    //     }
+    // );
+
+    // axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem('token')}` }
+
     let sendPokemon = pokemonData => {
         axios.post(
             "http://localhost:8080/team/" + userContext.user.id + "/update",
-            pokemonData
+            pokemonData,
+            {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
         ).then(response => loadTeam(response.data));
     }
 
@@ -133,7 +147,8 @@ function TeamModal({open, onClose}) {
 
     useEffect(() => {
         axios.get(
-            "http://localhost:8080/team/" + userContext.user.id
+            "http://localhost:8080/team/" + userContext.user.id,
+            {headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
         ).then(response => loadTeam(response.data));
         // eslint-disable-next-line
     }, [])

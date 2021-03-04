@@ -18,7 +18,9 @@ let _connected = false;
 export function connect(updateUsers, updateMessages, setChallenger, showChallenge, changeRoute, userId) {
 	client.push(new Client({
 		brokerURL: SOCKET,
-		connectHeaders: {},
+		headers: {
+			Authorization: "Bearer " + localStorage.getItem("token")
+		},
 		debug: function (str) {
 			// console.log("Chat: " + str);
 		},
@@ -26,7 +28,7 @@ export function connect(updateUsers, updateMessages, setChallenger, showChalleng
 		heartbeatIncoming: 4000,
 		heartbeatOutgoing: 4000,
 	}));
-
+	// client[0].connectHeaders = {Authorization: "Bearer " + localStorage.getItem("token")};
 	client[0].onConnect = frame => {
 		client[0].subscribe(RECEIVE_CHAT_USERS_TOPIC, users => updateUsers(JSON.parse(users.body)), {user: userId});
 		client[0].subscribe(RECEIVE_CHAT_TOPIC, message => updateMessages(JSON.parse(message.body)));
