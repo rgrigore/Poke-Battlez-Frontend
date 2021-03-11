@@ -29,7 +29,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/rgrigore/Poke-Battlez-Frontend/tree/project_documentation.git">
-    <img src="doc_images/pokelogo.png" alt="Logo" width="269" height="99">
+    <img src="doc_images/pokelogo.png" alt="Logo" width="300">
   </a>
 
   <h3 align="center">Poke Battlez</h3>
