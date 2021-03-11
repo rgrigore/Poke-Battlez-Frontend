@@ -87,7 +87,7 @@ Here's why:
 * Poke Battlez is the place where you can meet online and chat as a group.
 * You can send PMs to any other user, for those private thoughts or invitations for direct challenges.
 * You can use all your Pokemon skills and knowledge in configuring and modifying your own team of pokemons, up to 6 of them.
-* You can challenge any other user for a 1 to 1 battle. :smile:
+* You can challenge any other user for a 1 to 1 battle.
 * You can execute a battle where you can test your customized team together with your best Pokemon battle strategies.
 
 Of course, all Pokemon are available to you, together with a comprehensive list of characteristics you can customize, thanks to the Pokemon API used, more details in acknowledgements 
@@ -216,7 +216,7 @@ Razvan Grigore - [@My Github](https://github.com/rgrigore) - razvang95@gmail.com
 * [React Documentation](https://reactjs.org/)
 * [PokeApi](https://pokeapi.co/)
 * [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Main_Page)
-* [Codecool Romania](https://codecool.com/ro/)
+* [Codecool Romania :thumbsup:](https://codecool.com/ro/)
 * [Img Shields](https://shields.io)
 
 
