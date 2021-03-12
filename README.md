@@ -248,5 +248,5 @@ Razvan Grigore - [@My Github](https://github.com/rgrigore) - razvang95@gmail.com
 [team-gif]: doc_images/team.gif
 [challenge-gif]: doc_images/challenge.gif
 [battle-gif]: doc_images/battle.gif
-[agile]: doc_images/agile.png
+[agile]: doc_images/agile-logo.png
 
