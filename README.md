@@ -184,7 +184,7 @@ Further we will shortly name, describe and visualize some main features of the a
 ## Roadmap
 
 The project development took place through 4 Agile iterations, each iteration taking 4 days, and presenting the results in the 5th. A short complete roadmap bellow:
-[![agile][agile]]()
+[![agile][agile =350px]]()
 
 * Sprint 1: Implementing main Lobby (Group chat, Online users, Login System)
 * Spring 2: Implementing Team configuration / PM messaging / Send and Receive Challenge
@@ -248,5 +248,5 @@ Razvan Grigore - [@My Github](https://github.com/rgrigore) - razvang95@gmail.com
 [team-gif]: doc_images/team.gif
 [challenge-gif]: doc_images/challenge.gif
 [battle-gif]: doc_images/battle.gif
-[agile]: doc_images/agile.png =350px
+[agile]: doc_images/agile.png
 
