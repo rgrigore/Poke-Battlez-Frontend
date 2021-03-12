@@ -79,8 +79,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![login][login]](https://example.com)
-
 This is an exciting multiplayer strategy game for all Pokemon fans out there, and a way for them to directly interact online.
 
 Here's why:
@@ -161,17 +159,23 @@ All prerequisites must be installed, accordingly to the technologies used in thi
 Further we will shortly name, describe and visualize some main features of the app.
 
 ### Lobby
+* In order to connect to the main server, there is necessary to register or login.
+[![register-png][register-png]]()
+[![login-png][login-png]]()
+[![login-gif][login-gif]]()
+
 * Here all users join a common "room", where they can check who is online, and they can chat, either on  the main chat, or send PM to specific users.
-<!-- Lobby images/gif -->
+[![chat-png][chat-png]]()
 
 * Click on any user and see the private actions you can take towards that specific user.
-<!-- PM modal images/gif -->
+[![PM-gif][PM-gif]]()
 
 * Using the button in the header, you open the TEAM configuration modal, where you can configure all your Pokemon slots, with actual characters and with detailed criteria as seen bellow:
-<!-- TEAM config images/gif -->
+[![team-gif][team-gif]]()
 
 * Select the user you want to engage into battle and by pressing the challenge button, you will be transferred on a private room with him/her, where you can chat or execute the battle.
-<!-- Accept challenge config images/gif -->
+[![challenge-gif][challenge-gif]]()
+[![battle-gif][battle-gif]]()
 
 ### Battle
 * The battle is turn based, with the player being able to select the Pokemon, and the move which to be executed against the adversary Pokemon. Once both players "locked" their own moves, they will get a log response with the results of the turn, and impacting their Pokemon health accordingly. You can also swith between your Pokemon team at any time.
@@ -236,4 +240,12 @@ Razvan Grigore - [@My Github](https://github.com/rgrigore) - razvang95@gmail.com
 [github-marius-url]: https://github.com/marius-ceobanu
 [github-razvan-shield]: https://img.shields.io/twitter/url?label=GitHub%20-%20Razvan&logo=Github&style=social&url=https%3A%2F%2Fgithub.com%2Frgrigore
 [github-razvan-url]: https://github.com/rgrigore
-[login]: doc_images/login.gif
+[chat-png]: doc_images/chat.png
+[register-png]: doc_images/register.png
+[login-png]: doc_images/login.png
+[login-gif]: doc_images/login.gif
+[PM-gif]: doc_images/PM.gif
+[team-gif]: doc_images/team.gif
+[challenge-gif]: doc_images/challenge.gif
+[battle-gif]: doc_images/battle.gif
+
