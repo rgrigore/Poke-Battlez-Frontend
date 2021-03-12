@@ -79,7 +79,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![login][login]](https://example.com)
 
 This is an exciting multiplayer strategy game for all Pokemon fans out there, and a way for them to directly interact online.
 
@@ -236,4 +236,4 @@ Razvan Grigore - [@My Github](https://github.com/rgrigore) - razvang95@gmail.com
 [github-marius-url]: https://github.com/marius-ceobanu
 [github-razvan-shield]: https://img.shields.io/twitter/url?label=GitHub%20-%20Razvan&logo=Github&style=social&url=https%3A%2F%2Fgithub.com%2Frgrigore
 [github-razvan-url]: https://github.com/rgrigore
-[product-screenshot]: images/screenshot.png
+[login]: doc_images/login.gif
