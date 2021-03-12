@@ -160,20 +160,25 @@ Further we will shortly name, describe and visualize some main features of the a
 
 ### Lobby
 * In order to connect to the main server, there is necessary to register or login.
+
 [![register-png][register-png]]()
 [![login-png][login-png]]()
 [![login-gif][login-gif]]()
 
 * Here all users join a common "room", where they can check who is online, and they can chat, either on  the main chat, or send PM to specific users.
+
 [![chat-png][chat-png]]()
 
 * Click on any user and see the private actions you can take towards that specific user.
+
 [![PM-gif][PM-gif]]()
 
 * Using the button in the header, you open the TEAM configuration modal, where you can configure all your Pokemon slots, with actual characters and with detailed criteria as seen bellow:
+
 [![team-gif][team-gif]]()
 
 * Select the user you want to engage into battle and by pressing the challenge button, you will be transferred on a private room with him/her, where you can chat or execute the battle.
+
 [![challenge-gif][challenge-gif]]()
 [![battle-gif][battle-gif]]()
 
@@ -184,6 +189,7 @@ Further we will shortly name, describe and visualize some main features of the a
 ## Roadmap
 
 The project development took place through 4 Agile iterations, each iteration taking 4 days, and presenting the results in the 5th. A short complete roadmap bellow:
+
 [![agile][agile]]()
 
 * Sprint 1: Implementing main Lobby (Group chat, Online users, Login System)
