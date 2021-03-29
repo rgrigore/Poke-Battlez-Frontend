@@ -74,7 +74,7 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
             fetch(pokemon);
         }
         // eslint-disable-next-line
-    }, []);
+    }, [pokemon]);
 
     useEffect(() => {
         const temp = [...moves];
@@ -141,7 +141,8 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
             clearFields();
             clearPokemon();
 
-            fetch(newPokemonName);
+            setPokemon(newPokemonName);
+            // fetch(newPokemonName);
         }
     };
 
@@ -201,7 +202,7 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
                 const resPokemon = responses[0];
                 const resItems = responses[1];
 
-                setPokemon(resPokemon.data.name);
+                // setPokemon(resPokemon.data.name);
                 setPokemonType(resPokemon.data.types.map(type => type.type.name));
                 setStats([...stats].map((stat, index) => {
                     stat.base = resPokemon.data.stats[index].base_stat;
@@ -273,11 +274,6 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
 
         sendPokemon(pokemonData);
     }
-
-    useEffect(() => {
-        teamPokemon.set({...teamPokemon.pokemon, sprite: pokemonSprite});
-        // eslint-disable-next-line
-    }, [pokemonSprite]);
 
     return(
         <div id="configForm" className={"d-flex flex-column"}>

@@ -30,14 +30,6 @@ export default function LoginModal({ open, onClose }) {
 	if (!open) return null
 
 	let loginEvent = () => {
-
-		const data = {
-			email: document.getElementById("login_email").value,
-			password: document.getElementById("login_password").value
-		};
-
-		console.log(data);
-
 		axios.post(
 			"http://localhost:8080/account/login",
 			{
