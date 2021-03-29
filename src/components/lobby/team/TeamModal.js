@@ -116,7 +116,11 @@ function TeamModal({open, onClose}) {
         if(teamData !== '') {
             resetTeam(teamData.teamId);
             for (let pokemon of teamData.pokemon) {
-                team[pokemon.position].set({...pokemon, sprite: team[pokemon.position].pokemon.sprite});
+                axios.get(
+                    `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`
+                ).then(response => {
+                    team[pokemon.position].set({...pokemon, sprite: response.data.sprites.front_default});
+                })
             }
         }
     }
