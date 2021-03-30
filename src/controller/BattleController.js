@@ -37,14 +37,11 @@ export function connect(userId, setTeam, setNewMessage, setTeamHp, setCurrentPok
                     backSprite: pokemon.backSprite
                 })
             }
-            console.log(team);
             setTeam(team);
         });
 
         client[0].subscribe(BATTLE_RECEIVE_TOPIC + _battleData.battleId, battle => {
             let json = JSON.parse(battle.body)
-
-            console.log(json)
 
             for (const message of json.log) {
                 setNewMessage({name: null, body: message});
@@ -106,6 +103,5 @@ export function sendCancel(playerId) {
 }
 
 export function setBattleData(battleData) {
-    console.log(battleData);
     _battleData = battleData;
 }

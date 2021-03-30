@@ -9,13 +9,14 @@ const PRIVATE_CHAT_SEND = "/app/chat/private";
 const RECEIVE_CHAT_USERS_TOPIC = "/chat/lobby/users";
 const CHALLENGE_SEND = "/app/chat/challenge";
 const CHALLENGE_TOPIC = "/chat/challenge/";
+const BATTLE_LOAD = "/battle/load/";
 const BATTLE_START = "/battle/start/";
 const SEND_CHALLENGE_RESPONSE = "/app/chat/challenge/accept";
 
 let client = [];
 let _connected = false;
 
-export function connect(updateUsers, updateMessages, setChallenger, showChallenge, changeRoute, userId) {
+export function connect(updateUsers, updateMessages, setChallenger, showChallenge, changeRoute, userId, battleLoader) {
 	client.push(new Client({
 		brokerURL: SOCKET,
 		headers: {
@@ -49,6 +50,10 @@ export function connect(updateUsers, updateMessages, setChallenger, showChalleng
 					name: JSON.parse(challenge.body).from.name
 				});
 				showChallenge(true);
+		});
+
+		client[0].subscribe(BATTLE_LOAD + frame.headers["user-name"], () => {
+			battleLoader(true);
 		});
 
 		client[0].subscribe(BATTLE_START + frame.headers["user-name"], confirmation => {
