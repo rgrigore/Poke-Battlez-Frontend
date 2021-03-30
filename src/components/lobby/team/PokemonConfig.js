@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from "prop-types";
-import {Badge, Button, FormControl, Image, ProgressBar} from "react-bootstrap";
+import {Badge, Button, FormControl, Image, ProgressBar, Overlay, Tooltip} from "react-bootstrap";
 import {Typeahead} from "react-bootstrap-typeahead";
 import axios from "axios";
 import MoveConfig from "./MoveConfig";
@@ -27,6 +27,8 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
         "Timid": { up: 5, down: 1 }, "Hasty": { up: 5, down: 2 }, "Jolly": { up: 5, down: 3 }, "Naive": { up: 5, down: 4 }, "Serious": { up: 5, down: 5 }
     };
     const [nature, setNature] = useState(teamPokemon.pokemon.nature);
+    const [showNatureError, setShowNatureError] = useState(false);
+    const target = useRef(null);
 
     let calculateHp = (stat, level) => {
         const temp = [...stats];
@@ -241,38 +243,44 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
     }
 
     const savePokemon = () => {
-        const pokemonData = {
-            id: teamPokemon.pokemon.id,
-            teamId: teamPokemon.pokemon.teamId,
-            position: teamPokemon.pokemon.position,
-            name: pokemon,
-            level: level,
-            ivHp: stats[0].IV,
-            ivAttack: stats[1].IV,
-            ivDefense: stats[2].IV,
-            ivSpAttack: stats[3].IV,
-            ivSpDefense: stats[4].IV,
-            ivSpeed: stats[5].IV,
-            evHp: stats[0].EV,
-            evAttack: stats[1].EV,
-            evDefense: stats[2].EV,
-            evSpAttack: stats[3].EV,
-            evSpDefense: stats[4].EV,
-            evSpeed: stats[5].EV,
-            gender: pokemonInfo.gender,
-            nature: nature,
-            heldItem: pokemonInfo.heldItem,
-            ability: pokemonInfo.ability,
-            move1: move1.name,
-            move2: move2.name,
-            move3: move3.name,
-            move4: move4.name,
+        if(nature === "") {
+            setShowNatureError(true);
+            console.log("no nature!");
+        } else {
+            const pokemonData = {
+                id: teamPokemon.pokemon.id,
+                teamId: teamPokemon.pokemon.teamId,
+                position: teamPokemon.pokemon.position,
+                name: pokemon,
+                level: level,
+                ivHp: stats[0].IV,
+                ivAttack: stats[1].IV,
+                ivDefense: stats[2].IV,
+                ivSpAttack: stats[3].IV,
+                ivSpDefense: stats[4].IV,
+                ivSpeed: stats[5].IV,
+                evHp: stats[0].EV,
+                evAttack: stats[1].EV,
+                evDefense: stats[2].EV,
+                evSpAttack: stats[3].EV,
+                evSpDefense: stats[4].EV,
+                evSpeed: stats[5].EV,
+                gender: pokemonInfo.gender,
+                nature: nature,
+                heldItem: pokemonInfo.heldItem,
+                ability: pokemonInfo.ability,
+                move1: move1.name,
+                move2: move2.name,
+                move3: move3.name,
+                move4: move4.name,
 
-            sprite: pokemonSprite
+                sprite: pokemonSprite
+            }
+            teamPokemon.set(pokemonData);
+
+            sendPokemon(pokemonData);
+            setShowNatureError(false);
         }
-        teamPokemon.set(pokemonData);
-
-        sendPokemon(pokemonData);
     }
 
     return(
@@ -327,7 +335,7 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
                         <Typeahead id={"natures"} inputProps={{"data-field": "nature"}} size={"sm"} className={"p-0 mr-1"} style={{minWidth:"100px"}}
                                    labelKey={"nature"} options={Object.keys(natures)}  placeholder={nature === "" ? "Nature..." : nature}
                                    onBlur={setPokemonNature} ref={inputRefs.current[14]} />
-                        <Typeahead id={"items"} inputProps={{"data-field": "heldItem"}} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
+                       <Typeahead id={"items"} inputProps={{"data-field": "heldItem"}} size={"sm"} className={"p-0 mr-2"} style={{minWidth:"150px"}}
                                    labelKey={"item"} options={items}  placeholder={pokemonInfo.heldItem === "" ? "Item..." : pokemonInfo.heldItem}
                                    onBlur={updatePokemonInfo} ref={inputRefs.current[15]} />
                         <Typeahead id={"abilities"} inputProps={{"data-field": "ability"}} size={"sm"} className={"p-0"} style={{minWidth:"130px"}}
@@ -344,9 +352,16 @@ function PokemonConfig({ teamPokemon, sendPokemon, onClose }) {
                         <Button variant="secondary" size="sm" onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button variant="secondary" size="sm" className={"pl-2 ml-2"} onClick={savePokemon}>
+                        <Button variant="secondary" size="sm" className={"pl-2 ml-2"} onClick={savePokemon} ref={target}>
                             Save
                         </Button>
+                        <Overlay target={target.current} show={showNatureError} placement="right">
+                            {(props) => (
+                                <Tooltip id="overlay-example" {...props}>
+                                    Setting Nature is mandatory!
+                                </Tooltip>
+                            )}
+                        </Overlay>
                     </div>
                 </div>
             </div>
