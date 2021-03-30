@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Modal} from "react-bootstrap";
 import {sendChallengeResponse} from "../../controller/ChatController";
 
-function ChallengeModal({open, close, challenger, setChallenger}) {
+function ChallengeModal({open, close, challenger, setChallenger, loader}) {
     const[by, setBy] = useState(null);
 
     useEffect(() => {
@@ -10,6 +10,7 @@ function ChallengeModal({open, close, challenger, setChallenger}) {
     }, [challenger]);
 
     const accept = () => {
+        loader();
         sendChallengeResponse(true, challenger.id)
         setChallenger(null);
         close();

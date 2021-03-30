@@ -56,7 +56,6 @@ function BattlePage() {
 
     useEffect(() => {
         //TODO
-        console.log(teamHp)
     }, [teamHp])
 
     useEffect(() => {

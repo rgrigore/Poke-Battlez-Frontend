@@ -1,6 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
 import { useHistory } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import styled, { css } from "styled-components";
+import LoadingOverlay from 'react-loading-overlay';
+import "../../css/Loader.css"
 
 import LobbyNavbar from "./layout/LobbyNavbar";
 import Chat from "./Chat";
@@ -11,7 +14,27 @@ import UserModal from "./UserModal";
 import ChallengeModal from "./ChallengeModal";
 import {UserContext} from "./account/UserContext";
 
+const DarkBackground = styled.div`
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 999; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+  ${(props) =>
+    props.disappear &&
+    css`
+      display: block; /* show */
+    `}
+`;
+
 function Lobby() {
+    const [battleLoading, setBattleLoading] = useState(false);
     const [registered, setRegistered] = useState(false);
     const [first, setFirst] = useState(true);
 
@@ -37,7 +60,7 @@ function Lobby() {
     }
 
     if (first && registered) {
-        connectLobby(setUsers, setNewMessage, setChallenger, setShowChallengeModal, changeRoute, userContext.user.id);
+        connectLobby(setUsers, setNewMessage, setChallenger, setShowChallengeModal, changeRoute, userContext.user.id, setBattleLoading);
         setFirst(false);
     }
 
@@ -59,9 +82,17 @@ function Lobby() {
                     <UserModal open={showUserModal} close={() => setShowUserModal(false)} listUser={selectedUser} />
                     <ChallengeModal open={showChallengeModal} close={() => setShowChallengeModal(false)}
                                     challenger={challenger} setChallenger={(value) => setChallenger(value)}
+                                    loader={() => setBattleLoading(true)}
                     />
                 </>
             }
+            <DarkBackground disappear={battleLoading}>
+                <LoadingOverlay
+                    active={battleLoading}
+                    spinner
+                    text="Loading battle..."
+                />
+            </DarkBackground>
         </div>
     );
 }
