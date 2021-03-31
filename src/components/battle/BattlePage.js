@@ -75,7 +75,7 @@ function BattlePage() {
             field.value = "";
             field.focus();
 
-            setNewMessage({user: userContext.user.username, message: message});
+            setNewMessage({name: userContext.user.username, body: message});
             // const newOpponentTeam = [true, false, true, true, true, true];
             // setOpponentTeam(newOpponentTeam);
             // sendMessage(message);
@@ -123,7 +123,7 @@ function BattlePage() {
             <div className='pt-1 pl-2 h-100 d-flex flex-column' style={{minWidth: '400px'}}>
                 <div className='mr-1 flex-fill border rounded scrollbar-hidden'
                      style={{ overflow:'auto', backgroundColor: "rgba(160, 169, 173, 0.17)" }}>
-                    <div id={"battleChatArea"}>
+                    <div id={"battleChatArea"} className={"pb-2"}>
                         <ChatBox messages={chatMessages}/>
                     </div>
                 </div>
