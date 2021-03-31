@@ -6,6 +6,7 @@ const BATTLE_RECEIVE_TOPIC = "/battle/";
 
 let client = [];
 let _battleData = {battleId: "", trainers: [], trainerNames: {}, trainerTeams: {}, availablePokemon: {}};
+let turns = 0;
 
 export function connect(userId, setTeam, setNewMessage, setTeamHp, setCurrentPokemonIndex, setOpponentTeam, setCurrentOpponentPokemon, setActed) {
     // console.log("Chat connect")
@@ -41,8 +42,18 @@ export function connect(userId, setTeam, setNewMessage, setTeamHp, setCurrentPok
         });
 
         client[0].subscribe(BATTLE_RECEIVE_TOPIC + _battleData.battleId, battle => {
-            let json = JSON.parse(battle.body)
+            let json = JSON.parse(battle.body);
 
+            if(json.log.length > 1 && !json.log[0].includes("Called back")) {
+                turns += 1;
+                setNewMessage({name: "Turn", body: (turns).toString()});
+            } else if(json.log.length > 1 && json.log[0].includes("Called back")) {
+                setNewMessage({name: "Turn", body: "SWITCH"});
+            } else {
+                setNewMessage({name: "Turn", body: "0"});
+            }
+
+            json.log.pop();
             for (const message of json.log) {
                 setNewMessage({name: null, body: message});
             }
@@ -62,7 +73,7 @@ export function connect(userId, setTeam, setNewMessage, setTeamHp, setCurrentPok
                 }
             }
 
-            setCurrentPokemonIndex(json.active[userId])
+            setCurrentPokemonIndex(json.active[userId]);
 
             setActed(false);
         });
