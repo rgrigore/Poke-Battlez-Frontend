@@ -1,5 +1,5 @@
 import React from "react";
-import {Badge, ProgressBar} from "react-bootstrap";
+import {Badge, ProgressBar, Button} from "react-bootstrap";
 
 function SwitchRegion({ team, moves, switching, setSwitching, setCurrentPokemon, acted, sendMove, sendSwitch }) {
 
@@ -9,7 +9,7 @@ function SwitchRegion({ team, moves, switching, setSwitching, setCurrentPokemon,
                     <div className={"h-30 pt-1 d-flex flex-row"}>
                         <div className={"d-flex mr-0 mb-2 mt-3 justify-content-around h-50"}>
                             {team.map((pokemon, index) => (
-                                <div key={index} className="flex-fill ml-2 mr-2 justify-content-around"
+                                <Button key={index} className="flex-fill ml-2 mr-2 justify-content-around"
                                     style={{ marginTop: '-10px' }}>
                                     <div className={"align-self-stretch"}>
                                         <img alt={""} src={pokemon.frontSprite}
@@ -21,7 +21,7 @@ function SwitchRegion({ team, moves, switching, setSwitching, setCurrentPokemon,
                                             <Badge className={"mr-1"} key={index} variant={"light"}>{ type }</Badge>
                                         ))}
                                     </div>
-                                </div>
+                                </Button>
                             ))}
                         </div>
                     </div>
